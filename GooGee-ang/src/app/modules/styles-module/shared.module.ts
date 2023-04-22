@@ -21,11 +21,11 @@ const modules = [
 ]
 
 @NgModule({
-  declarations: [
-  ],
-  exports: [
-    ...modules
-  ],
+    declarations: [
+    ],
+    exports: [
+        ...modules,
+    ],
   imports: [
     ...modules
   ]
