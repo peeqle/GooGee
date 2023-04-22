@@ -1,0 +1,22 @@
+.application-loading-box {
+  width: 300px;
+  margin: 5px;
+  text-align: center;
+  font-family: Candara;
+  color: aliceblue;
+  transition: 0.3s ease;
+}
+
+.application-loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #002B5B;
+  transition: 0.3s ease;
+}
+
+.loading-bar-holder{
+  color: aliceblue;
+}

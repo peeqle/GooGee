@@ -1,0 +1,16 @@
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-color: aliceblue;
+}
+
+.buttons-font-settings {
+  font-weight: bolder;
+}
+
+.main-button {
+  background-color: #002B5B;
+}
