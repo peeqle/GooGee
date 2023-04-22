@@ -1,0 +1,11 @@
+<div class="d-lg-flex justify-content-sm-evenly mt-2">
+  <app-activity-tab *ngFor="let activity of userActivities" [activityIndex]="activity" (tabClickEventEmitter)="changeActiveTab($event)"></app-activity-tab>
+</div>
+<div class="container card h-100">
+  <span>{{currentSelectedTab}}</span>
+  <app-chat [hidden]="currentSelectedTab !== ActivityTab.CHAT"></app-chat>
+  <app-room [hidden]="currentSelectedTab !== ActivityTab.ROOMS"></app-room>
+  <app-profile [hidden]="currentSelectedTab !== ActivityTab.PROFILE"></app-profile>
+  <app-search [hidden]="currentSelectedTab !== ActivityTab.SEARCH"></app-search>
+  <app-settings [hidden]="currentSelectedTab !== ActivityTab.SETTINGS"></app-settings>
+</div>
