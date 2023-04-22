@@ -14,21 +14,23 @@ import java.util.UUID;
 @Data
 @Entity
 @Builder
-@RedisHash("chats")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Chat implements Serializable {
-    @Id
-    private UUID id;
+	@Id
+	@GeneratedValue
+	private UUID id;
 
-    private String chatName;
+	private String chatName;
 
-    private Instant createdAt;
+	private Long createdAt = Instant.now().toEpochMilli();
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private AppUser creator;
+	private Long lastMessage;
 
-    @OneToMany
-    private List<AppUser> members;
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "user_id")
+	private AppUser creator;
+
+	@OneToMany(cascade = CascadeType.PERSIST)
+	private List<AppUser> members;
 }

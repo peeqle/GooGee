@@ -28,118 +28,114 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final JwtService jwtService;
+	private final JwtService jwtService;
 
-    private final AppUserServiceImpl appUserService;
+	private final AppUserServiceImpl appUserService;
 
-    private final TokenServiceImpl tokenService;
+	private final TokenServiceImpl tokenService;
 
-    private final PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
 
-    private final DaoAuthenticationProvider daoAuthenticationProvider;
+	private final DaoAuthenticationProvider daoAuthenticationProvider;
 
-    public AuthenticationResponse register(RegisterRequest request) {
-        AppUser appUser = new AppUser();
-        appUser.setUsername(request.getUsername());
-        appUser.setPassword(passwordEncoder.encode(request.getPassword()));
+	public AuthenticationResponse register(RegisterRequest request) {
+		AppUser appUser = new AppUser();
 
-        var savedUser = appUserService.save(appUser);
-        var jwtAccessToken = jwtService.generateAccessToken(appUser);
-        var jwtRefreshToken = jwtService.generateRefreshToken(appUser);
+		appUser.setUsername(request.getUsername());
+		appUser.setPassword(passwordEncoder.encode(request.getPassword()));
+		appUser.setEmail(request.getEmail());
 
-        saveUserToken(savedUser, jwtAccessToken, TokenType.BEARER);
-        saveUserToken(savedUser, jwtRefreshToken, TokenType.REFRESH);
-        return AuthenticationResponse.builder()
-                .accessToken(jwtAccessToken)
-                .refreshToken(jwtRefreshToken)
-                .build();
-    }
+		var savedUser = appUserService.save(appUser);
+		var jwtAccessToken = jwtService.generateAccessToken(appUser);
+		var jwtRefreshToken = jwtService.generateRefreshToken(appUser);
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(request.getUsername(), request.getPassword()));
-        try {
-            var user = appUserService.loadUserByUsername(request.getUsername());
-            var jwtAccessToken = jwtService.generateAccessToken(user);
-            var jwtRefreshToken = jwtService.generateAccessToken(user);
+		saveUserToken(savedUser, jwtAccessToken, TokenType.BEARER);
+		saveUserToken(savedUser, jwtRefreshToken, TokenType.REFRESH);
+		return AuthenticationResponse.builder()
+			.accessToken(jwtAccessToken)
+			.refreshToken(jwtRefreshToken)
+			.build();
+	}
 
-            AppUser appUser = new AppUser();
+	public AuthenticationResponse authenticate(AuthenticationRequest request) {
+		daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(request.getUsername(), request.getPassword()));
+		try {
+			var user = appUserService.loadUserByUsername(request.getUsername());
 
-            appUser.setUsername(user.getUsername());
-            appUser.setPassword(user.getPassword());
-            appUser.setRoles(user.getAuthorities().stream()
-                    .map(grantedAuthority -> appUserService.getRole(grantedAuthority.getAuthority())).collect(Collectors.toList()));
+			var accessTokenJwt = jwtService.generateAccessToken(user);
+			var refreshTokenJwt = jwtService.generateRefreshToken(user);
 
-            revokeAllUserTokens(appUser);
-            deleteAllTokensForUser(appUser);
+			updateUserTokenData(accessTokenJwt, refreshTokenJwt, user);
 
-            saveUserToken(appUser, jwtAccessToken, TokenType.BEARER);
-            saveUserToken(appUser, jwtRefreshToken, TokenType.REFRESH);
+			return AuthenticationResponse.builder()
+				.accessToken(accessTokenJwt)
+				.refreshToken(refreshTokenJwt)
+				.build();
+		} catch (UsernameNotFoundException e) {
+			return null;
+		}
+	}
 
-            return AuthenticationResponse.builder()
-                    .accessToken(jwtAccessToken)
-                    .refreshToken(jwtRefreshToken)
-                    .build();
-        } catch (UsernameNotFoundException e) {
-            return null;
-        }
-    }
+	public AuthenticationResponse refresh(String refreshToken) throws TokenNotFoundException, TokenNotValidException, TokenExpiredException {
+		Token token = tokenService.findTokenByValue(refreshToken);
 
-    public AuthenticationResponse refresh(String refreshToken) throws TokenNotFoundException, TokenNotValidException, TokenExpiredException {
-        Token token = tokenService.findTokenByValue(refreshToken);
+		if (token == null) {
+			throw new TokenNotFoundException(format("Token %s not found", refreshToken));
+		}
 
-        if (token == null) {
-            throw new TokenNotFoundException(format("Token %s not found", refreshToken));
-        }
+		AppUser appUser = token.getAppUser();
 
-        AppUser appUser = token.getAppUser();
+		if (appUser == null) {
+			throw new TokenNotValidException();
+		}
 
-        if (appUser == null) {
-            throw new TokenNotValidException();
-        }
+		var accessTokenJwt = jwtService.generateAccessToken(appUser);
+		var refreshTokenJwt = jwtService.generateRefreshToken(appUser);
 
-        var accessTokenJwt = jwtService.generateAccessToken(appUser);
-        var refreshTokenJwt = jwtService.generateRefreshToken(appUser);
+		updateUserTokenData(accessTokenJwt, refreshTokenJwt, appUser);
 
-		List<Integer> appUserTokensIds = fetchAllUserTokens(appUser);
+		return AuthenticationResponse.builder()
+			.accessToken(accessTokenJwt)
+			.refreshToken(refreshTokenJwt)
+			.build();
+	}
 
-        saveUserToken(appUser, accessTokenJwt, TokenType.BEARER);
-        saveUserToken(appUser, refreshTokenJwt, TokenType.REFRESH);
-
-		tokenService.deleteTokensByIds(appUserTokensIds);
-
-        return AuthenticationResponse.builder()
-                .accessToken(accessTokenJwt)
-                .refreshToken(refreshTokenJwt)
-                .build();
-    }
-
-    private void saveUserToken(AppUser user, String jwtToken, TokenType tokenType) {
-        var token = Token.builder()
-                .appUser(user)
-                .token(jwtToken)
-                .tokenType(tokenType)
-                .expired(false)
-                .revoked(false)
-                .build();
-        tokenService.save(token);
-    }
+	private void saveUserToken(AppUser user, String jwtToken, TokenType tokenType) {
+		var token = Token.builder()
+			.appUser(user)
+			.token(jwtToken)
+			.tokenType(tokenType)
+			.expired(false)
+			.revoked(false)
+			.build();
+		tokenService.save(token);
+	}
 
 	private List<Integer> fetchAllUserTokens(AppUser appUser) {
 		return tokenService.findAllTokensForUser(appUser.getId()).stream().map(Token::getId).toList();
 	}
 
-    private void revokeAllUserTokens(AppUser appUser) {
-        var validUserTokens = tokenService.findAllTokensForUser(appUser.getId());
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-        tokenService.saveAll(validUserTokens);
-    }
+	private void revokeAllUserTokens(AppUser appUser) {
+		var validUserTokens = tokenService.findAllTokensForUser(appUser.getId());
+		if (validUserTokens.isEmpty())
+			return;
+		validUserTokens.forEach(token -> {
+			token.setExpired(true);
+			token.setRevoked(true);
+		});
+		tokenService.saveAll(validUserTokens);
+	}
 
-    private void deleteAllTokensForUser(AppUser appUser) {
-        tokenService.deleteAllTokensForUser(appUser);
-    }
+	private void deleteAllTokensForUser(AppUser appUser) {
+		tokenService.deleteAllTokensForUser(appUser);
+	}
+
+	private void updateUserTokenData(String accessTokenJwt, String refreshTokenJwt, AppUser appUser) {
+		List<Integer> appUserTokensIds = fetchAllUserTokens(appUser);
+
+		saveUserToken(appUser, accessTokenJwt, TokenType.BEARER);
+		saveUserToken(appUser, refreshTokenJwt, TokenType.REFRESH);
+
+		tokenService.deleteTokensByIds(appUserTokensIds);
+	}
 }
