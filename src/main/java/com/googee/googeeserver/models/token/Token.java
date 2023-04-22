@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 @Data
 @Builder
@@ -30,7 +29,7 @@ public class Token {
 
     public boolean expired;
 
-    @ManyToOne(cascade = jakarta.persistence.CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     public AppUser appUser;
 }
