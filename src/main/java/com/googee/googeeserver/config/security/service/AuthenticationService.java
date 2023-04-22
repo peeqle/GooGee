@@ -54,7 +54,7 @@ public class AuthenticationService {
 		return AuthenticationResponse.builder()
 			.accessToken(jwtAccessToken)
 			.refreshToken(jwtRefreshToken)
-			.build() ;
+			.build();
 	}
 
 	public AuthenticationResponse authenticate(AuthenticationRequest request) {
