@@ -13,13 +13,13 @@ import com.googee.googeeserver.utils.exceptions.token.TokenExpiredException;
 import com.googee.googeeserver.utils.exceptions.token.TokenNotFoundException;
 import com.googee.googeeserver.utils.exceptions.token.TokenNotValidException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -35,8 +35,6 @@ public class AuthenticationService {
     private final TokenServiceImpl tokenService;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final AuthenticationManager authenticationManager;
 
     private final DaoAuthenticationProvider daoAuthenticationProvider;
 
@@ -102,10 +100,12 @@ public class AuthenticationService {
         var accessTokenJwt = jwtService.generateAccessToken(appUser);
         var refreshTokenJwt = jwtService.generateRefreshToken(appUser);
 
-        deleteAllTokensForUser(appUser);
+		List<Integer> appUserTokensIds = fetchAllUserTokens(appUser);
 
         saveUserToken(appUser, accessTokenJwt, TokenType.BEARER);
         saveUserToken(appUser, refreshTokenJwt, TokenType.REFRESH);
+
+		tokenService.deleteTokensByIds(appUserTokensIds);
 
         return AuthenticationResponse.builder()
                 .accessToken(accessTokenJwt)
@@ -117,12 +117,16 @@ public class AuthenticationService {
         var token = Token.builder()
                 .appUser(user)
                 .token(jwtToken)
-                .tokenType(TokenType.BEARER)
+                .tokenType(tokenType)
                 .expired(false)
                 .revoked(false)
                 .build();
         tokenService.save(token);
     }
+
+	private List<Integer> fetchAllUserTokens(AppUser appUser) {
+		return tokenService.findAllTokensForUser(appUser.getId()).stream().map(Token::getId).toList();
+	}
 
     private void revokeAllUserTokens(AppUser appUser) {
         var validUserTokens = tokenService.findAllTokensForUser(appUser.getId());

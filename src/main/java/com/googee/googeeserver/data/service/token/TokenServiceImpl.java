@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +31,16 @@ public class TokenServiceImpl {
         tokenRepository.deleteAllByAppUser(appUser);
     }
 
+	public void deleteTokensByIds(Collection<Integer> ids) {
+		tokenRepository.deleteAllById(ids);
+	}
+
     public Token findTokenByValue(String tokenValue) {
         return tokenRepository.findValidTokenByToken(tokenValue);
     }
 
-    public List<Token> findAllTokensForUser(Long uuid) {
-        return tokenRepository.findAllValidTokenByAppUser(uuid);
+    public List<Token> findAllTokensForUser(Long id) {
+        return tokenRepository.findAllValidTokenByAppUser(id);
     }
 
     public Token findByTokenString(String token) {

@@ -1,5 +1,6 @@
 package com.googee.googeeserver.config.security.config;
 
+import com.googee.googeeserver.config.messaging.security.interceptors.RequestInterceptor;
 import com.googee.googeeserver.data.service.user.AppUserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -12,16 +13,23 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfig {
+public class ApplicationConfig implements WebMvcConfigurer {
 
     private final AppUserServiceImpl appUserService;
 
     private final PasswordEncoder passwordEncoder;
 
-    @Bean
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(new RequestInterceptor());
+	}
+
+	@Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(appUserService);

@@ -32,9 +32,16 @@ public class AuthenticationController {
 
     @PostMapping("/refresh")
     public ResponseEntity<AuthenticationResponse> refreshTokens(@RequestParam String refreshToken) {
+		var authResponse = new AuthenticationResponse();
+		authResponse.setSuccess(false);
         try {
             var tokens = service.refresh(refreshToken);
-            return ResponseEntity.ok(tokens);
+
+			authResponse.setRefreshToken(tokens.getRefreshToken());
+			authResponse.setAccessToken(tokens.getAccessToken());
+			authResponse.setSuccess(true);
+
+            return ResponseEntity.ok(authResponse);
         } catch (TokenNotFoundException e) {
             return ResponseEntity.status(404).build();
         } catch (TokenNotValidException e) {

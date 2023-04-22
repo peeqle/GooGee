@@ -6,13 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse extends Response {
+public abstract class Response {
+	boolean success;
 
-	private String accessToken;
-
-	private String refreshToken;
-
+	long transactionTime;
 }
