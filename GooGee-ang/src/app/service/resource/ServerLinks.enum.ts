@@ -6,5 +6,6 @@ export enum ServerLinks {
   ROOMS_REQUEST = "/api/v1/room",
   SEARCH_REQUEST = "/api/v1/search",
   USER_REQUEST = "/api/v1/user",
+  USER_CURRENT_REQUEST = "/api/v1/user/fetch/current",
   APPLICATION_AUTH_PREFIX = "/api/v1/auth"
 }

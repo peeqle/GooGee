@@ -1,1 +1,14 @@
-<p>profile works!</p>
+<div class="row">
+  <div class="col">
+    <img [src]="'assets/images/empty_avatar.jpg'" class="img-fluid rounded-circle">
+  </div>
+  <div class="col">
+    <div class="float-start w-100">
+      <h1 class="fw-bold">@{{currentUser?.username}}</h1>
+    </div>
+    <span>{{currentUser?.status}}</span>
+  </div>
+  <ckeditor
+  debounce="500">
+  </ckeditor>
+</div>

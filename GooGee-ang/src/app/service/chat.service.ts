@@ -37,16 +37,7 @@ export class ChatService {
   }
 
   private create() {
-    this.socket = new SockJS("http://127.0.0.1:8080/ws", {
-        transportOptions: {
-          'xhr-streaming': {
-            headers: {
-              "Authorization": `Bearer`
-            }
-          }
-        }
-      }
-    )
+    this.socket = new SockJS("http://127.0.0.1:8080/ws", {})
     let observable = new Observable((obs: Observer<MessageEvent>) => {
       this.socket.onmessage = obs.next.bind(obs);
       this.socket.onerror = obs.error.bind(obs);

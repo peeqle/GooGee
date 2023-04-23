@@ -22,6 +22,6 @@ export class LocalStorageService {
   }
 
   fetchTokens() {
-    return localStorage.getItem("tokens");
+    return this.fetch("tokens");
   }
 }
