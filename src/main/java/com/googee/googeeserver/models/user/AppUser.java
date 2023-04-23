@@ -1,7 +1,9 @@
 package com.googee.googeeserver.models.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.googee.googeeserver.models.token.Token;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,74 +19,85 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.hibernate.annotations.CascadeType.ALL;
+
 @Data
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Transient
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AppUser implements UserDetails, Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id", nullable = false)
+	private Long id;
 
-    private String username;
+	private String username;
 
-    private String password;
+	private String password;
 
-    private String email;
+	private String email;
 
-    @ElementCollection
-    @Cascade(CascadeType.ALL)
-    private List<Role> roles = Arrays.asList(Role.USER);
+	private String imageKey;
 
-    @Cascade(CascadeType.ALL)
-    @OneToMany(mappedBy = "appUser")
-    private List<Token> tokens;
+	private String status;
 
-    private boolean isAccountNonExpired = true;
+	private Long lastActive;
 
-    private boolean isAccountNonLocked = true;
+	@ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+	@CollectionTable(name = "user_role",
+		joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role")
+	private Collection<Role> roles = List.of(Role.USER);
 
-    private boolean isCredentialsNonExpired = true;
+	@Cascade(CascadeType.ALL)
+	@OneToMany(mappedBy = "appUser")
+	private List<Token> tokens;
 
-    private boolean isEnabled = true;
+	private boolean isAccountNonExpired = true;
 
-    private String userOptions = "";
+	private boolean isAccountNonLocked = true;
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
-    }
+	private boolean isCredentialsNonExpired = true;
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
+	private boolean isEnabled = true;
 
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
+	private String userOptions = "";
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return this.isAccountNonExpired;
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return roles.stream().map(role -> new SimpleGrantedAuthority(role.name())).collect(Collectors.toList());
+	}
 
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.isAccountNonLocked;
-    }
+	@Override
+	public String getPassword() {
+		return this.password;
+	}
 
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return this.isCredentialsNonExpired;
-    }
+	@Override
+	public String getUsername() {
+		return this.username;
+	}
 
-    @Override
-    public boolean isEnabled() {
-        return this.isEnabled;
-    }
+	@Override
+	public boolean isAccountNonExpired() {
+		return this.isAccountNonExpired;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return this.isAccountNonLocked;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return this.isCredentialsNonExpired;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.isEnabled;
+	}
 }

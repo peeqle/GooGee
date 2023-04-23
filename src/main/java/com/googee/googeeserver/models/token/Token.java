@@ -13,6 +13,7 @@ import org.hibernate.annotations.Cascade;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Embeddable
 public class Token {
 
     @Id

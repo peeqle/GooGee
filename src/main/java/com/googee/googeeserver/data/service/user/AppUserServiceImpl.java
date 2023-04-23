@@ -3,6 +3,7 @@ package com.googee.googeeserver.data.service.user;
 import com.googee.googeeserver.data.repo.user.AppUserRepository;
 import com.googee.googeeserver.models.user.AppUser;
 import com.googee.googeeserver.models.user.Role;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,13 +17,11 @@ import java.text.MessageFormat;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
-import static com.googee.googeeserver.models.user.Role.ADMIN;
-import static com.googee.googeeserver.models.user.Role.USER;
 import static java.lang.String.format;
 
 @Service
 @RequiredArgsConstructor
-public class AppUserServiceImpl implements UserDetailsManager {
+public class AppUserServiceImpl implements UserDetailsManager, AutoCloseable {
 
 	private final AppUserRepository userRepository;
 
@@ -30,6 +29,7 @@ public class AppUserServiceImpl implements UserDetailsManager {
 	private PasswordEncoder passwordEncoder;
 
 	@Override
+	@Transactional
 	public AppUser loadUserByUsername(String username) {
 		return userRepository.findAppUserByUsername(username).orElseThrow(
 			() -> new UsernameNotFoundException(MessageFormat.format("Username {0} doesn't exist!", username)));
@@ -93,10 +93,8 @@ public class AppUserServiceImpl implements UserDetailsManager {
 		return userRepository.findAppUserById(id).isPresent();
 	}
 
-	public Role getRole(String roleName) {
-		return switch (roleName) {
-			case "ADMIN" -> ADMIN;
-			default -> USER;
-		};
+	@Override
+	public void close() throws Exception {
+
 	}
 }

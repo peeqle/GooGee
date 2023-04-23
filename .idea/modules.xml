@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/GooGee.iml" filepath="$PROJECT_DIR$/.idea/GooGee.iml" />
+      <module fileurl="file://$PROJECT_DIR$/GooGee-server.iml" filepath="$PROJECT_DIR$/GooGee-server.iml" />
     </modules>
   </component>
 </project>

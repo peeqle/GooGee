@@ -1,18 +1,22 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    password: root
-    username: postgres
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-  rabbitmq:
-    host: localhost
-    username: admin
-    password: admin
+    datasource:
+        url: jdbc:postgresql://localhost:5432/postgres
+        password: root
+        username: postgres
+        driver-class-name: org.postgresql.Driver
+    jpa:
+        hibernate:
+            ddl-auto: update
+    main:
+        multipart:
+            max-file-size: 1000MB
+            max-request-size: 100MB
+    rabbitmq:
+        host: localhost
+        username: admin
+        password: admin
 angular:
-  client:
-    url: http://localhost:4200
+    client:
+        url: http://localhost:4200
 security:
-  secretKey: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+    secretKey: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
