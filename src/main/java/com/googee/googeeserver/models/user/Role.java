@@ -1,5 +1,8 @@
 package com.googee.googeeserver.models.user;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.Getter;
 
@@ -12,7 +15,7 @@ public enum Role {
 
     private final String roleSubject;
 
-    Role(String roleName, String roleSubject) {
+	Role(String roleName, String roleSubject) {
         this.roleName = roleName;
 
         this.roleSubject = roleSubject;

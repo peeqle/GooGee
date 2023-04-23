@@ -10,9 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class GooGeeServerApplication {
 
     public static void main(String[] args) {
-
         SpringApplication.run(GooGeeServerApplication.class, args);
     }
-
-
 }

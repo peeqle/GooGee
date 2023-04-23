@@ -29,22 +29,22 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
 
     private Message<?> exceptionMessage;
 
-    @Override
-    public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        final var accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
-        final var cmd = accessor.getCommand();
-        String jwt = null;
-        if (StompCommand.CONNECT == cmd || StompCommand.SEND == cmd) {
-            final var requestTokenHeader = accessor.getFirstNativeHeader("Authorization");
-            if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer")) {
-                jwt = requestTokenHeader.substring(7);
-            }
-            if (!validateExpiration(jwt)){
-                return exceptionMessage;
-            }
-        }
-        return message;
-    }
+//    @Override
+//    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+//        final var accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
+//        final var cmd = accessor.getCommand();
+//        String jwt = null;
+//        if (StompCommand.CONNECT == cmd || StompCommand.SEND == cmd) {
+//            final var requestTokenHeader = accessor.getFirstNativeHeader("Authorization");
+//            if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer")) {
+//                jwt = requestTokenHeader.substring(7);
+//            }
+//            if (!validateExpiration(jwt)){
+//                return exceptionMessage;
+//            }
+//        }
+//        return message;
+//    }
 
     public boolean validateExpiration(String authToken) {
         try {

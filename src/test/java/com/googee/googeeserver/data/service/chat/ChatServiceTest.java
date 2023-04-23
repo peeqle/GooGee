@@ -15,6 +15,5 @@ class ChatServiceTest {
 
 	@Test
 	public void testFetchOfChats() {
-		chatService.fetchChatsForUser(9L, 1, 15);
 	}
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class Response {
+public class Response {
 	boolean success;
 
 	long transactionTime;

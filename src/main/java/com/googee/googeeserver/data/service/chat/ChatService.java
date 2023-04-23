@@ -32,7 +32,7 @@ public class ChatService {
 
 	private final UserContextService userContextService;
 
-	public Page<Chat> fetchChatsForUser(Long userId, int page, int limit) {
+	public Page<Chat> fetchChatsForUser(int page, int limit) {
 		Pageable pageable = PageRequest.of(page, limit);
 
 		Long appUserId = userContextService.getCurrentUserId();
