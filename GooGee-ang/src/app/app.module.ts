@@ -10,10 +10,13 @@ import { ShellComponent } from './components/shell/shell.component';
 import { NavigatorComponent } from './components/navigator/navigator.component';
 import { MainFrameComponent } from './components/main-frame/main-frame.component';
 import { MapsComponent } from './components/maps/maps.component';
-import { ChatFrameComponent } from './components/chat-frame/chat-frame.component';
-import {MatCardModule} from "@angular/material/card";
-import { ChatComponent } from './components/chat-frame/chat/chat.component';
-import { ChatElementComponent } from './components/chat-frame/chat-element/chat-element.component';
+import { ActivitySliderComponent } from './components/activity-slider/activity-slider.component';
+import { ActivityTabComponent } from './components/activity-slider/activity-tab/activity-tab.component';
+import { RoomComponent } from './components/activity-slider/panels/room/room/room.component';
+import { ProfileComponent } from './components/activity-slider/panels/profile/profile/profile.component';
+import { SettingsComponent } from './components/activity-slider/panels/settings/settings/settings.component';
+import {ChatComponent} from "./components/activity-slider/panels/chat/chat/chat.component";
+import { SearchComponent } from './components/activity-slider/panels/search/search.component';
 
 @NgModule({
   declarations: [
@@ -23,9 +26,13 @@ import { ChatElementComponent } from './components/chat-frame/chat-element/chat-
     NavigatorComponent,
     MainFrameComponent,
     MapsComponent,
-    ChatFrameComponent,
     ChatComponent,
-    ChatElementComponent
+    ActivitySliderComponent,
+    ActivityTabComponent,
+    RoomComponent,
+    ProfileComponent,
+    SettingsComponent,
+    SearchComponent
   ],
   imports: [
     NgbModule,

@@ -21,8 +21,7 @@ export class AuthService {
               private localStorageService: LocalStorageService,
               private server: ServerService,
               private userService: UserService,
-              private snack: SnackService,
-              private authService: AuthService) {
+              private snack: SnackService) {
   }
 
   isUserAuthorized() {
@@ -42,9 +41,16 @@ export class AuthService {
     let this$ = this;
     this.http.post<AuthenticationRequest>(this.server.prepareServerLink(ServerLinks.LOGIN_REQUEST), loginRequest).subscribe({
       next: (nxt) => {
-        if (nxt.success)
+        if (nxt.success) {
           this.userAuthorized.next(nxt.success);
-        this$.router.navigate(['/']).then()
+          this.localStorageService.save("tokens", {
+            accessToken: nxt.accessToken,
+            refreshToken: nxt.refreshToken
+          })
+          // хз оставлять ли сохранение в локале профиля, в любом случае TODO
+          // this.userService.generateAndSaveFromRegisterRequest(registerRequest);
+          this$.router.navigate(['/']).then()
+        }
       },
       error: (err) => {
         this$.snack.loginRequestError()
