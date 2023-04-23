@@ -7,7 +7,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {Router} from "../router/router.module";
 import {GoogleMapsModule} from "@angular/google-maps";
-import {CKEditorModule} from "ng2-ckeditor";
+import {EditorModule} from "@tinymce/tinymce-angular";
 
 const modules = [
   CommonModule,
@@ -19,7 +19,7 @@ const modules = [
   ReactiveFormsModule,
   Router,
   GoogleMapsModule,
-  CKEditorModule
+  EditorModule
 ]
 
 @NgModule({

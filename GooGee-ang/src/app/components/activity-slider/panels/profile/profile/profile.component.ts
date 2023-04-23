@@ -43,4 +43,14 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
       }
     })
   }
+
+  getEditorConfig() {
+    return {
+      resize: false,
+      height: 200,
+      menubar: false,
+      value: "Hello World",
+      content_css: 'profile.component.css'
+    }
+  }
 }
