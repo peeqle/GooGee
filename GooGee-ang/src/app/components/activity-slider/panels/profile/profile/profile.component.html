@@ -8,6 +8,8 @@
     </div>
     <span>{{currentUser?.status}}</span>
   </div>
-  <editor apiKey="y4wscd86bwbny4dgy6bam7xc7vb5w5yxyup2xidlwb6vxp81" outputFormat="html" class="mt-2 editor-container"
+  <editor apiKey="y4wscd86bwbny4dgy6bam7xc7vb5w5yxyup2xidlwb6vxp81"
+          outputFormat="html" class="mt-2 editor-container"
+          [(ngModel)]="content"
           [init]="getEditorConfig()"></editor>
 </div>
