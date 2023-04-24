@@ -56,6 +56,10 @@ public class AppUser implements UserDetails, Serializable {
 	@OneToMany(mappedBy = "appUser")
 	private List<Token> tokens;
 
+	@Cascade(CascadeType.ALL)
+	@OneToMany(mappedBy = "appUser")
+	private List<Post> posts;
+
 	private boolean isAccountNonExpired = true;
 
 	private boolean isAccountNonLocked = true;

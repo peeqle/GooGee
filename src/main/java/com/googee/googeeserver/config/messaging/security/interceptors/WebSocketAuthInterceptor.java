@@ -30,7 +30,7 @@ public class WebSocketAuthInterceptor implements ChannelInterceptor {
     private Message<?> exceptionMessage;
 
 //    @Override
-//    public Message<?> preSend(Message<?> message, MessageChannel channel) {
+//    public Message<?> preSend(Message<?> message, MessageChannel channel) {com.darkeye.chatGPT
 //        final var accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 //        final var cmd = accessor.getCommand();
 //        String jwt = null;
