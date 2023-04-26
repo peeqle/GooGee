@@ -74,7 +74,7 @@ public class AppUserServiceImpl implements UserDetailsManager, AutoCloseable {
 	}
 
 	public AppUser findAppUserByUsername(String username) {
-		return userRepository.findAppUserByUsername(username).get();
+		return userRepository.findAppUserByUsername(username).orElseThrow(() -> new UsernameNotFoundException(username));
 	}
 
 	public AppUser tryGetAppUserById(Long userId) {
