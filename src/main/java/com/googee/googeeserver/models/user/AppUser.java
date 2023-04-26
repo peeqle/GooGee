@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hibernate.annotations.CascadeType.ALL;
+import static org.hibernate.annotations.CascadeType.PERSIST;
 
 @Data
 @Builder
@@ -52,9 +53,16 @@ public class AppUser implements UserDetails, Serializable {
 	@Column(name = "role")
 	private Collection<Role> roles = List.of(Role.USER);
 
-	@Cascade(CascadeType.ALL)
+	@Cascade(ALL)
 	@OneToMany(mappedBy = "appUser")
 	private List<Token> tokens;
+
+	@Cascade(ALL)
+	@OneToMany(mappedBy = "appUser")
+	private List<Post> posts;
+
+	@OneToMany
+	private List<AppUser> blockedUsers;
 
 	private boolean isAccountNonExpired = true;
 
