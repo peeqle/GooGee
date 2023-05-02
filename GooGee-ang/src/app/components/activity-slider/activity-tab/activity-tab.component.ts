@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewInit, Component, EventEmitter, Input, Output} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {HolderService} from "../service/holder.service";
 import {ActivityService} from "../service/activity.service";
 
@@ -15,20 +15,13 @@ export class ActivityTabComponent implements AfterContentInit {
 
   active: boolean = false;
 
+  @ViewChild("localLink")
+  localLink: any;
+
   @Output()
   tabClickEventEmitter: EventEmitter<number> = new EventEmitter<number>();
 
-  constructor(private tabHolder: HolderService,private activityService: ActivityService) {
-
-  }
-
-  changeTab(event: Event) {
-    this.active = !this.active;
-    this.tabClickEventEmitter.emit(this.activity.id)
-  }
-
-  generateIdForActivityButton() {
-    return `button-activity-${this.activity.id}`;
+  constructor(private tabHolder: HolderService, private activityService: ActivityService) {
   }
 
   ngAfterContentInit(): void {
@@ -36,8 +29,23 @@ export class ActivityTabComponent implements AfterContentInit {
 
     this.tabHolder.currentActiveTabIndex.subscribe({
       next: (value) => {
+        this.changeState(this.activity.id == value)
         this.active = this.activity.id == value
       }
     })
+  }
+
+  changeTab(event: any) {
+    this.active = !this.active;
+
+    this.tabClickEventEmitter.emit(this.activity.id)
+  }
+
+  generateIdForActivityButton() {
+    return `button-activity-${this.activity.id}`;
+  }
+
+  changeState(bool: boolean) {
+    bool ? this.localLink.nativeElement.classList.add('active') : this.localLink.nativeElement.classList.remove('active');
   }
 }

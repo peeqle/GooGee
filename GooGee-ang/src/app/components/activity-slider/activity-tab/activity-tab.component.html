@@ -1,6 +1,8 @@
-<button class="btn btn-light w-100" [id]="generateIdForActivityButton()" (click)="changeTab($event)" [class.active]="active">
-  {{activity.name}}
-</button>
+<li class="nav-item" [id]="generateIdForActivityButton()" (click)="changeTab($event)" [class.active]="active">
+  <a class="nav-link" #localLink>
+    {{activity.name}}
+  </a>
+</li>
 
 
 
