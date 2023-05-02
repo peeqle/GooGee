@@ -13,6 +13,8 @@ public class PostDTO implements Serializable {
 
 	private Long createdAt;
 
+	private Long creatorUser;
+
 	private Long targetUser;
 
 	private Long parentPost;

@@ -32,6 +32,10 @@ public class ChatService {
 
 	private final UserContextService userContextService;
 
+	public Chat save(Chat chat) {
+		return chatRepository.save(chat);
+	}
+
 	public Page<Chat> fetchChatsForUser(int page, int limit) {
 		Pageable pageable = PageRequest.of(page, limit);
 

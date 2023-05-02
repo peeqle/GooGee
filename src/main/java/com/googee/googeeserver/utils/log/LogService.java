@@ -21,10 +21,8 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class LogService {
 
-
 	private final HashOperations<String, Long, String> loggerHashOps;
-
-	private final SecurityContextService securityContextService;
+	private static final String unknownIssuerName = "UNKNOWN";
 
 	public void saveLogMessage(String message, Throwable e) {
 		log.warn(message, e);
@@ -32,7 +30,18 @@ public class LogService {
 		LoggerMessage loggerMessage = LoggerMessage.builder()
 			.message(message)
 			.exceptionType(LoggerIssuerExceptionType.INTERNAL)
-			.issuer(securityContextService.fetchCurrentUsername())
+			.issuer(unknownIssuerName)
+			.thrownAt(Instant.now().toEpochMilli())
+			.build();
+		loggerHashOps.put(HashNamespaces.LOGGER_HASH.getName(), loggerMessage.getId(), loggerMessage.toString());
+	}
+	public void saveLogMessage(String message, String issuer, Throwable e) {
+		log.warn(message, e);
+
+		LoggerMessage loggerMessage = LoggerMessage.builder()
+			.message(message)
+			.exceptionType(LoggerIssuerExceptionType.INTERNAL)
+			.issuer(issuer)
 			.thrownAt(Instant.now().toEpochMilli())
 			.build();
 		loggerHashOps.put(HashNamespaces.LOGGER_HASH.getName(), loggerMessage.getId(), loggerMessage.toString());
