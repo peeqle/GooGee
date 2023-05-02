@@ -46,6 +46,8 @@ export class ActivityTabComponent implements AfterContentInit {
   }
 
   changeState(bool: boolean) {
-    bool ? this.localLink.nativeElement.classList.add('active') : this.localLink.nativeElement.classList.remove('active');
+    if(this.localLink) {
+      bool ? this.localLink.nativeElement.classList.add('active') : this.localLink.nativeElement.classList.remove('active');
+    }
   }
 }

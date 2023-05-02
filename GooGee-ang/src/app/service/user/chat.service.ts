@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import SockJS from "sockjs-client";
 import * as Stomp from 'stompjs';
 import {Observable, Observer} from "rxjs";
-import {LocalStorageService} from "./local-storage.service";
+import {LocalStorageService} from "../system/local-storage.service";
 
 @Injectable({
   providedIn: 'root'
@@ -70,5 +70,9 @@ export class ChatService {
   public subscribeOnChatMessages(chat_id: string) {
     this.stomp.subscribe(`/topic/chat.${chat_id}.messages`, (message: any) => {
     });
+  }
+
+  createChat() {
+
   }
 }

@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Loader} from "@googlemaps/js-api-loader";
 import MapStyles from "./styles/mapsStyles.json";
-import {LocationService} from "../../service/location.service";
+import {LocationService} from "../../service/user/location.service";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 

@@ -1,10 +1,10 @@
 import {AfterViewInit, Component, OnInit, Renderer2} from '@angular/core';
 import {timeout} from "rxjs";
 import {environment} from "../environments/environment.prod";
-import {ChatService} from "./service/chat.service";
-import {LocalStorageService} from "./service/local-storage.service";
-import {TokenService} from "./service/token.service";
-import {AuthService} from "./service/auth.service";
+import {ChatService} from "./service/user/chat.service";
+import {LocalStorageService} from "./service/system/local-storage.service";
+import {TokenService} from "./service/system/token.service";
+import {AuthService} from "./service/system/auth.service";
 import {Router} from "@angular/router";
 
 @Component({

@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {Location} from "./models/Location";
-import {SnackService} from "./snack.service";
-import {SettingsService} from "./settings.service";
+import {Location} from "../models/Location";
+import {SnackService} from "../snack.service";
+import {SettingsService} from "../system/settings.service";
 
 @Injectable({
   providedIn: 'root'

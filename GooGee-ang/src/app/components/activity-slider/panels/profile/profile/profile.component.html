@@ -8,8 +8,9 @@
     </div>
     <span>{{currentUser?.status}}</span>
   </div>
-  <editor apiKey="y4wscd86bwbny4dgy6bam7xc7vb5w5yxyup2xidlwb6vxp81"
-          outputFormat="html" class="mt-2 editor-container"
-          [(ngModel)]="content"
-          [init]="getEditorConfig()"></editor>
+  <div class="mt-2 editor-container">
+    <textarea class="w-100 h-100 editor-area" [(ngModel)]="content"></textarea>
+    <button class="btn btn-light float-end" (click)="savePost()">post</button>
+  </div>
+  <app-posts-frame></app-posts-frame>
 </div>

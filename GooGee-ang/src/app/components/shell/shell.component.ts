@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {ChatService} from "../../service/chat.service";
-import {AuthService} from "../../service/auth.service";
+import {ChatService} from "../../service/user/chat.service";
+import {AuthService} from "../../service/system/auth.service";
 
 @Component({
   selector: 'app-shell',

@@ -12,5 +12,12 @@ img {
 }
 
 .editor-container {
+  height: 200px;
   max-height: 200px;
+}
+
+.editor-area{
+  border: 1px;
+  border-radius: 10px;
+  padding: 2px;
 }

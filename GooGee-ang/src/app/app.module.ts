@@ -17,6 +17,11 @@ import { ProfileComponent } from './components/activity-slider/panels/profile/pr
 import { SettingsComponent } from './components/activity-slider/panels/settings/settings/settings.component';
 import {ChatComponent} from "./components/activity-slider/panels/chat/chat/chat.component";
 import { SearchComponent } from './components/activity-slider/panels/search/search.component';
+import {PostsFrameComponent} from "./components/activity-slider/panels/profile/post/posts-frame/posts-frame.component";
+import {
+  PostsElementComponent
+} from "./components/activity-slider/panels/profile/post/posts-element/posts-element.component";
+import { RoomCreateComponent } from './components/activity-slider/panels/room/room-create/room-create.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +37,10 @@ import { SearchComponent } from './components/activity-slider/panels/search/sear
     RoomComponent,
     ProfileComponent,
     SettingsComponent,
-    SearchComponent
+    SearchComponent,
+    PostsFrameComponent,
+    PostsElementComponent,
+    RoomCreateComponent
   ],
   imports: [
     NgbModule,

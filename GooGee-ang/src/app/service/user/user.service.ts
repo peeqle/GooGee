@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-import {LocalStorageService} from "./local-storage.service";
-import {AppUser} from "./models/AppUser";
+import {LocalStorageService} from "../system/local-storage.service";
+import {AppUser} from "../models/AppUser";
 import {HttpClient} from "@angular/common/http";
-import {ServerLinks} from "./resource/ServerLinks.enum";
-import {ServerService} from "./server.service";
-import {AppUserDTO} from "./models/DTO/AppUserDTO";
+import {ServerLinks} from "../resource/ServerLinks.enum";
+import {ServerService} from "../system/server.service";
+import {AppUserDTO} from "../models/DTO/AppUserDTO";
 
 @Injectable({
   providedIn: 'root'
