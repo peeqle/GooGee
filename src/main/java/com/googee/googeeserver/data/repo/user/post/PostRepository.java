@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
 
-	Page<Post> getPostsByAppUserOrderByCreatedAtDesc(AppUser appUser, Pageable pageable);
+	Page<Post> getPostsByCreatorUserOrderByCreatedAtDesc(AppUser creatorUser, Pageable pageable);
 }

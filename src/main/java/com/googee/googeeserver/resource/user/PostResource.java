@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/v1/user/posts")
@@ -36,8 +37,8 @@ public class PostResource {
 
 	}
 
-	@PostMapping("/post")
-	public ResponseEntity<?> post(@RequestBody PostDTO postDTO) {
+	@PostMapping("/save")
+	public ResponseEntity post(@RequestBody PostDTO postDTO) {
 		if (postDTO.getContent().isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
@@ -45,8 +46,8 @@ public class PostResource {
 
 		Post post = Post.builder()
 			.textContent(postDTO.getContent())
-			.appUser(currentUser)
-			.createdAt(postDTO.getCreatedAt())
+			.creatorUser(currentUser)
+			.createdAt(Instant.now().toEpochMilli())
 			.build();
 		if (postDTO.getParentPost() != null) {
 			try {
@@ -56,15 +57,16 @@ public class PostResource {
 			}
 		}
 
-		if (!currentUser.getId().equals(postDTO.getTargetUser())) {
-			AppUser targetUser = appUserService.tryGetAppUserById(postDTO.getTargetUser());
-			post.setTargetUser(targetUser);
-		} else {
-			post.setTargetUser(currentUser);
-		}
+		post.setTargetUser(currentUser);
 
+		if (postDTO.getTargetUser() != null) {
+			if (!currentUser.getId().equals(postDTO.getTargetUser())) {
+				AppUser targetUser = appUserService.tryGetAppUserById(postDTO.getTargetUser());
+				post.setTargetUser(targetUser);
+			}
+		}
 		//send post info to subbed users channel
 
-		return ResponseEntity.ok(postService.save(post));
+		return ResponseEntity.ok().build();
 	}
 }

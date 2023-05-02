@@ -20,7 +20,7 @@ public class PostService {
 
 	public Page<Post> fetch(int limit, int offset, AppUser appUser) {
 		Pageable pageable = PageRequest.of(offset, limit);
-		return postRepository.getPostsByAppUserOrderByCreatedAtDesc(appUser, pageable);
+		return postRepository.getPostsByCreatorUserOrderByCreatedAtDesc(appUser, pageable);
 	}
 
 	public Post fetchPostById(Long id) throws PostNotFoundException {

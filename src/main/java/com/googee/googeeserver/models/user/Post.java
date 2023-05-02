@@ -1,9 +1,7 @@
 package com.googee.googeeserver.models.user;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -13,8 +11,9 @@ import java.util.List;
 @Data
 @Entity
 @Builder
-@RequiredArgsConstructor
-@Table(name = "app_user_post")
+@Table(name = "post")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post implements Serializable {
 
 	@Id
@@ -30,11 +29,11 @@ public class Post implements Serializable {
 	public Post parentPost;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
-	public AppUser appUser;
+	@JoinColumn(name = "creator_id")
+	public AppUser creatorUser;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "target_id")
 	public AppUser targetUser;
 
 	private Long createdAt = Instant.now().toEpochMilli();
