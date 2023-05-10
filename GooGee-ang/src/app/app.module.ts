@@ -22,6 +22,7 @@ import {
   PostsElementComponent
 } from "./components/activity-slider/panels/profile/post/posts-element/posts-element.component";
 import { RoomCreateComponent } from './components/activity-slider/panels/room/room-create/room-create.component';
+import {MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogRef} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -47,7 +48,11 @@ import { RoomCreateComponent } from './components/activity-slider/panels/room/ro
     SharedModule,
     MaterialModule
   ],
-  providers: [],
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    {provide:MatDialogRef , useValue:{} },
+    { provide: MAT_DIALOG_DATA, useValue: {} }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

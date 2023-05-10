@@ -23,6 +23,6 @@ export class ServerService {
   }
 
   prepareServerLink(linkPattern: ServerLinks) {
-    return environment.server.url + linkPattern;
+    return environment.server.url + environment.server.prefix + linkPattern;
   }
 }

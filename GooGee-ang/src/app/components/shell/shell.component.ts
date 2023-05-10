@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {ChatService} from "../../service/user/chat.service";
+import {SocketService} from "../../service/user/socket.service";
 import {AuthService} from "../../service/system/auth.service";
 
 @Component({
@@ -9,7 +9,7 @@ import {AuthService} from "../../service/system/auth.service";
 })
 export class ShellComponent implements OnInit {
 
-  constructor(private chatService: ChatService, private authService: AuthService) {
+  constructor(private socketService: SocketService, private authService: AuthService) {
   }
 
   ngOnInit(): void {

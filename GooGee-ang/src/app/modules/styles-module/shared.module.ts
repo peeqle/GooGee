@@ -8,6 +8,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {Router} from "../router/router.module";
 import {GoogleMapsModule} from "@angular/google-maps";
 import {EditorModule} from "@tinymce/tinymce-angular";
+import {MatDialogModule} from "@angular/material/dialog";
 
 const modules = [
   CommonModule,
@@ -19,7 +20,8 @@ const modules = [
   ReactiveFormsModule,
   Router,
   GoogleMapsModule,
-  EditorModule
+  EditorModule,
+  MatDialogModule
 ]
 
 @NgModule({

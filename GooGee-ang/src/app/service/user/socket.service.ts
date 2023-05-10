@@ -3,11 +3,12 @@ import SockJS from "sockjs-client";
 import * as Stomp from 'stompjs';
 import {Observable, Observer} from "rxjs";
 import {LocalStorageService} from "../system/local-storage.service";
+import {UserService} from "./user.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
+export class SocketService {
 
   public stomp: any;
 
@@ -27,7 +28,9 @@ export class ChatService {
         }
       }, function () {
         if (_this.socket.readyState === WebSocket.OPEN) {
-
+          _this.stomp.subscribe("/notifications/global", (message: any) => {
+            console.log('message', message)
+          })
         }
         _this.stomp.reconnect_delay = 2000;
       }, () => {
