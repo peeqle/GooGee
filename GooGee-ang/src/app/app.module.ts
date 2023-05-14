@@ -17,6 +17,13 @@ import { ProfileComponent } from './components/activity-slider/panels/profile/pr
 import { SettingsComponent } from './components/activity-slider/panels/settings/settings/settings.component';
 import {ChatComponent} from "./components/activity-slider/panels/chat/chat/chat.component";
 import { SearchComponent } from './components/activity-slider/panels/search/search.component';
+import {PostsFrameComponent} from "./components/activity-slider/panels/profile/post/posts-frame/posts-frame.component";
+import {
+  PostsElementComponent
+} from "./components/activity-slider/panels/profile/post/posts-element/posts-element.component";
+import { RoomCreateComponent } from './components/activity-slider/panels/room/room-create/room-create.component';
+import {MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogRef} from "@angular/material/dialog";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 @NgModule({
   declarations: [
@@ -32,14 +39,21 @@ import { SearchComponent } from './components/activity-slider/panels/search/sear
     RoomComponent,
     ProfileComponent,
     SettingsComponent,
-    SearchComponent
+    SearchComponent,
+    PostsFrameComponent,
+    PostsElementComponent,
+    RoomCreateComponent
   ],
-  imports: [
-    NgbModule,
-    SharedModule,
-    MaterialModule
+    imports: [
+        NgbModule,
+        SharedModule,
+        MaterialModule,
+    ],
+  providers: [
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    {provide:MatDialogRef , useValue:{} },
+    { provide: MAT_DIALOG_DATA, useValue: {} }
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

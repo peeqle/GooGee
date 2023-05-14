@@ -1,11 +1,12 @@
 import {AfterViewInit, Component, OnInit, Renderer2} from '@angular/core';
 import {timeout} from "rxjs";
 import {environment} from "../environments/environment.prod";
-import {ChatService} from "./service/chat.service";
-import {LocalStorageService} from "./service/local-storage.service";
-import {TokenService} from "./service/token.service";
-import {AuthService} from "./service/auth.service";
+import {SocketService} from "./service/user/socket.service";
+import {LocalStorageService} from "./service/system/local-storage.service";
+import {TokenService} from "./service/system/token.service";
+import {AuthService} from "./service/system/auth.service";
 import {Router} from "@angular/router";
+import {NotificationService} from "./service/user/notification.service";
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,8 @@ export class AppComponent implements AfterViewInit, OnInit {
               private localStorageService: LocalStorageService,
               private tokenService: TokenService,
               private authService: AuthService,
-              private chatService: ChatService,
+              private socketService: SocketService,
+              private notificationService: NotificationService,
               private navigator: Router) {
   }
 
@@ -42,11 +44,9 @@ export class AppComponent implements AfterViewInit, OnInit {
         next: ((json) => {
           this.authService.setUserAuthorized(json.success);
 
-          this.localStorageService.save("tokens", {accessToken: json.accessToken, refreshToken: json.refreshToken})
           if (json.success) {
-            this.chatService.connect();
-            this.navigator.navigate(['/']).then(() => {
-            });
+            this.localStorageService.save("tokens", {accessToken: json.accessToken, refreshToken: json.refreshToken})
+            this.connectSockets();
           }
         }),
         error: ((err) => {
@@ -55,9 +55,16 @@ export class AppComponent implements AfterViewInit, OnInit {
           }
         }),
         complete: () => {
-          console.log('complete')
+
         }
       })
     }
+  }
+
+  private connectSockets() {
+    this.socketService.connect();
+    this.navigator.navigate(['/']).then(() => {
+      this.notificationService.fetchUnreadGlobalNotifications();
+    });
   }
 }

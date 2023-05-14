@@ -3,13 +3,30 @@
     <img [src]="'assets/images/empty_avatar.jpg'" class="img-fluid rounded-circle">
   </div>
   <div class="col">
-    <div class="float-start w-100">
-      <h1 class="fw-bold">@{{currentUser?.username}}</h1>
+    <div class="mb-3">
+
+      <div class="float-start w-100">
+        <h1 class="fw-bold">@{{currentUser?.username}}</h1>
+      </div>
+      <span class="status-container ellipsis">{{currentUser?.status}}</span>
     </div>
-    <span>{{currentUser?.status}}</span>
+    <div>
+      <div class="row user-stats-profile">
+        <div class="col-5">
+          <span>
+            Friends {{currentUser?.friendsCount}}
+          </span>
+        </div>
+        <div class="col-5">
+          <span>
+            Events {{currentUser?.eventsVisited}}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
-  <editor apiKey="y4wscd86bwbny4dgy6bam7xc7vb5w5yxyup2xidlwb6vxp81"
-          outputFormat="html" class="mt-2 editor-container"
-          [(ngModel)]="content"
-          [init]="getEditorConfig()"></editor>
+  <div class="mt-3">
+    <editor [init]="getEditorConfig()" [apiKey]="getEditorKey()"></editor>
+  </div>
+  <app-posts-frame></app-posts-frame>
 </div>

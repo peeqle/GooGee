@@ -7,10 +7,21 @@ img {
   border-radius: 5px !important;
 }
 
-.tox-statusbar__branding{
+.tox-statusbar__branding {
   display: none !important;
 }
 
 .editor-container {
+  height: 200px;
   max-height: 200px;
+}
+
+.editor-area {
+  border: 1px;
+  border-radius: 10px;
+  padding: 2px;
+}
+
+.user-stats-profile {
+  font-weight: 800;
 }

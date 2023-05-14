@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {Location} from "./models/Location";
-import {SnackService} from "./snack.service";
-import {SettingsService} from "./settings.service";
+import {Location} from "../models/Location";
+import {SnackService} from "../snack.service";
+import {SettingsService} from "../system/settings.service";
 
 @Injectable({
   providedIn: 'root'
@@ -23,11 +23,9 @@ export class LocationService {
   }
 
   checkLocation() {
-    console.log('xxxxxx')
     const $this = this;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((sol) => {
-        console.log(sol)
         this.setUserLocation(sol);
       }, (err) => {
         console.log('ERR', err)

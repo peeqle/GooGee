@@ -14,3 +14,19 @@ body {
   margin: 0;
   font-family: -apple-system, Inconsolata;
 }
+
+.backdropBackground{
+  backdrop-filter: blur(4px);
+}
+
+.ng-select-material {
+@import "node_modules/@ng-select/ng-select/themes/material.theme";
+}
+
+.ng-select-default {
+@import "node_modules/@ng-select/ng-select/themes/default.theme";
+}
+
+.ellipsis {
+  text-overflow: ellipsis;
+}

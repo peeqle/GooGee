@@ -1,0 +1,14 @@
+.room-create-container {
+  min-height: auto;
+  max-height: 600px;
+  min-width: 25vw;
+  overflow: hidden;
+}
+
+textarea {
+  overflow: auto;
+  resize: none;
+}
+.mdc-slider{
+  margin: 0 !important;
+}

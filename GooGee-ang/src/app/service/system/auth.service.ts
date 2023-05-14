@@ -4,10 +4,10 @@ import {Router} from "@angular/router";
 import {HttpClient} from "@angular/common/http";
 import {LocalStorageService} from "./local-storage.service";
 import {ServerService} from "./server.service";
-import {ServerLinks} from "./resource/ServerLinks.enum";
-import {UserService} from "./user.service";
-import {SnackService} from "./snack.service";
-import {AuthenticationRequest} from "./models/AuthorizationRequest";
+import {ServerLinks} from "../resource/ServerLinks.enum";
+import {UserService} from "../user/user.service";
+import {SnackService} from "../snack.service";
+import {AuthenticationRequest} from "../models/AuthorizationRequest";
 
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,12 @@
 import {AfterContentInit, Component} from '@angular/core';
-import {UserService} from "../../../../../service/user.service";
+import {UserService} from "../../../../../service/user/user.service";
 import {ActivityService} from "../../../service/activity.service";
 import {HolderService} from "../../../service/holder.service";
 import {CommonActivity} from "../../CommonActivity";
 import {ActivityTab} from "../../../../../service/models/ActivityTab.enum";
+import {PostService} from "../../../../../service/user/post.service";
+import {PostDTO} from "../../../../../service/models/DTO/PostDTO";
+import {environment} from "../../../../../../environments/environment.prod";
 
 @Component({
   selector: 'app-profile',
@@ -18,7 +21,8 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
 
   constructor(private userService: UserService,
               private activityTabService: ActivityService,
-              private tabHolder: HolderService) {
+              private tabHolder: HolderService,
+              private postService: PostService) {
     super();
   }
 
@@ -46,6 +50,24 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
     })
   }
 
+  savePost() {
+    if (this.content) {
+      let post: PostDTO = {
+        content: this.content,
+        createdAt: null,
+        creatorUser: null,
+        targetUser: null,
+        parentPost: null
+      }
+      console.log('POST', post)
+      this.postService.save(post).subscribe({
+        next: (json) => {
+          console.log('POST CAME JSON', json)
+        }
+      })
+    }
+  }
+
   getEditorConfig() {
     return {
       selector: 'textarea',
@@ -56,9 +78,11 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
       images_file_types: 'jpg,svg,webp,gif',
       resize: false,
       height: 300,
-      // menubar: false,
-      value: "Hello World",
-      content_css: 'profile.component.css'
+      content_css: './profile.component.css'
     }
+  }
+
+  getEditorKey() {
+    return environment.editorKey;
   }
 }

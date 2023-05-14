@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SnackService} from "../../service/snack.service";
-import {LocationService} from "../../service/location.service";
+import {LocationService} from "../../service/user/location.service";
 
 @Component({
   selector: 'app-navigator',
