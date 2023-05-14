@@ -3,14 +3,30 @@
     <img [src]="'assets/images/empty_avatar.jpg'" class="img-fluid rounded-circle">
   </div>
   <div class="col">
-    <div class="float-start w-100">
-      <h1 class="fw-bold">@{{currentUser?.username}}</h1>
+    <div class="mb-3">
+
+      <div class="float-start w-100">
+        <h1 class="fw-bold">@{{currentUser?.username}}</h1>
+      </div>
+      <span class="status-container ellipsis">{{currentUser?.status}}</span>
     </div>
-    <span>{{currentUser?.status}}</span>
+    <div>
+      <div class="row user-stats-profile">
+        <div class="col-5">
+          <span>
+            Friends {{currentUser?.friendsCount}}
+          </span>
+        </div>
+        <div class="col-5">
+          <span>
+            Events {{currentUser?.eventsVisited}}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="mt-2 editor-container">
-    <textarea class="w-100 h-100 editor-area" [(ngModel)]="content"></textarea>
-    <button class="btn btn-light float-end" (click)="savePost()">post</button>
+  <div class="mt-3">
+    <editor [init]="getEditorConfig()" [apiKey]="getEditorKey()"></editor>
   </div>
   <app-posts-frame></app-posts-frame>
 </div>

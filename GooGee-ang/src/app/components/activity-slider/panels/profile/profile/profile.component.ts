@@ -6,6 +6,7 @@ import {CommonActivity} from "../../CommonActivity";
 import {ActivityTab} from "../../../../../service/models/ActivityTab.enum";
 import {PostService} from "../../../../../service/user/post.service";
 import {PostDTO} from "../../../../../service/models/DTO/PostDTO";
+import {environment} from "../../../../../../environments/environment.prod";
 
 @Component({
   selector: 'app-profile',
@@ -79,5 +80,9 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
       height: 300,
       content_css: './profile.component.css'
     }
+  }
+
+  getEditorKey() {
+    return environment.editorKey;
   }
 }

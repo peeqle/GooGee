@@ -3,6 +3,7 @@ import {CommonActivity} from "../../CommonActivity";
 import {ModalService} from "../../../../../service/system/ui/modal.service";
 import {RoomCreateComponent} from "../room-create/room-create.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-room',
@@ -21,21 +22,23 @@ export class RoomComponent extends CommonActivity {
 
   constructor(private modalService: ModalService,
               private dialog: MatDialog,
-              private dialogRef: MatDialogRef<any>) {
+              private dialogRef: MatDialogRef<any>,
+              private http:HttpClient) {
     super();
   }
 
   openDialog(): void {
     this.dialogRef = this.dialog.open(RoomCreateComponent, {
       data: {},
+      hasBackdrop: true,
+      backdropClass: 'backdropBackground'
     });
-
-
 
     this.dialogRef.afterClosed().subscribe(result => {
       this.animal = result;
     });
   }
+
   triggerCreateRoomModal() {
     this.modalService.openTemplateModal(RoomCreateComponent)
   }

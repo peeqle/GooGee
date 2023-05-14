@@ -44,11 +44,9 @@ export class AppComponent implements AfterViewInit, OnInit {
         next: ((json) => {
           this.authService.setUserAuthorized(json.success);
 
-          this.localStorageService.save("tokens", {accessToken: json.accessToken, refreshToken: json.refreshToken})
           if (json.success) {
-            this.socketService.connect();
-            this.navigator.navigate(['/']).then(() => {
-            });
+            this.localStorageService.save("tokens", {accessToken: json.accessToken, refreshToken: json.refreshToken})
+            this.connectSockets();
           }
         }),
         error: ((err) => {
@@ -57,8 +55,16 @@ export class AppComponent implements AfterViewInit, OnInit {
           }
         }),
         complete: () => {
+
         }
       })
     }
+  }
+
+  private connectSockets() {
+    this.socketService.connect();
+    this.navigator.navigate(['/']).then(() => {
+      this.notificationService.fetchUnreadGlobalNotifications();
+    });
   }
 }

@@ -23,11 +23,9 @@ export class LocationService {
   }
 
   checkLocation() {
-    console.log('xxxxxx')
     const $this = this;
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((sol) => {
-        console.log(sol)
         this.setUserLocation(sol);
       }, (err) => {
         console.log('ERR', err)

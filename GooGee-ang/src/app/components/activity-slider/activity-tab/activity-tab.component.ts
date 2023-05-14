@@ -1,4 +1,13 @@
-import {AfterContentInit, AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {HolderService} from "../service/holder.service";
 import {ActivityService} from "../service/activity.service";
 
@@ -10,6 +19,9 @@ import {ActivityService} from "../service/activity.service";
 export class ActivityTabComponent implements AfterContentInit {
   @Input("activityIndex")
   activityIndex: any;
+
+  @Input("autoSelected")
+  autoSelected:any;
 
   activity: any;
 

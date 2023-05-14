@@ -9,6 +9,7 @@ import {Router} from "../router/router.module";
 import {GoogleMapsModule} from "@angular/google-maps";
 import {EditorModule} from "@tinymce/tinymce-angular";
 import {MatDialogModule} from "@angular/material/dialog";
+import {NgSelectModule} from "@ng-select/ng-select";
 
 const modules = [
   CommonModule,
@@ -21,7 +22,8 @@ const modules = [
   Router,
   GoogleMapsModule,
   EditorModule,
-  MatDialogModule
+  MatDialogModule,
+  NgSelectModule
 ]
 
 @NgModule({

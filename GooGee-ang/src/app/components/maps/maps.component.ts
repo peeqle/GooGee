@@ -4,6 +4,7 @@ import MapStyles from "./styles/mapsStyles.json";
 import {LocationService} from "../../service/user/location.service";
 import {Observable} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {SocketService} from "../../service/user/socket.service";
 
 @Component({
   selector: 'app-maps',
@@ -27,7 +28,7 @@ export class MapsComponent implements OnInit {
 
   private mapCenteredOnUser: boolean = false;
 
-  constructor(private locationService: LocationService) {
+  constructor(private locationService: LocationService, private socketService: SocketService) {
   }
 
   ngOnInit(): void {
@@ -55,6 +56,7 @@ export class MapsComponent implements OnInit {
           }else {
             this.currentUserMarker.setPosition(point);
           }
+          this.socketService.updateUserLocation(loc);
         }
       }, () => {
       },
