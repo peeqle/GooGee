@@ -15,8 +15,14 @@ import com.googee.googeeserver.utils.exceptions.token.TokenNotValidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +41,8 @@ public class AuthenticationService {
 	private final TokenServiceImpl tokenService;
 
 	private final PasswordEncoder passwordEncoder;
+
+	private final CustomAuthProvider customAuthProvider;
 
 	private final DaoAuthenticationProvider daoAuthenticationProvider;
 

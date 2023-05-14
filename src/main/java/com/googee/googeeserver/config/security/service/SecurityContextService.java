@@ -4,6 +4,7 @@ import com.googee.googeeserver.data.service.user.AppUserServiceImpl;
 import com.googee.googeeserver.models.user.AppUser;
 import com.googee.googeeserver.utils.log.LogService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

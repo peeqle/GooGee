@@ -1,5 +1,6 @@
 package com.googee.googeeserver.resource;
 
+import com.googee.googeeserver.config.messaging.NotificationController;
 import com.googee.googeeserver.models.request.AuthenticationRequest;
 import com.googee.googeeserver.models.request.AuthenticationResponse;
 import com.googee.googeeserver.config.security.service.AuthenticationService;
@@ -10,6 +11,7 @@ import com.googee.googeeserver.utils.exceptions.token.TokenNotValidException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.TextScore;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthenticationController {
-
     private final AuthenticationService service;
 
     @PostMapping("/register")
