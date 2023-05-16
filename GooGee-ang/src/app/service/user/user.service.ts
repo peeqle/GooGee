@@ -22,11 +22,19 @@ export class UserService {
     })
   }
 
-  fetchUserFriends() {
+  fetchUserInfo(userId: any) {
+    return this.http.get<AppUserDTO>(this.server.prepareServerLink(ServerLinks.USER_CURRENT_REQUEST), {
+      headers: this.server.generateRequiredHeaders(),
+      params: new HttpParams()
+        .set("userId", userId)
+    })
+  }
+
+  fetchUserFriends(userId: number) {
     return this.http.get(this.server.prepareServerLink(ServerLinks.USER_FETCH_FRIENDS_REQUEST), {
       headers: this.server.generateRequiredHeaders(),
       params: new HttpParams()
-        .set("","")
+        .set("userId", userId)
     })
   }
 

@@ -1,4 +1,5 @@
 export interface AppUserDTO {
+  id: number,
   success: boolean
   transactionTime: number
   imageKey: any

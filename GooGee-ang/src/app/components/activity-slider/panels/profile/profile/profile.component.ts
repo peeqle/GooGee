@@ -7,6 +7,8 @@ import {ActivityTab} from "../../../../../service/models/ActivityTab.enum";
 import {PostService} from "../../../../../service/user/post.service";
 import {PostDTO} from "../../../../../service/models/DTO/PostDTO";
 import {environment} from "../../../../../../environments/environment.prod";
+import {FriendsModalComponent} from "./friends-modal/friends-modal.component";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-profile',
@@ -22,7 +24,9 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
   constructor(private userService: UserService,
               private activityTabService: ActivityService,
               private tabHolder: HolderService,
-              private postService: PostService) {
+              private postService: PostService,
+              private friendsDialog: MatDialog,
+              private friendsRef: MatDialogRef<any>) {
     super();
   }
 
@@ -59,13 +63,27 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
         targetUser: null,
         parentPost: null
       }
-      console.log('POST', post)
+
       this.postService.save(post).subscribe({
         next: (json) => {
           console.log('POST CAME JSON', json)
         }
       })
     }
+  }
+
+  openFriendsDialog(): void {
+    this.friendsRef = this.friendsDialog.open(FriendsModalComponent, {
+      data: {
+        userId: this.currentUser.id
+      },
+      hasBackdrop: true,
+      backdropClass: 'backdropBackground'
+    });
+
+    this.friendsRef.afterClosed().subscribe(result => {
+      console.log('result',  result)
+    });
   }
 
   getEditorConfig() {
