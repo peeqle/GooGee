@@ -14,14 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserResource {
 
-	private final SecurityContextService securityContextService;
-
 	private final LogService logService;
+
+	private final SecurityContextService securityContextService;
 
 	private final AppUserServiceImpl appUserService;
 
@@ -38,9 +40,27 @@ public class UserResource {
 						.username(username)
 						.imageKey(appUser.getImageKey())
 						.status(appUser.getStatus())
+						.friendsCount(appUser.getFriendlyUsers().size())
+						.eventsVisited(appUser.getAppUserAdditionalInfo().getEventsVisited())
 						.success(true)
 						.build()
 				);
+			}
+		} catch (UsernameNotFoundException e) {
+			logService.saveLogMessage("Username exception on user profile fetch", e);
+		}
+
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+
+	@GetMapping("/fetch/friends")
+	public ResponseEntity<List<AppUserDTO>> fetchCurrentUserFriends() {
+		String username = securityContextService.fetchCurrentUsername();
+		try {
+			AppUser appUser = appUserService.loadUserByUsername(username);
+			if (appUser != null) {
+				AppUserDTO appUserDTO = AppUserDTO.builder().build();
+				return ResponseEntity.ok(appUser.getFriendlyUsers().stream().map(appUserDTO::mapUser).toList());
 			}
 		} catch (UsernameNotFoundException e) {
 			logService.saveLogMessage("Username exception on user profile fetch", e);

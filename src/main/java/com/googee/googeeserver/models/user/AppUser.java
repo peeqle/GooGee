@@ -2,6 +2,7 @@ package com.googee.googeeserver.models.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.googee.googeeserver.models.token.Token;
+import com.sun.mail.util.UUDecoderStream;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -19,8 +20,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.hibernate.annotations.CascadeType.ALL;
-import static org.hibernate.annotations.CascadeType.PERSIST;
+import static org.hibernate.annotations.CascadeType.*;
 
 @Data
 @Builder
@@ -62,8 +62,12 @@ public class AppUser implements UserDetails, Serializable {
 	private List<Post> posts;
 
 	@OneToMany
-	@Cascade(ALL)
+	@Cascade(PERSIST)
 	private List<AppUser> blockedUsers;
+
+	@OneToMany
+	@Cascade(PERSIST)
+	private List<AppUser> friendlyUsers;
 
 	private boolean isAccountNonExpired = true;
 
@@ -73,7 +77,7 @@ public class AppUser implements UserDetails, Serializable {
 
 	private boolean isEnabled = true;
 
-	private String userOptions = "";
+	private AppUserAdditionalInfo appUserAdditionalInfo = new AppUserAdditionalInfo();
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

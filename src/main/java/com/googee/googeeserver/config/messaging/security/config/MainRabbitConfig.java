@@ -61,7 +61,6 @@ public class MainRabbitConfig implements WebSocketMessageBrokerConfigurer {
                 .setClientPasscode(password)
                 .setSystemLogin(username)
                 .setSystemPasscode(password);
-        registry.setApplicationDestinationPrefixes("/ws");
     }
 
     @Override

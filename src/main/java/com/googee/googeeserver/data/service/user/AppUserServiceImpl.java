@@ -5,6 +5,7 @@ import com.googee.googeeserver.models.user.AppUser;
 import com.googee.googeeserver.models.user.Role;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
+import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,7 @@ public class AppUserServiceImpl implements UserDetailsManager, AutoCloseable {
 
 	@Override
 	@Transactional
+	@Cache(include = "all", region = "", usage = READ_WRITE)
 	public AppUser loadUserByUsername(String username) {
 		return userRepository.findAppUserByUsername(username).orElseThrow(
 			() -> new UsernameNotFoundException(MessageFormat.format("Username {0} doesn't exist!", username)));
