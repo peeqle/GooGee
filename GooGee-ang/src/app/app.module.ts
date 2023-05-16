@@ -24,6 +24,7 @@ import {
 import { RoomCreateComponent } from './components/activity-slider/panels/room/room-create/room-create.component';
 import {MAT_DIALOG_DATA, MAT_DIALOG_DEFAULT_OPTIONS, MatDialogRef} from "@angular/material/dialog";
 import {NgSelectModule} from "@ng-select/ng-select";
+import { FriendsModalComponent } from './components/activity-slider/panels/profile/profile/friends-modal/friends-modal.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import {NgSelectModule} from "@ng-select/ng-select";
     SearchComponent,
     PostsFrameComponent,
     PostsElementComponent,
-    RoomCreateComponent
+    RoomCreateComponent,
+    FriendsModalComponent
   ],
     imports: [
         NgbModule,

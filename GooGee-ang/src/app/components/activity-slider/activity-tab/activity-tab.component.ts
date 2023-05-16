@@ -16,7 +16,7 @@ import {ActivityService} from "../service/activity.service";
   templateUrl: './activity-tab.component.html',
   styleUrls: ['./activity-tab.component.css']
 })
-export class ActivityTabComponent implements AfterContentInit {
+export class ActivityTabComponent implements AfterContentInit, AfterViewInit {
   @Input("activityIndex")
   activityIndex: any;
 
@@ -36,6 +36,9 @@ export class ActivityTabComponent implements AfterContentInit {
   constructor(private tabHolder: HolderService, private activityService: ActivityService) {
   }
 
+  ngAfterViewInit(): void {
+    this.changeState(this.activity.id == this.tabHolder.getCurrentTabValue())
+    }
   ngAfterContentInit(): void {
     this.activity = this.activityService.getActivityTabFullData(this.activityIndex)
 
@@ -45,6 +48,8 @@ export class ActivityTabComponent implements AfterContentInit {
         this.active = this.activity.id == value
       }
     })
+
+
   }
 
   changeTab(event: any) {

@@ -45,6 +45,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           this.authService.setUserAuthorized(json.success);
 
           if (json.success) {
+            console.log('josnsssdsd', json)
             this.localStorageService.save("tokens", {accessToken: json.accessToken, refreshToken: json.refreshToken})
             this.connectSockets();
           }

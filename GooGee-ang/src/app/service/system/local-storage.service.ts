@@ -24,4 +24,7 @@ export class LocalStorageService {
   fetchTokens() {
     return this.fetch("tokens");
   }
+  removeTokens() {
+    localStorage.removeItem("tokens")
+  }
 }

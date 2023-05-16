@@ -30,6 +30,8 @@ export class RoomCreateComponent implements AfterContentInit {
 
   possibleMembers: any[] = [];
 
+  currentUser: any;
+
   constructor(private socketService: SocketService,
               private roomService: RoomService,
               private userService: UserService,
@@ -57,11 +59,17 @@ export class RoomCreateComponent implements AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.userService.fetchUserFriends().subscribe({
-      next: (json:[]) => {
-        if(json) {
-          this.possibleMembers = json
-        }
+    this.userService.fetchCurrentUserInfo().subscribe({
+      next: (user) => {
+        this.currentUser = user;
+
+        this.userService.fetchUserFriends(user.id).subscribe({
+          next: (json: []) => {
+            if (json) {
+              this.possibleMembers = json
+            }
+          }
+        })
       }
     })
   }

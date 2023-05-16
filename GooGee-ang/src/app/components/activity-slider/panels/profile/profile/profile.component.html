@@ -13,11 +13,11 @@
     <div>
       <div class="row user-stats-profile">
         <div class="col-5">
-          <span>
+          <span (click)="openFriendsDialog()" class="cursor-pointer">
             Friends {{currentUser?.friendsCount}}
           </span>
         </div>
-        <div class="col-5">
+        <div class="col-5 cursor-pointer">
           <span>
             Events {{currentUser?.eventsVisited}}
           </span>

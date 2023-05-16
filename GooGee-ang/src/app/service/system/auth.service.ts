@@ -61,6 +61,14 @@ export class AuthService {
     })
   }
 
+  logout() {
+    this.http.get(this.server.prepareServerLink(ServerLinks.LOGOUT_REQUEST), {
+      headers: this.server.generateRequiredHeaders()
+    }).subscribe({
+      next: (json) => {}
+    })
+  }
+
   register(registerRequest: any) {
     this.http.post(this.server.prepareServerLink(ServerLinks.REGISTER_REQUEST), registerRequest).subscribe(
       (res) => {

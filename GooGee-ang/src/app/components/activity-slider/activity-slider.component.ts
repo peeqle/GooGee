@@ -12,13 +12,18 @@ export class ActivitySliderComponent implements OnInit, AfterContentInit {
   @Input("userActivities")
   userActivities: any[] = [ActivityTab.CHAT, ActivityTab.ROOMS, ActivityTab.PROFILE, ActivityTab.SEARCH, ActivityTab.SETTINGS];
 
-  currentSelectedTab: any;
+  currentSelectedTab: any = ActivityTab.CHAT;
 
   constructor(private tabHolder: HolderService,
               private activityService: ActivityService) {
   }
 
   ngOnInit(): void {
+    this.tabHolder.currentActiveTabIndex.subscribe({
+      next: (value) => {
+        this.currentSelectedTab = value;
+      }
+    })
   }
 
   changeActiveTab(val: any) {
@@ -26,11 +31,7 @@ export class ActivitySliderComponent implements OnInit, AfterContentInit {
   }
 
   ngAfterContentInit(): void {
-    this.tabHolder.currentActiveTabIndex.subscribe({
-      next: (value) => {
-        this.currentSelectedTab = value;
-      }
-    })
+
   }
 
   protected readonly ActivityTab = ActivityTab;

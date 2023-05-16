@@ -17,4 +17,8 @@ export class HolderService {
   get currentActiveTabIndex() {
     return this.currentActiveTabId.asObservable();
   }
+
+  getCurrentTabValue() {
+    return this.currentActiveTabId.value;
+  }
 }

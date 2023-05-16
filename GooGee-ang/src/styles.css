@@ -15,7 +15,7 @@ body {
   font-family: -apple-system, Inconsolata;
 }
 
-.backdropBackground{
+.backdropBackground {
   backdrop-filter: blur(4px);
 }
 
@@ -29,4 +29,23 @@ body {
 
 .ellipsis {
   text-overflow: ellipsis;
+}
+
+.bald-link {
+  font-weight: 700;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.sys-modal-container {
+  min-height: auto;
+  max-height: 600px;
+  min-width: 25vw;
+  overflow-x: hidden;
+}
+
+.y-container {
+  overflow-y: auto;
 }
