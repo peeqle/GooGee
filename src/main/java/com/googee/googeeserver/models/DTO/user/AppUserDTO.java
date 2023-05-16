@@ -31,8 +31,9 @@ public class AppUserDTO extends Response implements Serializable {
 	private int eventsVisited;
 
 	@Builder
-	public AppUserDTO(boolean success, long transactionTime, String imageKey, String username, String status, Long lastActive, List<Role> roles, int friendsCount, int eventsVisited) {
+	public AppUserDTO(Long id, boolean success, long transactionTime, String imageKey, String username, String status, Long lastActive, List<Role> roles, int friendsCount, int eventsVisited) {
 		super(success, transactionTime);
+		this.id = id;
 		this.imageKey = imageKey;
 		this.username = username;
 		this.status = status;

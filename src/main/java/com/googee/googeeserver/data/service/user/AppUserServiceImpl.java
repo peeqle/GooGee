@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -82,6 +83,16 @@ public class AppUserServiceImpl implements UserDetailsManager, AutoCloseable {
 
 	public AppUser tryGetAppUserById(Long userId) {
 		return userRepository.findAppUserById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+	}
+
+	// todo stupidest method in history, asap addition
+	public void addToFriends(AppUser appUser, Long userId) {
+		AppUser targetUser = tryGetAppUserById(userId);
+		Set<AppUser> friendlyUsers = appUser.getFriendlyUsers();
+		friendlyUsers.add(targetUser);
+
+		appUser.setFriendlyUsers(friendlyUsers);
+		userRepository.saveAndFlush(appUser);
 	}
 
 	public boolean usernameExists(String username) {

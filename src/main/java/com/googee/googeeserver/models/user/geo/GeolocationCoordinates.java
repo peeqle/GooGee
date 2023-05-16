@@ -1,4 +1,4 @@
-package com.googee.googeeserver.models.user;
+package com.googee.googeeserver.models.user.geo;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

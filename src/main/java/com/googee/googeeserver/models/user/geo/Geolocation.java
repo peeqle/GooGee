@@ -1,8 +1,7 @@
-package com.googee.googeeserver.models.user;
+package com.googee.googeeserver.models.user.geo;
 
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import java.io.Serializable;
 

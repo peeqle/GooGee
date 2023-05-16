@@ -1,18 +1,12 @@
 package com.googee.googeeserver.models.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.googee.googeeserver.models.post.Post;
 import com.googee.googeeserver.models.token.Token;
-import com.sun.mail.util.UUDecoderStream;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.Transient;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -55,19 +49,27 @@ public class AppUser implements UserDetails, Serializable {
 
 	@Cascade(ALL)
 	@OneToMany(mappedBy = "appUser")
-	private List<Token> tokens;
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Set<Token> tokens;
 
 	@Cascade(ALL)
 	@OneToMany(mappedBy = "creatorUser")
-	private List<Post> posts;
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Set<Post> posts;
 
 	@OneToMany
 	@Cascade(PERSIST)
-	private List<AppUser> blockedUsers;
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Set<AppUser> blockedUsers;
 
 	@OneToMany
 	@Cascade(PERSIST)
-	private List<AppUser> friendlyUsers;
+	@EqualsAndHashCode.Exclude
+	@ToString.Exclude
+	private Set<AppUser> friendlyUsers;
 
 	private boolean isAccountNonExpired = true;
 

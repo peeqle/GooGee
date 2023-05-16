@@ -7,11 +7,11 @@ import com.googee.googeeserver.models.request.Response;
 import com.googee.googeeserver.models.room.Room;
 import com.googee.googeeserver.models.user.AppUser;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 
@@ -33,5 +33,10 @@ public class RoomResource {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.status(NOT_FOUND).build();
+	}
+
+	@GetMapping("/fetch")
+	public ResponseEntity<Page<Room>> fetchRooms(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam("limit") int limit) {
+		return ResponseEntity.ok(roomService.fetchUserRooms(PageRequest.of(page, limit)));
 	}
 }
