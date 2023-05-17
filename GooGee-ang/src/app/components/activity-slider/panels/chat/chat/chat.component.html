@@ -1,3 +1,8 @@
-<div class="y-container">
-
+<div class="y-container h-100 w-100" *ngIf="chats.length !== 0; else emptyChats">
+  <app-chat-element *ngFor="let chat of chats" [chatElement]="chat"></app-chat-element>
 </div>
+<ng-template class="h-100 w-100 content-container" #emptyChats>
+  <div class="text-center text-black-25">
+    <mat-icon class="chat-icon">chat_bubble_outline</mat-icon>
+  </div>
+</ng-template>

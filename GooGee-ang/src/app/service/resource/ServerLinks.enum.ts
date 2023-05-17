@@ -5,6 +5,7 @@ export enum ServerLinks {
   REGISTER_REQUEST = "auth/register",
   CHATS_REQUEST = "chat",
   CHAT_CREATE_REQUEST = "chat/create",
+  CHAT_FETCH_REQUEST = "chat/fetch",
   ROOMS_REQUEST = "room",
   ROOMS_USER_FETCH_REQUEST = "room/fetch",
   SEARCH_REQUEST = "search",

@@ -32,7 +32,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
 
   ngAfterContentInit(): void {
     let infoUser$: any;
-    this.tabHolder.currentActiveTabIndex.subscribe({
+    this.tabHolder.currentActiveTabObs.subscribe({
       next: (value) => {
         if (value == ActivityTab.PROFILE) {
           infoUser$ = this.userService.fetchCurrentUserInfo().subscribe({
@@ -82,7 +82,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
     });
 
     this.friendsRef.afterClosed().subscribe(result => {
-      console.log('result',  result)
+      console.log('result', result)
     });
   }
 

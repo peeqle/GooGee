@@ -1,0 +1,12 @@
+.chat-icon {
+  font-size: 100px;
+  font-weight: 400;
+  height: 50%;
+  width: 50%;
+
+  opacity: 0.25;
+}
+
+.content-container{
+  vertical-align: 60;
+}

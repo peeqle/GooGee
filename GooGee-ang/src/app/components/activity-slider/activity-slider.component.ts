@@ -19,7 +19,7 @@ export class ActivitySliderComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    this.tabHolder.currentActiveTabIndex.subscribe({
+    this.tabHolder.currentActiveTabObs.subscribe({
       next: (value) => {
         this.currentSelectedTab = value;
       }

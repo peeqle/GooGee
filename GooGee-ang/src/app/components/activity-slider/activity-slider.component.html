@@ -1,5 +1,6 @@
 <ul class="d-lg-flex justify-content-sm-evenly mt-2 nav nav-tabs">
-  <app-activity-tab *ngFor="let activity of userActivities" [activityIndex]="activity" [autoSelected]="currentSelectedTab" (tabClickEventEmitter)="changeActiveTab($event)"></app-activity-tab>
+  <app-activity-tab *ngFor="let activity of userActivities" [activityIndex]="activity" [autoSelected]="currentSelectedTab"
+                    (tabClickEventEmitter)="changeActiveTab($event)"></app-activity-tab>
 </ul>
 <div class="container h-100 p-3">
   <app-chat [hidden]="currentSelectedTab !== ActivityTab.CHAT"></app-chat>
