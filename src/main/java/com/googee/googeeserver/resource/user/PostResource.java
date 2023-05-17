@@ -6,15 +6,13 @@ import com.googee.googeeserver.data.service.user.AppUserServiceImpl;
 import com.googee.googeeserver.data.service.user.post.PostService;
 import com.googee.googeeserver.models.DTO.user.post.PostDTO;
 import com.googee.googeeserver.models.user.AppUser;
-import com.googee.googeeserver.models.user.Post;
+import com.googee.googeeserver.models.post.Post;
 import com.googee.googeeserver.utils.exceptions.post.PostNotFoundException;
-import jakarta.persistence.Entity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.Serializable;
 import java.time.Instant;
 
 @RestController

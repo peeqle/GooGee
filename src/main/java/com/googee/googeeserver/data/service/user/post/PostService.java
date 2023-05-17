@@ -2,15 +2,13 @@ package com.googee.googeeserver.data.service.user.post;
 
 import com.googee.googeeserver.data.repo.user.post.PostRepository;
 import com.googee.googeeserver.models.user.AppUser;
-import com.googee.googeeserver.models.user.Post;
+import com.googee.googeeserver.models.post.Post;
 import com.googee.googeeserver.utils.exceptions.post.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.swing.plaf.SpinnerUI;
 
 @Service
 @RequiredArgsConstructor

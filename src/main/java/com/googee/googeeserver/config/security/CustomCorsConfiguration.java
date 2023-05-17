@@ -23,9 +23,12 @@ public class CustomCorsConfiguration {
         config.addAllowedOrigin("http://localhost:4200");
         config.addAllowedOrigin("http://localhost:8080");
         config.addAllowedHeader("*");
-        config.addAllowedMethod("POST");
-        config.addAllowedMethod("GET");
-        source.registerCorsConfiguration("/**", config);
+		config.addAllowedMethod("OPTIONS");
+		config.addAllowedMethod("DELETE");
+		config.addAllowedMethod("POST");
+		config.addAllowedMethod("PUT");
+		config.addAllowedMethod("GET");
+		source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 

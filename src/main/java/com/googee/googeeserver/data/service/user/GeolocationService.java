@@ -1,7 +1,7 @@
 package com.googee.googeeserver.data.service.user;
 
 import com.googee.googeeserver.data.service.KeyStorage;
-import com.googee.googeeserver.models.user.Geolocation;
+import com.googee.googeeserver.models.user.geo.Geolocation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;

@@ -1,5 +1,6 @@
-package com.googee.googeeserver.models.user;
+package com.googee.googeeserver.models.post;
 
+import com.googee.googeeserver.models.user.AppUser;
 import jakarta.persistence.*;
 import lombok.*;
 

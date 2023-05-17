@@ -90,6 +90,9 @@ public class AuthenticationService {
 		if (token == null) {
 			throw new TokenNotFoundException(format("Token %s not found", refreshToken));
 		}
+		if(token.expired || token.revoked) {
+			throw new TokenExpiredException("Token expired!");
+		}
 
 		AppUser appUser = token.getAppUser();
 
