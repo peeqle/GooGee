@@ -1,6 +1,7 @@
 package com.googee.googeeserver.data.service.chat;
 
 import com.googee.googeeserver.config.security.UserContextService;
+import com.googee.googeeserver.config.security.service.SecurityContextService;
 import com.googee.googeeserver.data.redis.HashNamespaces;
 import com.googee.googeeserver.data.redis.HashNamespaces.*;
 import com.googee.googeeserver.data.repo.chat.ChatRepository;
@@ -30,7 +31,7 @@ public class ChatService {
 
 	private final AppUserServiceImpl appUserService;
 
-	private final UserContextService userContextService;
+	private final SecurityContextService securityContextService;
 
 	public Chat save(Chat chat) {
 		return chatRepository.save(chat);
@@ -39,9 +40,7 @@ public class ChatService {
 	public Page<Chat> fetchChatsForUser(int page, int limit) {
 		Pageable pageable = PageRequest.of(page, limit);
 
-		Long appUserId = userContextService.getCurrentUserId();
-
-		AppUser appUser = appUserService.tryGetAppUserById(appUserId);
+		AppUser appUser = securityContextService.fetchCurrentUser();
 
 		if(isNull(appUser)) {
 			return Page.empty();

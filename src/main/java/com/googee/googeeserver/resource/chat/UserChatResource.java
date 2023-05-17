@@ -25,7 +25,7 @@ public class UserChatResource {
 	private final SecurityContextService securityContextService;
 
 	@GetMapping("/fetch")
-	public ResponseEntity<?> fetchUserChats(@RequestParam("pageOffset") int pageOffset, @RequestParam("pageLimit") int pageLimit) {
+	public ResponseEntity<?> fetchUserChats(@RequestParam("page") int pageOffset, @RequestParam("limit") int pageLimit) {
 		return ResponseEntity.ok(chatService.fetchChatsForUser(pageOffset, pageLimit));
 	}
 
