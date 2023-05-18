@@ -7,6 +7,7 @@ import {TokenService} from "./service/system/token.service";
 import {AuthService} from "./service/system/auth.service";
 import {Router} from "@angular/router";
 import {NotificationService} from "./service/user/notification.service";
+import {UserService} from "./service/user/user.service";
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent implements AfterViewInit, OnInit {
               private localStorageService: LocalStorageService,
               private tokenService: TokenService,
               private authService: AuthService,
+              private userService: UserService,
               private socketService: SocketService,
               private notificationService: NotificationService,
               private navigator: Router) {
@@ -45,8 +47,13 @@ export class AppComponent implements AfterViewInit, OnInit {
           this.authService.setUserAuthorized(json.success);
 
           if (json.success) {
-            console.log('josnsssdsd', json)
             this.localStorageService.save("tokens", {accessToken: json.accessToken, refreshToken: json.refreshToken})
+
+            this.userService.fetchCurrentUserInfo().subscribe({
+              next: value => {
+                this.localStorageService.save("user", value)
+              }
+            })
             this.connectSockets();
           }
         }),

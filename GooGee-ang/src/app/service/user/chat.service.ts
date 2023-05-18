@@ -19,4 +19,10 @@ export class ChatService {
         .set("limit", limit)
     })
   }
+
+  createNewChat(user) {
+    return this.http.post(this.server.prepareServerLink(ServerLinks.CHAT_CREATE_ROOM_REQUEST), user, {
+      headers: this.server.generateRequiredHeaders()
+    })
+  }
 }

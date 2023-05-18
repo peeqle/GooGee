@@ -44,7 +44,6 @@ export class ActivityTabComponent implements AfterContentInit, AfterViewInit {
 
     this.tabHolder.currentActiveTabObs.subscribe({
       next: (value) => {
-        console.log('VVVVVVVVVVVVVAL', value)
         this.changeState(this.activity.id == value)
         this.active = this.activity.id == value
       }

@@ -9,6 +9,7 @@ import {PostDTO} from "../../../../../service/models/DTO/PostDTO";
 import {environment} from "../../../../../../environments/environment.prod";
 import {FriendsModalComponent} from "./friends-modal/friends-modal.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {LocalStorageService} from "../../../../../service/system/local-storage.service";
 
 @Component({
   selector: 'app-profile',
@@ -25,6 +26,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
               private activityTabService: ActivityService,
               private tabHolder: HolderService,
               private postService: PostService,
+              private lsService: LocalStorageService,
               private friendsDialog: MatDialog,
               private friendsRef: MatDialogRef<any>) {
     super();
@@ -38,7 +40,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
           infoUser$ = this.userService.fetchCurrentUserInfo().subscribe({
             next: (json) => {
               this.currentUser = json;
-              console.log('jspn', json)
+              this.lsService.save("user", json)
             }, error: err => {
 
             }, complete: () => {

@@ -26,29 +26,39 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
 
   chats: Array<any> = new Array<any>();
 
-  page: any = 1;
+  page: any = 0;
 
   limit: any = 15;
 
   ngAfterContentInit(): void {
     this.chatService.fetchUserChats(this.page, this.limit).subscribe({
       next: value => {
-        if(value) {
-          console.log('value', value)
+        console.log('value', value)
+        if (value) {
           // @ts-ignore
           value.content.forEach(chat => {
             this.chats.push(chat);
           })
         }
-        console.log('this chats', this.chats)
       }
     })
 
     this.tabHolder.chatSelectedUserObs.subscribe({
-      next: value => {
-        if (value && this.tabHolder.getCurrentTabValue() === ActivityTab.CHAT) {
-          this.chats.push(value)
+      next: user => {
+        if (user && this.tabHolder.getCurrentTabValue() === ActivityTab.CHAT) {
+          console.log('this.chats', this.chats)
+          if (!this.chats.filter(chat => chat.privateRoom).map(chat => chat.chatName).includes(user.username)) {
+            this.createUserChat(user)
+          }
         }
+      }
+    })
+  }
+
+  createUserChat(user) {
+    this.chatService.createNewChat(user).subscribe({
+      next: value => {
+        this.chats.push(value)
       }
     })
   }
