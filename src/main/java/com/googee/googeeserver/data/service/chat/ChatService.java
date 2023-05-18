@@ -36,7 +36,7 @@ public class ChatService {
 	public Chat save(Chat chat) {
 		return chatRepository.save(chat);
 	}
-
+	//todo переписать чаты на монго чтобы можно было фетчить большие пачки юзеров
 	public Page<Chat> fetchChatsForUser(int page, int limit) {
 		Pageable pageable = PageRequest.of(page, limit);
 
@@ -46,6 +46,6 @@ public class ChatService {
 			return Page.empty();
 		}
 
-		return chatRepository.getChatsByMembersContains(appUser, pageable);
+		return chatRepository.findAllByMembersContains(appUser, pageable);
 	}
 }

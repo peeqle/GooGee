@@ -10,5 +10,5 @@ import java.util.UUID;
 
 public interface ChatRepository extends JpaRepository<Chat, UUID> {
 
-	Page<Chat> getChatsByMembersContains(AppUser appUser, Pageable pageable);
+	Page<Chat> findAllByMembersContains(AppUser appUser, Pageable pageable);
 }
