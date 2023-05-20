@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, Inject} from '@angular/core';
+import {AfterContentInit, Component, EventEmitter, Inject, Output} from '@angular/core';
 import {SocketService} from "../../../../../service/user/socket.service";
 import {MatDialog, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {RoomDTO} from "../../../../../service/models/DTO/RoomDTO";
@@ -16,6 +16,7 @@ export interface RoomData {
   styleUrls: ['./room-create.component.css']
 })
 export class RoomCreateComponent implements AfterContentInit {
+
   room: RoomDTO = {
     uuid: "",
     roomName: "",
@@ -49,7 +50,7 @@ export class RoomCreateComponent implements AfterContentInit {
   createRoom() {
     this.roomService.saveRoom(this.room).subscribe({
       next: (json) => {
-
+        this.roomService.appendRoom(json, "CREATOR");
       }, error: (err) => {
 
       }, complete: () => {
@@ -66,7 +67,11 @@ export class RoomCreateComponent implements AfterContentInit {
         this.userService.fetchUserFriends(user.id).subscribe({
           next: (json: []) => {
             if (json) {
-              this.possibleMembers = json
+              let index = 0;
+              this.possibleMembers = json.map(user => {
+                // @ts-ignore
+                return {id: user.id, name: user.username}
+              })
             }
           }
         })

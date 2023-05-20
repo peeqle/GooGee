@@ -6,8 +6,6 @@ import {ServerService} from 'src/app/service/system/server.service';
 import {UserService} from 'src/app/service/user/user.service';
 import {ActivityTab} from 'src/app/service/models/ActivityTab.enum';
 import {ChatService} from "../../../../../service/user/chat.service";
-import {Observable, tap} from "rxjs";
-import {offset} from "@popperjs/core";
 
 @Component({
   selector: 'app-chat',
@@ -26,6 +24,8 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
 
   chats: Array<any> = new Array<any>();
 
+  currentSelectedChat: any = null;
+
   page: any = 0;
 
   limit: any = 15;
@@ -33,7 +33,6 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
   ngAfterContentInit(): void {
     this.chatService.fetchUserChats(this.page, this.limit).subscribe({
       next: value => {
-        console.log('value', value)
         if (value) {
           // @ts-ignore
           value.content.forEach(chat => {
@@ -50,6 +49,8 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
           if (!this.chats.filter(chat => chat.privateRoom).map(chat => chat.chatName).includes(user.username)) {
             this.createUserChat(user)
           }
+
+          //todo fetch selected chat
         }
       }
     })

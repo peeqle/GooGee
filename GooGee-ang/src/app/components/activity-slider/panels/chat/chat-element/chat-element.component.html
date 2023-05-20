@@ -1,1 +1,14 @@
-{{chat.chatName}}
+<div class="" *ngIf="full; else shredChats">
+  <div class="row">
+    <div class="col-2">
+      <img [src]="getChatAvatar()" class="rounded-circle chat-image">
+    </div>
+    <div class="col-8">
+      <h3>{{chat.chatName}}</h3>
+    </div>
+  </div>
+</div>
+
+<ng-template #shredChats>
+sdasd
+</ng-template>

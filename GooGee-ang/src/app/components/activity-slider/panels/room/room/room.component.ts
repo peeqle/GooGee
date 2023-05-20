@@ -6,6 +6,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {HttpClient} from "@angular/common/http";
 import {RoomService} from "../../../../../service/user/room.service";
 import {FriendsModalComponent} from "../../profile/profile/friends-modal/friends-modal.component";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-room',
@@ -14,13 +15,13 @@ import {FriendsModalComponent} from "../../profile/profile/friends-modal/friends
 })
 export class RoomComponent extends CommonActivity implements OnInit {
 
-  name: string;
-
-  animal: string;
-
   @HostListener('window:keyup.esc') onKeyUp() {
     this.roomCreateRef.close();
   }
+
+  asyncCreatorRooms: any;
+
+  asyncMemberRooms: any;
 
   constructor(private modalService: ModalService,
               private roomCreateDialog: MatDialog,
@@ -35,8 +36,21 @@ export class RoomComponent extends CommonActivity implements OnInit {
 
   fetchUserRooms() {
     this.roomService.fetchRooms(0, 15).subscribe({
-      next: (json) => {
-        console.log('josn', json)
+      next: (json: any) => {
+        this.roomService.appendRooms(json.createdRooms, "CREATOR")
+        this.roomService.appendRooms(json.memberRooms, "MEMBER")
+
+        this.roomService.creatorRooms.subscribe({
+          next: value => {
+            this.asyncCreatorRooms = value
+          }
+        })
+
+        this.roomService.memberRooms.subscribe({
+          next: value => {
+            this.asyncMemberRooms = value
+          }
+        })
       }
     })
   }
@@ -49,7 +63,7 @@ export class RoomComponent extends CommonActivity implements OnInit {
     });
 
     this.roomCreateRef.afterClosed().subscribe(result => {
-      this.animal = result;
+
     });
   }
 }

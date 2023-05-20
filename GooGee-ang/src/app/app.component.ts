@@ -44,6 +44,7 @@ export class AppComponent implements AfterViewInit, OnInit {
       let refreshToken = tokens.refreshToken;
       this.tokenService.checkAndRefreshTokens(refreshToken).subscribe({
         next: ((json) => {
+          console.log('tokens', json)
           this.authService.setUserAuthorized(json.success);
 
           if (json.success) {
