@@ -1,7 +1,10 @@
 package com.googee.googeeserver.models.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.googee.googeeserver.models.DTO.user.AppUserDTO;
 import com.googee.googeeserver.models.post.Post;
+import com.googee.googeeserver.models.room.Room;
 import com.googee.googeeserver.models.token.Token;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,7 +28,6 @@ import static org.hibernate.annotations.CascadeType.*;
 public class AppUser implements UserDetails, Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id", nullable = false)
 	private Long id;
 
 	private String username;
@@ -59,13 +61,13 @@ public class AppUser implements UserDetails, Serializable {
 	@ToString.Exclude
 	private Set<Post> posts;
 
-	@OneToMany
+	@ManyToMany
 	@Cascade(PERSIST)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
 	private Set<AppUser> blockedUsers;
 
-	@OneToMany
+	@ManyToMany
 	@Cascade(PERSIST)
 	@EqualsAndHashCode.Exclude
 	@ToString.Exclude
@@ -114,5 +116,14 @@ public class AppUser implements UserDetails, Serializable {
 	@Override
 	public boolean isEnabled() {
 		return this.isEnabled;
+	}
+
+	public AppUser (Long id) {
+		this.id = id;
+	}
+
+	public static AppUserDTO mapToDTO(AppUser appUser) {
+		return AppUserDTO.builder().id(appUser.getId())
+			.username(appUser.getUsername()).build();
 	}
 }

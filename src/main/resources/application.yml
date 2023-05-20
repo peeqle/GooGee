@@ -23,3 +23,5 @@ security:
 elastic:
     username: "changeme"
     password: "changeme"
+files:
+    media: "/home/pag/Dokumenty/GooGee-media/"

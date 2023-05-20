@@ -10,6 +10,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +33,7 @@ public class RoomDTO extends Response implements Serializable {
 
 	private long closingAt;
 
-	private long[] creators = {};
+	private List<Long> creators = new ArrayList<>();
 
-	private long[] members = {};
+	private List<Long> members = new ArrayList<>();
 }
