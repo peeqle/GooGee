@@ -34,6 +34,7 @@ export class LocationService {
   }
 
   setUserLocation(position: GeolocationPosition) {
+    console.log('position', position)
     this.userLocation.next(position);
     return location;
   }

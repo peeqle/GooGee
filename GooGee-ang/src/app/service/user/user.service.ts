@@ -47,6 +47,6 @@ export class UserService {
   }
 
   getCurrentUserInfo() {
-    return JSON.parse(localStorage.getItem("user") || "");
+    return this.localStorageService.fetch("user");
   }
 }
