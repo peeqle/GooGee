@@ -4,6 +4,8 @@ import * as Stomp from 'stompjs';
 import {Observable, Observer} from "rxjs";
 import {LocalStorageService} from "../system/local-storage.service";
 import {UserService} from "./user.service";
+import {Router} from "@angular/router";
+import {AuthService} from "../system/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +18,10 @@ export class SocketService {
 
   private frame: any = {};
 
-  constructor(private storageService: LocalStorageService, private userService: UserService) {
+  constructor(private storageService: LocalStorageService,
+              private userService: UserService,
+              private authService: AuthService,
+              private router: Router) {
   }
 
   public connect(): void {
@@ -97,5 +102,38 @@ export class SocketService {
       (message: any) => {
         console.log('message', message)
       });
+  }
+
+  public sendChatMessage(message: any, chat: any) {
+    let currentUser = this.userService.getCurrentUserInfo();
+
+    if (!currentUser) {
+      this.authService.logout();
+      this.storageService.removeTokens();
+      this.router.navigate(['/login']);
+    }
+    if (chat.privateRoom) {
+      let targetUser = chat.members.filter(member => member.id !== currentUser.id)[0];
+      if (!targetUser) {
+        return;
+      }
+
+      this.stomp.send(`/topic/chat.${chat.chatId}.message`, {
+          'message': message,
+          'from': currentUser.id,
+          'target': targetUser.id
+        },
+        (message: any) => {
+          console.log('message', message)
+        })
+    } else {
+      // this.stomp.send(`/topic/chat.${chat.chatId}.spread.message`, {
+      //     'message': message,
+      //     'from': currentUser.id
+      //   },
+      //   (message: any) => {
+      //     console.log('message', message)
+      //   })
+    }
   }
 }

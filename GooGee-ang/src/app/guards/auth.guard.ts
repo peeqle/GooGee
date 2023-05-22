@@ -11,10 +11,8 @@ export class AuthGuard {
 
   canActivate(){
     if (this.authService.isUserAuthorized()) {
-      console.log('CAN')
       return true;
     }
-    console.log('CUNT')
     this.router.navigate(['login'])
     return false;
   }

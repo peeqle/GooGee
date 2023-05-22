@@ -28,13 +28,11 @@ export class LocationService {
       navigator.geolocation.getCurrentPosition((sol) => {
         this.setUserLocation(sol);
       }, (err) => {
-        console.log('ERR', err)
       })
     }
   }
 
   setUserLocation(position: GeolocationPosition) {
-    console.log('position', position)
     this.userLocation.next(position);
     return location;
   }

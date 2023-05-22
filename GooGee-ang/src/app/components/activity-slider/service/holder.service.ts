@@ -18,24 +18,24 @@ export class HolderService {
     return id;
   }
 
-  changeSelectedChatUser(user: any) {
-    this.chatSelectedUser.next(user);
-    return user;
-  }
-
   get currentActiveTabObs() {
     return this.currentActiveTabId.asObservable();
-  }
-
-  get chatSelectedUserObs() {
-    return this.chatSelectedUser.asObservable();
   }
 
   getCurrentTabValue() {
     return this.currentActiveTabId.value;
   }
 
-  getSelectedUserValue() {
+  changeSelectedChatUser(user: any) {
+    this.chatSelectedUser.next(user);
+    return user;
+  }
+
+  get chatSelectedChatUserObs() {
+    return this.chatSelectedUser.asObservable();
+  }
+
+  getSelectedChatUser() {
     return this.chatSelectedUser.value;
   }
 }

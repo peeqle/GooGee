@@ -1,23 +1,25 @@
-<div class="" *ngIf="currentSelectedChat !== null; else unselectedChat">
-  <div class="row">
+<div class="container h-100">
+  <div class="row h-100" *ngIf="currentSelectedChat !== null; else unselectedChat">
     <div class="col-2">
       <div class="y-container h-100 w-100" *ngIf="chats.length !== 0; else unselectedChat">
         <app-chat-element *ngFor="let chat of chats" [chatElement]="chat" [full]="false"></app-chat-element>
       </div>
     </div>
-    <div class="col-8">
-
+    <div class="col h-100">
+      <app-chat-box></app-chat-box>
     </div>
   </div>
+
+  <ng-template #unselectedChat>
+    <div class="y-container h-100 w-100" *ngIf="chats.length !== 0; else emptyChats">
+      <app-chat-element *ngFor="let chat of chats" [chatElement]="chat" [full]="true"
+                        (selectChat)="setEmittedChat($event)"></app-chat-element>
+    </div>
+    <ng-template class="h-100 w-100 content-container" #emptyChats>
+      <div class="text-center text-black-25">
+        <mat-icon class="chat-icon">chat_bubble_outline</mat-icon>
+      </div>
+    </ng-template>
+  </ng-template>
 </div>
 
-<ng-template #unselectedChat>
-  <div class="y-container h-100 w-100" *ngIf="chats.length !== 0; else emptyChats">
-    <app-chat-element *ngFor="let chat of chats" [chatElement]="chat" [full]="true"></app-chat-element>
-  </div>
-  <ng-template class="h-100 w-100 content-container" #emptyChats>
-    <div class="text-center text-black-25">
-      <mat-icon class="chat-icon">chat_bubble_outline</mat-icon>
-    </div>
-  </ng-template>
-</ng-template>

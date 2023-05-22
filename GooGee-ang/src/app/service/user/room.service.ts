@@ -52,7 +52,6 @@ export class RoomService {
   }
 
   appendRooms(rooms: any = [], target: string) {
-    console.log('ROOMS', rooms, target)
     if(target === "CREATOR") {
       let currentValue = this.creatorRooms.value;
       rooms.forEach(item => {

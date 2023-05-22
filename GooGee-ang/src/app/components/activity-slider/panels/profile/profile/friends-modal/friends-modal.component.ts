@@ -6,6 +6,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {RoomData} from "../../../room/room-create/room-create.component";
 import {HolderService} from "../../../../service/holder.service";
 import { ActivityTab } from 'src/app/service/models/ActivityTab.enum';
+import {ChatService} from "../../../../../../service/user/chat.service";
 
 @Component({
   selector: 'app-friends-modal',
@@ -17,6 +18,7 @@ export class FriendsModalComponent implements OnInit, AfterContentInit {
               private roomService: RoomService,
               private userService: UserService,
               private tabService: HolderService,
+              private chatService: ChatService,
               public dialogRef: MatDialogRef<FriendsModalComponent>,
               @Inject(MAT_DIALOG_DATA) public data: {
                 userId: number
