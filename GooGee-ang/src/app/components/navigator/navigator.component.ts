@@ -33,6 +33,5 @@ export class NavigatorComponent implements OnInit {
   }
 
   private report(state: string) {
-    console.log("PERMISSION STATE: ", state)
   }
 }

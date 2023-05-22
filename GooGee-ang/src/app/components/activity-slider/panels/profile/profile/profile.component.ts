@@ -68,7 +68,6 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
 
       this.postService.save(post).subscribe({
         next: (json) => {
-          console.log('POST CAME JSON', json)
         }
       })
     }
@@ -84,7 +83,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
     });
 
     this.friendsRef.afterClosed().subscribe(result => {
-      console.log('result', result)
+
     });
   }
 

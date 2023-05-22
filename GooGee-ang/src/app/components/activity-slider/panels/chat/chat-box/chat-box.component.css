@@ -1,0 +1,14 @@
+.center-icon-vertically {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.input-panel-margin {
+  margin-top: calc(100% - 40px);
+}
+
+.icon-hoover:hover {
+  color: #0059b7;
+  cursor: pointer;
+}

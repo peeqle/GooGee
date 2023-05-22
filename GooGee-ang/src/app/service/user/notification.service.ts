@@ -19,7 +19,6 @@ export class NotificationService {
       headers: this.server.generateRequiredHeaders()
     }).subscribe({
       next: (val:any) => {
-        console.log('avlue ', val)
       }
     })
   }

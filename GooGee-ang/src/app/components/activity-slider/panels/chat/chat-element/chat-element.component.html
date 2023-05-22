@@ -1,14 +1,18 @@
-<div class="" *ngIf="full; else shredChats">
-  <div class="row">
-    <div class="col-2">
-      <img [src]="getChatAvatar()" class="rounded-circle chat-image">
-    </div>
-    <div class="col-8">
-      <h3>{{chat.chatName}}</h3>
+<div class="chat-pointer" *ngIf="full; else shredChats" (click)="emitChat()">
+  <div class="container p-2">
+    <div class="row">
+      <div class="col-2 text-center chat-images-column">
+        <img [src]="getChatAvatar()" class="rounded-circle chat-image">
+      </div>
+      <div class="col-8">
+        <h3>{{chat.chatName}}</h3>
+      </div>
     </div>
   </div>
 </div>
 
-<ng-template #shredChats>
-sdasd
+<ng-template class="chat-pointer" #shredChats>
+  <div class="container p-2">
+    <img [src]="getChatAvatar()" class="rounded-circle chat-image">
+  </div>
 </ng-template>

@@ -6,6 +6,7 @@ import {ServerService} from 'src/app/service/system/server.service';
 import {UserService} from 'src/app/service/user/user.service';
 import {ActivityTab} from 'src/app/service/models/ActivityTab.enum';
 import {ChatService} from "../../../../../service/user/chat.service";
+import {logCumulativeDurations} from "@angular-devkit/build-angular/src/builders/browser-esbuild/profiling";
 
 @Component({
   selector: 'app-chat',
@@ -35,33 +36,49 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
       next: value => {
         if (value) {
           // @ts-ignore
-          value.content.forEach(chat => {
+          value.forEach(chat => {
             this.chats.push(chat);
           })
         }
       }
     })
 
-    this.tabHolder.chatSelectedUserObs.subscribe({
+    this.tabHolder.chatSelectedChatUserObs.subscribe({
       next: user => {
+        console.log('user', user)
         if (user && this.tabHolder.getCurrentTabValue() === ActivityTab.CHAT) {
-          console.log('this.chats', this.chats)
-          if (!this.chats.filter(chat => chat.privateRoom).map(chat => chat.chatName).includes(user.username)) {
-            this.createUserChat(user)
+          if(!this.checkUsername(user)) {
+            this.createChat(user);
           }
-
-          //todo fetch selected chat
         }
       }
     })
   }
 
-  createUserChat(user) {
+  createChat(user) {
     this.chatService.createNewChat(user).subscribe({
       next: value => {
         this.chats.push(value)
+
+        this.currentSelectedChat = value
       }
     })
+  }
+
+  setEmittedChat(chat: any) {
+    console.log('chat', chat)
+    this.currentSelectedChat = chat;
+    this.chatService.changeSelectedChat(chat)
+  }
+
+  checkUsername(user: any) {
+    let privateChats = this.chats.filter(chat => chat.privateRoom);
+    for (let chat of privateChats) {
+      if (chat.memberUsernames.indexOf(user.username) !== -1) {
+        return true;
+      }
+    }
+    return false;
   }
 
   ngOnInit(): void {

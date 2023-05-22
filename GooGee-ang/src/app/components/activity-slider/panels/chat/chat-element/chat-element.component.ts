@@ -1,4 +1,4 @@
-import {AfterContentInit, Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-chat-element',
@@ -13,14 +13,20 @@ export class ChatElementComponent implements OnInit, AfterContentInit {
   @Input("full")
   full: boolean = true;
 
+  @Output("selectChat")
+  chatEmitter: EventEmitter<any> = new EventEmitter<any>();
+
   ngOnInit(): void {
   }
 
   ngAfterContentInit(): void {
-    console.log('asdjknsajdjkasnksa', this.chat)
   }
 
   getChatAvatar() {
     return this.chat.avatar ? this.chat.avatar : "./assets/images/empty_avatar.jpg"
+  }
+
+  emitChat() {
+    this.chatEmitter.emit(this.chat);
   }
 }
