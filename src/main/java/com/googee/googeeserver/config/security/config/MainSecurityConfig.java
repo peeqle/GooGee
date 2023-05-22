@@ -46,6 +46,7 @@ public class MainSecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/sample/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
+                        .requestMatchers("/api/v1/images/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()

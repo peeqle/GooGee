@@ -42,16 +42,4 @@ public class AppUserDTO extends Response implements Serializable {
 		this.friendsCount = friendsCount;
 		this.eventsVisited = eventsVisited;
 	}
-
-	public AppUserDTO mapUser(AppUser appUser) {
-		this.id = appUser.getId();
-		this.username = appUser.getUsername();
-		this.status = appUser.getStatus();
-		this.imageKey = appUser.getImageKey();
-		this.lastActive = appUser.getLastActive();
-		this.roles = appUser.getRoles().stream().toList();
-		this.friendsCount = appUser.getFriendlyUsers().size();
-		this.eventsVisited = appUser.getAppUserAdditionalInfo().getEventsVisited();
-		return this;
-	}
 }

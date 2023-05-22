@@ -42,10 +42,6 @@ public class NotificationController {
 
 	public final static String GLOBAL_NOTIFICATION = "globalNotification";
 
-	public void sendGlobal() {
-		rabbitTemplate.convertAndSend(GLOBAL_NOTIFICATION, "NotificationXXXXXXXXXXXXXXXX");
-	}
-
 	@SubscribeMapping(GLOBAL_NOTIFICATIONS_PATH)
 	public Message globalNotificationSubscription() {
 		return null;

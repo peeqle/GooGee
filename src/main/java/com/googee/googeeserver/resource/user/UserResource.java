@@ -90,19 +90,31 @@ public class UserResource {
 
 		return ResponseEntity.ok().build();
 	}
+
 	//todo make page
 	@GetMapping("/fetch/friends")
 	public ResponseEntity<List<AppUserDTO>> fetchCurrentUserFriends(@RequestParam("userId") Long userId) {
 		try {
 			AppUser appUser = appUserService.tryGetAppUserById(userId);
 			if (appUser != null) {
-				AppUserDTO appUserDTO = AppUserDTO.builder().build();
-				return ResponseEntity.ok(appUser.getFriendlyUsers().stream().map(appUserDTO::mapUser).toList());
+				return ResponseEntity.ok(appUser.getFriendlyUsers().stream().map(this::mapUser).toList());
 			}
 		} catch (UsernameNotFoundException e) {
 			logService.saveLogMessage("Username exception on user profile fetch", e);
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+
+	public AppUserDTO mapUser(AppUser appUser) {
+		return AppUserDTO.builder()
+			.id(appUser.getId())
+			.username(appUser.getUsername())
+			.status(appUser.getStatus())
+			.imageKey(appUser.getImageKey())
+			.lastActive(appUser.getLastActive())
+			.roles(appUser.getRoles().stream().toList())
+			.friendsCount(appUser.getFriendlyUsers().size())
+			.eventsVisited(appUser.getAppUserAdditionalInfo().getEventsVisited()).build();
 	}
 }

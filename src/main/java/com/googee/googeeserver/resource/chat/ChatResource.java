@@ -8,20 +8,18 @@ import com.googee.googeeserver.models.DTO.user.AppUserDTO;
 import com.googee.googeeserver.models.chat.Chat;
 import com.googee.googeeserver.models.user.AppUser;
 import lombok.RequiredArgsConstructor;
-import org.elasticsearch.common.recycler.Recycler;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.lang.reflect.Array;
 import java.time.Instant;
 import java.util.*;
 
 @RestController
 @RequestMapping("/api/v1/chat")
 @RequiredArgsConstructor
-public class UserChatResource {
+public class ChatResource {
 
 	private final ChatService chatService;
 
@@ -30,9 +28,15 @@ public class UserChatResource {
 	private final SecurityContextService securityContextService;
 
 	@GetMapping("/fetch")
-	public ResponseEntity<Page<Chat>> fetchUserChats(@RequestParam("page") int pageOffset, @RequestParam("limit") int pageLimit) {
-		Page<Chat> response = chatService.fetchChatsForUser(pageOffset, pageLimit);
-		return ResponseEntity.ok(response);
+	public ResponseEntity<List<ChatDTO>> fetchUserChats(@RequestParam("page") int pageOffset, @RequestParam("limit") int pageLimit) {
+
+		List<Chat> chats = chatService.fetchChatsForUser(pageOffset, pageLimit).getContent();
+		List<ChatDTO> result = new ArrayList<>();
+		for (Chat chat : chats) {
+			result.add(mapChat(chat));
+		}
+
+		return ResponseEntity.ok(result);
 	}
 
 	@PostMapping("/create")
@@ -45,7 +49,8 @@ public class UserChatResource {
 			.build();
 
 		if (chatService.save(chat) != null) {
-			return ResponseEntity.ok(ChatDTO.builder().chatName(chatName).creatorUser(creatorUser).createdAt(Instant.now().toEpochMilli()).build());
+			return ResponseEntity.ok(ChatDTO.builder()
+				.chatName(chatName).createdAt(Instant.now().toEpochMilli()).build());
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
@@ -55,16 +60,36 @@ public class UserChatResource {
 		AppUser appUser = securityContextService.fetchCurrentUser();
 
 		AppUser participant = appUserService.tryGetAppUserById(appUserDTO.getId());
-		if(participant != null) {
+		if (participant != null) {
 			Chat chat = Chat.builder()
 				.chatName(participant.getUsername())
 				.createdAt(Instant.now().toEpochMilli())
 				.privateRoom(true)
-				.members(List.of(appUser, participant))
+				.members(List.of(new AppUser(appUser.getId(), appUser.getUsername()), new AppUser(participant.getId(), participant.getUsername())))
 				.build();
+			ChatDTO result = mapChat(chatService.save(chat));
 
-			return ResponseEntity.ok(chatService.save(chat));
+			result.setMembers(List.of(AppUser.mapToDTO(appUser), AppUser.mapToDTO(participant)));
+			result.setMemberUsernames(List.of(appUser.getUsername(), participant.getUsername()));
+			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+
+	public ChatDTO mapChat(Chat chat) {
+		return ChatDTO.builder()
+			.chatId(chat.getUuid().toString())
+			.chatName(chat.getChatName())
+			.createdAt(chat.getCreatedAt())
+			.privateRoom(chat.isPrivateRoom())
+			.members(chat.getMembers().stream().map(user ->
+					AppUserDTO.builder()
+						.id(user.getId())
+						.username(user.getUsername())
+						.imageKey(user.getImageKey())
+						.success(true).build())
+				.toList())
+			.memberUsernames(chat.getMembers().stream().map(AppUser::getUsername).toList())
+			.build();
 	}
 }
