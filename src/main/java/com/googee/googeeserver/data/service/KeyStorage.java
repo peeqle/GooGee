@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum KeyStorage {
-	GEOLOCATION(1, "GEO");
+	GEOLOCATION(1, "GEO"),
+	MEDIA(2, "MEDIA");
 
 	private final int index;
 
