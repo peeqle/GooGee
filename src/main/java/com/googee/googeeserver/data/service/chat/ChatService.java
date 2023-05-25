@@ -46,6 +46,6 @@ public class ChatService {
 			return Page.empty();
 		}
 
-		return chatRepository.findAllByMembersContains(appUser, pageable);
+		return chatRepository.findAllByMembersContaining(appUser, pageable);
 	}
 }

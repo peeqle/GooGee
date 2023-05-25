@@ -170,6 +170,12 @@ services:
             timeout: 10s
             retries: 120
 
+    mongodb:
+        image: 'bitnami/mongodb'
+        container_name: mongo-main
+        ports:
+            - "27017:27017"
+
 volumes:
     certs:
         driver: local

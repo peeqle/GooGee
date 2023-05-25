@@ -122,8 +122,13 @@ public class AppUser implements UserDetails, Serializable {
 		this.id = id;
 	}
 
+	public AppUser (Long id, String username) {
+		this.id = id;
+	}
+
 	public static AppUserDTO mapToDTO(AppUser appUser) {
-		return AppUserDTO.builder().id(appUser.getId())
+		return AppUserDTO.builder()
+			.id(appUser.getId())
 			.username(appUser.getUsername()).build();
 	}
 }

@@ -32,7 +32,6 @@ public class RoomResource {
 	private final SecurityContextService securityContextService;
 
 	@PostMapping("/create")
-	@Transactional
 	public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO) {
 		AppUser appUser = securityContextService.fetchCurrentUser();
 		if (roomDTO != null) {
