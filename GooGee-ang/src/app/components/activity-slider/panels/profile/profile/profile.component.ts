@@ -10,6 +10,8 @@ import {environment} from "../../../../../../environments/environment.prod";
 import {FriendsModalComponent} from "./friends-modal/friends-modal.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {LocalStorageService} from "../../../../../service/system/local-storage.service";
+import {ProfileEditComponent} from "../profile-edit/profile-edit.component";
+import {ImageService} from "../../../../../service/system/image.service";
 
 @Component({
   selector: 'app-profile',
@@ -22,13 +24,18 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
 
   content: any;
 
+  profileImage: any;
+
   constructor(private userService: UserService,
               private activityTabService: ActivityService,
               private tabHolder: HolderService,
               private postService: PostService,
               private lsService: LocalStorageService,
+              private imageService: ImageService,
               private friendsDialog: MatDialog,
-              private friendsRef: MatDialogRef<any>) {
+              private friendsRef: MatDialogRef<any>,
+              private editionDialog: MatDialog,
+              private editionRef: MatDialogRef<any>) {
     super();
   }
 
@@ -41,6 +48,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
             next: (json) => {
               this.currentUser = json;
               this.lsService.save("user", json)
+              this.fetchUserImage();
             }, error: err => {
 
             }, complete: () => {
@@ -52,6 +60,14 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
             infoUser$.unsubscribe()
           }
         }
+      }
+    })
+  }
+
+  fetchUserImage() {
+    this.imageService.fetchImage(this.currentUser.imageKey).subscribe({
+      next: value => {
+        console.log('iamge service value', value)
       }
     })
   }
@@ -83,6 +99,20 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
     });
 
     this.friendsRef.afterClosed().subscribe(result => {
+
+    });
+  }
+
+  openProfileEditionDialog() {
+    this.editionRef = this.editionDialog.open(ProfileEditComponent, {
+      data: {
+        userId: this.currentUser.id
+      },
+      hasBackdrop: true,
+      backdropClass: 'backdropBackground'
+    });
+
+    this.editionRef.afterClosed().subscribe(result => {
 
     });
   }

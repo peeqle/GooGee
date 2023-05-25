@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import SockJS from "sockjs-client";
 import * as Stomp from 'stompjs';
-import {Observable, Observer} from "rxjs";
+import {BehaviorSubject, Observable, Observer} from "rxjs";
 import {LocalStorageService} from "../system/local-storage.service";
 import {UserService} from "./user.service";
 import {Router} from "@angular/router";
@@ -17,6 +17,8 @@ export class SocketService {
   private socket: any;
 
   private frame: any = {};
+
+  public incomingMessages: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
   constructor(private storageService: LocalStorageService,
               private userService: UserService,
@@ -71,7 +73,8 @@ export class SocketService {
   }
 
   public subscribeOnChatMessages(chat_id: string) {
-    this.stomp.subscribe(`/topic/chat.${chat_id}.messages`, (message: any) => {
+    return this.stomp.subscribe(`/topic/chat.${chat_id}.events`, (message: any) => {
+      this.incomingMessages.next(message);
     });
   }
 
@@ -118,7 +121,8 @@ export class SocketService {
         return;
       }
 
-      this.stomp.send(`/topic/chat.${chat.chatId}.message`, {
+      this.stomp.send(`/topic/chat.private.message`, {
+          'chatId': chat.chatId,
           'message': message,
           'from': currentUser.id,
           'target': targetUser.id
@@ -135,5 +139,17 @@ export class SocketService {
       //     console.log('message', message)
       //   })
     }
+  }
+
+  get incomingChatMessagesObs() {
+    return this.incomingMessages.asObservable();
+  }
+
+  getIncomingChatMessages() {
+    return this.incomingMessages.value;
+  }
+
+  clearIncomingMessages() {
+    this.incomingMessages.next([]);
   }
 }
