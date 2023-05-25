@@ -118,7 +118,7 @@ export class SocketService {
         return;
       }
 
-      this.stomp.send(`/topic/chat.${chat.chatId}.message`, {
+      this.stomp.send(`/topic/chat.${chat.chatId}.private.message`, {
           'message': message,
           'from': currentUser.id,
           'target': targetUser.id

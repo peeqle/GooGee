@@ -20,6 +20,8 @@ public class AppUserDTO extends Response implements Serializable {
 
 	private String username;
 
+	private String email;
+
 	private String status;
 
 	private Long lastActive;
@@ -31,11 +33,12 @@ public class AppUserDTO extends Response implements Serializable {
 	private int eventsVisited;
 
 	@Builder
-	public AppUserDTO(Long id, boolean success, long transactionTime, String imageKey, String username, String status, Long lastActive, List<Role> roles, int friendsCount, int eventsVisited) {
+	public AppUserDTO(Long id, boolean success, long transactionTime, String imageKey, String username, String email, String status, Long lastActive, List<Role> roles, int friendsCount, int eventsVisited) {
 		super(success, transactionTime);
 		this.id = id;
 		this.imageKey = imageKey;
 		this.username = username;
+		this.email = email;
 		this.status = status;
 		this.lastActive = lastActive;
 		this.roles = roles;

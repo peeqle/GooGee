@@ -1,5 +1,6 @@
 package com.googee.googeeserver.models.media;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Id;
 import lombok.Data;
 import org.springframework.data.redis.core.RedisHash;

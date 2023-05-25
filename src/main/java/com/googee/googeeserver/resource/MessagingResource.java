@@ -32,17 +32,17 @@ public class MessagingResource {
 
 	private final SimpMessagingTemplate messagingTemplate;
 
-	private static final String CHAT_MESSAGE_SEND = "/topic/chat.{chatId}.message";
+	private static final String CHAT_MESSAGE_SEND = "/topic/chat.private.message";
 	private static final String CHAT_EVENTS_SUB = "/topic/chat.{chatId}.events";
 	private static final String CHAT_SESSION_SUB = "/topic/messages.subscribe";
 
 	private final MessageService messageService;
 
 	@MessageMapping(CHAT_MESSAGE_SEND)
-	private void handleChatMessage(@DestinationVariable("chatId") String chatId,
-								   @Header("from") String senderId,
-								   @Header("target") String targetId,
-								   @Header("message") String messageContent) {
+	private void handleChatMessage(@Header("chatId") String chatId,
+									  @Header("from") String senderId,
+									  @Header("target") String targetId,
+									  @Header("message") String messageContent) {
 		if (!Numbers.isPositiveNumeric(senderId) || !Numbers.isPositiveNumeric(targetId)) {
 			return;
 		}
@@ -52,6 +52,7 @@ public class MessagingResource {
 
 		ChatMessage chatMessage = new ChatMessage(new Message(messageContent.getBytes(StandardCharsets.UTF_8), messageProperties));
 		chatMessage.setSendAt(Instant.now().toEpochMilli());
+		chatMessage.setChatId(chatId);
 
 		messageService.saveChatMessage(chatMessage);
 
