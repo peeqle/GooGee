@@ -19,7 +19,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
-chats + profile
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Log4j2
