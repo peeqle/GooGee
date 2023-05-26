@@ -12,6 +12,7 @@ import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {LocalStorageService} from "../../../../../service/system/local-storage.service";
 import {ProfileEditComponent} from "../profile-edit/profile-edit.component";
 import {ImageService} from "../../../../../service/system/image.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-profile',
@@ -32,6 +33,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
               private postService: PostService,
               private lsService: LocalStorageService,
               private imageService: ImageService,
+              private sanitizer: DomSanitizer,
               private friendsDialog: MatDialog,
               private friendsRef: MatDialogRef<any>,
               private editionDialog: MatDialog,
@@ -65,9 +67,11 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
   }
 
   fetchUserImage() {
-    this.imageService.fetchImage(this.currentUser.imageKey).subscribe({
+    this.imageService.fetchUserImage();
+
+    this.imageService.profileImageURL.subscribe({
       next: value => {
-        console.log('iamge service value', value)
+        this.profileImage = value;
       }
     })
   }
