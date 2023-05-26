@@ -29,6 +29,8 @@ import {
 } from './components/activity-slider/panels/profile/profile/friends-modal/friends-modal.component';
 import { ChatElementComponent } from './components/activity-slider/panels/chat/chat-element/chat-element.component';
 import { ChatBoxComponent } from './components/activity-slider/panels/chat/chat-box/chat-box.component';
+import { ChatMessageComponent } from './components/activity-slider/panels/chat/chat-message/chat-message.component';
+import { ProfileEditComponent } from './components/activity-slider/panels/profile/profile-edit/profile-edit.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +52,9 @@ import { ChatBoxComponent } from './components/activity-slider/panels/chat/chat-
     RoomCreateComponent,
     FriendsModalComponent,
     ChatElementComponent,
-    ChatBoxComponent
+    ChatBoxComponent,
+    ChatMessageComponent,
+    ProfileEditComponent
   ],
   imports: [
     NgbModule,

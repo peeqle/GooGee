@@ -1,12 +1,13 @@
 <div class="row">
   <div class="col">
-    <img [src]="'assets/images/empty_avatar.jpg'" class="img-fluid rounded-circle">
+    <img [src]="''" class="img-fluid rounded-circle">
   </div>
   <div class="col">
     <div class="mb-3">
-
       <div class="float-start w-100">
-        <h1 class="fw-bold">@{{currentUser?.username}}</h1>
+        <h1 class="fw-bold">@{{currentUser?.username}}
+          <mat-icon style="font-size: 20px" (click)="openProfileEditionDialog()">edit</mat-icon>
+        </h1>
       </div>
       <span class="status-container ellipsis">{{currentUser?.status}}</span>
     </div>

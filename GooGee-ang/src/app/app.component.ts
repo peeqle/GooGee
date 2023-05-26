@@ -55,7 +55,6 @@ export class AppComponent implements AfterViewInit, OnInit {
                 this.localStorageService.save("user", value)
               }
             })
-            this.connectSockets();
           }
         }),
         error: ((err) => {
@@ -64,7 +63,7 @@ export class AppComponent implements AfterViewInit, OnInit {
           }
         }),
         complete: () => {
-
+          this.connectSockets();
         }
       })
     }

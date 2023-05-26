@@ -71,7 +71,8 @@ export class SocketService {
   }
 
   public subscribeOnChatMessages(chat_id: string) {
-    this.stomp.subscribe(`/topic/chat.${chat_id}.messages`, (message: any) => {
+    return this.stomp.subscribe(`/topic/chat.${chat_id}.events`, (message: any) => {
+      this.incomingMessages.next(message);
     });
   }
 
@@ -118,7 +119,7 @@ export class SocketService {
         return;
       }
 
-      this.stomp.send(`/topic/chat.${chat.chatId}.private.message`, {
+      this.stomp.send(`/topic/chat.${chat.chatId}.message`, {
           'message': message,
           'from': currentUser.id,
           'target': targetUser.id
@@ -135,5 +136,17 @@ export class SocketService {
       //     console.log('message', message)
       //   })
     }
+  }
+
+  get incomingChatMessagesObs() {
+    return this.incomingMessages.asObservable();
+  }
+
+  getIncomingChatMessages() {
+    return this.incomingMessages.value;
+  }
+
+  clearIncomingMessages() {
+    this.incomingMessages.next([]);
   }
 }

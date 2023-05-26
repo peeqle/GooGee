@@ -45,7 +45,6 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
 
     this.tabHolder.chatSelectedChatUserObs.subscribe({
       next: user => {
-        console.log('user', user)
         if (user && this.tabHolder.getCurrentTabValue() === ActivityTab.CHAT) {
           if(!this.checkUsername(user)) {
             this.createChat(user);
@@ -66,7 +65,6 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
   }
 
   setEmittedChat(chat: any) {
-    console.log('chat', chat)
     this.currentSelectedChat = chat;
     this.chatService.changeSelectedChat(chat)
   }

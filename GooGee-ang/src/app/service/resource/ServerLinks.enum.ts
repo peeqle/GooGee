@@ -13,8 +13,11 @@ export enum ServerLinks {
   USER_REQUEST = "user",
   USER_POST_REQUEST = "user/posts/save",
   USER_CURRENT_REQUEST = "user/fetch/current",
+  USER_CURRENT_UPDATE = "user/current/update",
   USER_FETCH_REQUEST = "user/fetch",
   USER_FETCH_FRIENDS_REQUEST = "user/fetch/friends",
   ROOM_CREATE_REQUEST = "room/create",
+  MEDIA_SAVE = "images/save",
+  MEDIA_FETCH = "images/fetch",
   APPLICATION_AUTH_PREFIX = "auth"
 }

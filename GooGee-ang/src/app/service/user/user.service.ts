@@ -30,6 +30,12 @@ export class UserService {
     })
   }
 
+  updateUserInfo(userInfo: any) {
+    return this.http.put(this.server.prepareServerLink(ServerLinks.USER_CURRENT_UPDATE), userInfo, {
+      headers: this.server.generateRequiredHeaders()
+    })
+  }
+
   fetchUserFriends(userId: number) {
     return this.http.get(this.server.prepareServerLink(ServerLinks.USER_FETCH_FRIENDS_REQUEST), {
       headers: this.server.generateRequiredHeaders(),
