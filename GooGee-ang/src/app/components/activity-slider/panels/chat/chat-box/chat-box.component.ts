@@ -34,6 +34,7 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
     this.chatService.getSocketService().incomingChatMessagesObs.subscribe({
       next: message => {
         if (message.body) {
+          console.log('MESSAGE PUSH', message)
           this.chatMessages.push(this.mapToSimplifiedMessage(JSON.parse(message.body)));
         }
       }
