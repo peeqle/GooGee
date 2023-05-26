@@ -20,6 +20,8 @@ public class ChatMessage implements Serializable {
 	@Id
 	private String id;
 
+	private String chatId;
+
 	private Long sendAt;
 
 	private Message message;

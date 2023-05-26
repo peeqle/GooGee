@@ -37,6 +37,7 @@ public class UserResource {
 						.roles(appUser.getRoles().stream().toList())
 						.lastActive(appUser.getLastActive())
 						.username(username)
+						.email(appUser.getEmail())
 						.imageKey(appUser.getImageKey())
 						.status(appUser.getStatus())
 						.friendsCount(appUser.getFriendlyUsers().size())
@@ -64,6 +65,7 @@ public class UserResource {
 						.roles(appUser.getRoles().stream().toList())
 						.lastActive(appUser.getLastActive())
 						.username(appUser.getUsername())
+						.email(appUser.getEmail())
 						.imageKey(appUser.getImageKey())
 						.status(appUser.getStatus())
 						.friendsCount(appUser.getFriendlyUsers().size())
@@ -88,6 +90,18 @@ public class UserResource {
 		AppUser target = appUserService.tryGetAppUserById(id);
 		appUserService.addToFriends(target, currentUser.getId());
 
+		return ResponseEntity.ok().build();
+	}
+
+	@PutMapping("/current/update")
+	public ResponseEntity updateCurrentUser(@RequestBody AppUserDTO user) {
+		AppUser currentUser = securityContextService.fetchCurrentUser();
+
+		currentUser.setStatus(user.getStatus());
+		currentUser.setEmail(user.getEmail());
+		currentUser.setImageKey(user.getImageKey());
+
+		this.appUserService.save(currentUser);
 		return ResponseEntity.ok().build();
 	}
 

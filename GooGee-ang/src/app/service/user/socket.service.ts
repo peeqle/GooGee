@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import SockJS from "sockjs-client";
 import * as Stomp from 'stompjs';
-import {BehaviorSubject, Observable, Observer} from "rxjs";
+import {Observable, Observer} from "rxjs";
 import {LocalStorageService} from "../system/local-storage.service";
 import {UserService} from "./user.service";
 import {Router} from "@angular/router";
@@ -17,8 +17,6 @@ export class SocketService {
   private socket: any;
 
   private frame: any = {};
-
-  public incomingMessages: BehaviorSubject<any> = new BehaviorSubject<any>([]);
 
   constructor(private storageService: LocalStorageService,
               private userService: UserService,
@@ -121,8 +119,7 @@ export class SocketService {
         return;
       }
 
-      this.stomp.send(`/topic/chat.private.message`, {
-          'chatId': chat.chatId,
+      this.stomp.send(`/topic/chat.${chat.chatId}.message`, {
           'message': message,
           'from': currentUser.id,
           'target': targetUser.id
