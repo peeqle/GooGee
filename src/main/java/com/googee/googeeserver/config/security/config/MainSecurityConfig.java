@@ -44,9 +44,9 @@ public class MainSecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/sample/**").permitAll()
                         .requestMatchers("/ws/**").permitAll()
                         .requestMatchers("/api/v1/images/**").permitAll()
+                        .requestMatchers("/oauth2/authorization/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement()
@@ -58,7 +58,6 @@ public class MainSecurityConfig {
                 .logoutUrl("/api/v1/auth/logout")
                 .addLogoutHandler(logoutService)
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext());
-        //TODO поставить Handshake INterceptor а-тщ хуево что сокет тока по домену верифицируется
         return http.build();
     }
 }

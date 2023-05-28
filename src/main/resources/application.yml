@@ -23,6 +23,13 @@ spring:
         host: localhost
         username: admin
         password: admin
+    security:
+        oauth2:
+            client:
+                registration:
+                    github:
+                        clientId: 0e10299ccb71a3fb435f
+                        clientSecret: c11073070842ae33e89eaf07894cd73a6828cd4e
 angular:
     client:
         url: http://localhost:4200
