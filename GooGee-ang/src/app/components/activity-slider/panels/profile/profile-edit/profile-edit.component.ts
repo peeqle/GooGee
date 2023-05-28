@@ -79,6 +79,7 @@ export class ProfileEditComponent implements OnInit, AfterContentInit {
             },
             complete: () => {
               this.dialogRef.close();
+              this.imageService.fetchUserImage();
             }
           })
         }
