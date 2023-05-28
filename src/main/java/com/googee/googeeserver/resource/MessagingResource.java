@@ -40,17 +40,14 @@ public class MessagingResource {
 
 	@MessageMapping(CHAT_MESSAGE_SEND)
 	private void handleChatMessage(@Header("chatId") String chatId,
-									  @Header("from") String senderId,
-									  @Header("target") String targetId,
-									  @Header("message") String messageContent) {
+								   @Header("from") String senderId,
+								   @Header("target") String targetId,
+								   @Header("message") String messageContent) {
 		if (!Numbers.isPositiveNumeric(senderId) || !Numbers.isPositiveNumeric(targetId)) {
 			return;
 		}
-		MessageProperties messageProperties = new MessageProperties();
-		messageProperties.setUserId(senderId);
-		messageProperties.setReceivedUserId(targetId);
-
-		ChatMessage chatMessage = new ChatMessage(new Message(messageContent.getBytes(StandardCharsets.UTF_8), messageProperties));
+		ChatMessage chatMessage = new ChatMessage();
+		chatMessage.setMessage(new ChatMessage.Message(senderId, targetId, messageContent.getBytes(StandardCharsets.UTF_8)));
 		chatMessage.setSendAt(Instant.now().toEpochMilli());
 		chatMessage.setChatId(chatId);
 

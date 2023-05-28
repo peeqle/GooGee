@@ -3,10 +3,10 @@ package com.googee.googeeserver.models.chat;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.amqp.core.Message;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.redis.core.RedisHash;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -28,7 +28,18 @@ public class ChatMessage implements Serializable {
 
 	private boolean isRead = false;
 
-	public ChatMessage (Message message) {
+	public ChatMessage(Message message) {
 		this.message = message;
+	}
+
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class Message implements Serializable{
+		private String userId;
+
+		private String receiverId;
+
+		private byte[] content;
 	}
 }
