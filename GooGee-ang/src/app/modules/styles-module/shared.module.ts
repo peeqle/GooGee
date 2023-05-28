@@ -10,6 +10,7 @@ import {GoogleMapsModule} from "@angular/google-maps";
 import {EditorModule} from "@tinymce/tinymce-angular";
 import {MatDialogModule} from "@angular/material/dialog";
 import {NgSelectModule} from "@ng-select/ng-select";
+import {InfiniteScrollModule} from "ngx-infinite-scroll";
 
 const modules = [
   CommonModule,
@@ -23,7 +24,8 @@ const modules = [
   GoogleMapsModule,
   EditorModule,
   MatDialogModule,
-  NgSelectModule
+  NgSelectModule,
+  InfiniteScrollModule
 ]
 
 @NgModule({

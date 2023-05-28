@@ -1,4 +1,11 @@
-<div class="message-container d-flex flex-column align-items-start overflow-auto">
+<div class="message-container d-flex flex-column align-items-start overflow-auto"
+     infiniteScroll
+     [infiniteScrollUpDistance]='1'
+     [infiniteScrollThrottle]="50"
+     (scrolledUp)="onScroll()"
+     [infiniteScrollContainer]="'.message-container'"
+     [fromRoot]="true"
+     #chatHolder>
   <div class="w-100">
     <div *ngFor="let message of chatMessages">
       <app-chat-message [message]="message" [isUser]="message.sender == currentUser.id"></app-chat-message>
