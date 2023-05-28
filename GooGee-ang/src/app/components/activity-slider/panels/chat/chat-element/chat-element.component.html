@@ -12,7 +12,7 @@
 </div>
 
 <ng-template class="chat-pointer" #shredChats>
-  <div class="container p-2">
+  <div class="container p-2" (click)="emitChat()">
     <img [src]="getChatAvatar()" class="rounded-circle chat-image">
   </div>
 </ng-template>

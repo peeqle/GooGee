@@ -1,15 +1,22 @@
-<div class="h-100 d-flex flex-column align-items-start">
+<div class="message-container d-flex flex-column align-items-start overflow-auto"
+     infiniteScroll
+     [infiniteScrollUpDistance]='1'
+     [infiniteScrollThrottle]="50"
+     (scrolledUp)="onScroll()"
+     [infiniteScrollContainer]="'.message-container'"
+     [fromRoot]="true"
+     #chatHolder>
   <div class="w-100">
     <div *ngFor="let message of chatMessages">
       <app-chat-message [message]="message" [isUser]="message.sender == currentUser.id"></app-chat-message>
     </div>
   </div>
-  <div class="row align-self-end w-100 center-icon-vertically">
-    <div class="col-8">
-      <input type="text" class="form-control w-100" [(ngModel)]="message">
-    </div>
-    <div class="col-2">
-      <mat-icon class="icon-hoover" (click)="sendMessage()">send</mat-icon>
-    </div>
+</div>
+<div class="row align-self-end w-100 center-icon-vertically message-input-height">
+  <div class="col-8">
+    <input type="text" class="form-control w-100" [(ngModel)]="message">
+  </div>
+  <div class="col-2">
+    <mat-icon class="icon-hoover" (click)="sendMessage()">send</mat-icon>
   </div>
 </div>
