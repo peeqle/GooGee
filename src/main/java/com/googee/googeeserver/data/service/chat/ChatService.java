@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.UUID;
 
 import static java.lang.String.format;
 import static java.util.Objects.isNull;
@@ -36,7 +37,10 @@ public class ChatService {
 	public Chat save(Chat chat) {
 		return chatRepository.save(chat);
 	}
-	//todo переписать чаты на монго чтобы можно было фетчить большие пачки юзеров
+
+	public Chat fetchChat(UUID chatId) {
+		return chatRepository.findById(chatId).orElseThrow();
+	}
 	public Page<Chat> fetchChatsForUser(int page, int limit) {
 		Pageable pageable = PageRequest.of(page, limit);
 
@@ -47,5 +51,8 @@ public class ChatService {
 		}
 
 		return chatRepository.findAllByMembersContaining(appUser, pageable);
+	}
+	public boolean exists(UUID chatId) {
+		return chatRepository.existsById(chatId);
 	}
 }

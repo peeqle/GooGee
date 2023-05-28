@@ -2,13 +2,17 @@ package com.googee.googeeserver.resource.chat;
 
 import com.googee.googeeserver.config.security.service.SecurityContextService;
 import com.googee.googeeserver.data.service.chat.ChatService;
+import com.googee.googeeserver.data.service.message.MessageService;
 import com.googee.googeeserver.data.service.user.AppUserServiceImpl;
 import com.googee.googeeserver.models.DTO.chat.ChatDTO;
 import com.googee.googeeserver.models.DTO.user.AppUserDTO;
 import com.googee.googeeserver.models.chat.Chat;
+import com.googee.googeeserver.models.chat.ChatMessage;
 import com.googee.googeeserver.models.user.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +26,8 @@ import java.util.*;
 public class ChatResource {
 
 	private final ChatService chatService;
+
+	private final MessageService messageService;
 
 	private final AppUserServiceImpl appUserService;
 
@@ -74,6 +80,28 @@ public class ChatResource {
 			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+
+	@GetMapping("/fetch/messages")
+	public ResponseEntity<Page<ChatMessage>> fetchChatMessages(@RequestParam("chatId") String chatId,
+															   @RequestParam(value = "page", defaultValue = "0") int page,
+															   @RequestParam(value = "limit", defaultValue = "30") int limit,
+															   @RequestParam(value = "filter", required = false) String filters) {
+		if (chatId == null || chatId.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+		}
+		try {
+			UUID chatUUID = UUID.fromString(chatId);
+			if (!chatService.exists(chatUUID)) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+			}
+			Chat chat = chatService.fetchChat(chatUUID);
+//todo check access
+
+			return ResponseEntity.ok(messageService.fetchChatMessages(chatId, page, limit));
+		} catch (IllegalArgumentException | NoSuchElementException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 	}
 
 	public ChatDTO mapChat(Chat chat) {
