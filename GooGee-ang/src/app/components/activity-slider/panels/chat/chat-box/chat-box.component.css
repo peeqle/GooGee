@@ -12,3 +12,11 @@
   color: #0059b7;
   cursor: pointer;
 }
+
+.message-input-height {
+  height: 10vh;
+}
+
+.message-container {
+  height: 80vh;
+}

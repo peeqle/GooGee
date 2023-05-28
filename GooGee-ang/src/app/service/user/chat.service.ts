@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from "@angular/common/http";
 import {ServerService} from '../system/server.service';
 import {ServerLinks} from "../resource/ServerLinks.enum";
 import {SocketService} from "./socket.service";
-import {BehaviorSubject, Subject} from "rxjs";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +11,7 @@ import {BehaviorSubject, Subject} from "rxjs";
 export class ChatService {
 
   private chatSelected: BehaviorSubject<any> = new BehaviorSubject<any>(null)
+
   constructor(private http: HttpClient,
               private server: ServerService,
               private socketService: SocketService) {
@@ -26,6 +27,16 @@ export class ChatService {
       params: new HttpParams()
         .set("page", page)
         .set("limit", limit)
+    })
+  }
+
+  fetchChatMessages(page: number, limit: number) {
+    return this.http.get<any>(this.server.prepareServerLink(ServerLinks.CHAT_FETCH_MESSAGES_REQUEST), {
+      headers: this.server.generateRequiredHeaders(),
+      params: new HttpParams()
+        .set("page", page)
+        .set("limit", limit)
+        .set("chatId", this.getSelectedChat().chatId)
     })
   }
 
