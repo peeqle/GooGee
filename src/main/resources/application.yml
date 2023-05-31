@@ -30,6 +30,8 @@ spring:
                     github:
                         clientId: 0e10299ccb71a3fb435f
                         clientSecret: c11073070842ae33e89eaf07894cd73a6828cd4e
+                        redirect-uri: http://localhost:4200/login/oauth2/code/github
+                        token-uri: https://github.com/login/oauth/access_token
 angular:
     client:
         url: http://localhost:4200
