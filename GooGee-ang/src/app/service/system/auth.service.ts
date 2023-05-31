@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {Router} from "@angular/router";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {LocalStorageService} from "./local-storage.service";
 import {ServerService} from "./server.service";
 import {ServerLinks} from "../resource/ServerLinks.enum";
@@ -65,7 +65,8 @@ export class AuthService {
     this.http.get(this.server.prepareServerLink(ServerLinks.LOGOUT_REQUEST), {
       headers: this.server.generateRequiredHeaders()
     }).subscribe({
-      next: (json) => {}
+      next: (json) => {
+      }
     })
   }
 
@@ -85,6 +86,12 @@ export class AuthService {
         }
       }
     )
+  }
+
+  exchangeCode(code: any) {
+    return this.http.post("http://localhost:8080/oauth/github/exchange", {}, {
+      params: new HttpParams().set("code", code)
+    })
   }
 }
 

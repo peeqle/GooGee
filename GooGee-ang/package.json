@@ -30,6 +30,7 @@
     "net": "^1.0.2",
     "ngx-infinite-scroll": "^15.0.0",
     "nodejs": "^0.0.0",
+    "octokit": "^2.0.19",
     "rxjs": "^7.8.0",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.6.1",

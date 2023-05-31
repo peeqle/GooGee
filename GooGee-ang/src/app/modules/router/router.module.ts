@@ -7,12 +7,25 @@ import {AuthGuard} from "../../guards/auth.guard";
 
 const paths: Routes = [
   {
+    path: 'login', component: LoginComponent, children: [
+      {
+        path: 'oauth2', children: [
+          {
+            path: 'code', children: [
+              {path: 'github', component: LoginComponent},
+              {path: 'google', component: LoginComponent}
+            ]
+          }
+        ]
+      }
+    ], pathMatch: "prefix"
+  }, {
     path: '', component: MainFrameComponent, canActivate: [() => {
       inject(AuthGuard).canActivate()
     }]
   },
-  {path: 'login', component: LoginComponent},
-  {path: '**', component: MainFrameComponent},
+
+  {path: '**', redirectTo: ''}
 ]
 
 @NgModule({
