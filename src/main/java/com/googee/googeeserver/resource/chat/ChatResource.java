@@ -83,7 +83,7 @@ public class ChatResource {
 	}
 
 	@GetMapping("/fetch/messages")
-	public ResponseEntity<Page<ChatMessage>> fetchChatMessages(@RequestParam("chatId") String chatId,
+	public ResponseEntity<List<ChatMessage>> fetchChatMessages(@RequestParam("chatId") String chatId,
 															   @RequestParam(value = "page", defaultValue = "0") int page,
 															   @RequestParam(value = "limit", defaultValue = "30") int limit,
 															   @RequestParam(value = "filter", required = false) String filters) {

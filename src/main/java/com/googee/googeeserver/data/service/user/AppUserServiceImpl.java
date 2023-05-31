@@ -24,7 +24,7 @@ import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE;
 
 @Service
 @RequiredArgsConstructor
-public class AppUserServiceImpl implements UserDetailsManager, AutoCloseable {
+public class AppUserServiceImpl implements UserDetailsManager {
 
 	private final AppUserRepository userRepository;
 
@@ -105,10 +105,5 @@ public class AppUserServiceImpl implements UserDetailsManager, AutoCloseable {
 
 	public boolean exists(Long id) {
 		return userRepository.findAppUserById(id).isPresent();
-	}
-
-	@Override
-	public void close() throws Exception {
-
 	}
 }
