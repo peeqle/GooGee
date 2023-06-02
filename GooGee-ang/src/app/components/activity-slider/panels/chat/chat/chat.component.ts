@@ -52,21 +52,27 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
         }
       }
     })
+
+    this.connectChatPicker();
   }
 
   createChat(user) {
     this.chatService.createNewChat(user).subscribe({
       next: value => {
         this.chats.push(value)
-
+        console.log('value', value)
         this.currentSelectedChat = value
       }
     })
   }
 
-  setEmittedChat(chat: any) {
-    this.currentSelectedChat = chat;
-    this.chatService.changeSelectedChat(chat)
+  connectChatPicker() {
+    this.chatService.chatSelectedObs.subscribe({
+      next: chat => {
+        console.log('chat', chat)
+        this.currentSelectedChat = chat;
+      }
+    })
   }
 
   checkUsername(user: any) {

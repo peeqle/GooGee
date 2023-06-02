@@ -55,6 +55,7 @@ export class ChatService {
   }
 
   changeSelectedChat(chat: any) {
+    this.unsubscribeFromChat();
     this.chatSelected.next(chat);
     return chat;
   }
@@ -68,6 +69,6 @@ export class ChatService {
   }
 
   unsubscribeFromChat() {
-
+    return this.socketService.unsubscribeFromChat();
   }
 }

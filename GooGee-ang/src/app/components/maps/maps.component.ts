@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Loader} from "@googlemaps/js-api-loader";
 import MapStyles from "./styles/mapsStyles.json";
 import {LocationService} from "../../service/user/location.service";
@@ -11,7 +11,7 @@ import {SocketService} from "../../service/user/socket.service";
   templateUrl: './maps.component.html',
   styleUrls: ['./maps.component.css']
 })
-export class MapsComponent implements OnInit {
+export class MapsComponent implements OnInit, AfterContentInit {
 
   defaultLat = 52;
   defaultLng = 22;
@@ -31,9 +31,9 @@ export class MapsComponent implements OnInit {
   constructor(private locationService: LocationService, private socketService: SocketService) {
   }
 
-  ngOnInit(): void {
+  ngAfterContentInit(): void {
     var $this = this;
-    this.locationService.runLocationChecker();
+    this.getFriendsLocations();
 
     this.locationService.getUserLocationSub().subscribe((loc: GeolocationPosition) => {
         if (loc) {
@@ -42,7 +42,7 @@ export class MapsComponent implements OnInit {
             lng: loc.coords.longitude
           } as google.maps.MapOptions;
 
-          if(this.currentUserMarker === undefined) {
+          if (this.currentUserMarker === undefined) {
             this.map?.setCenter({
               lat: loc.coords.latitude,
               lng: loc.coords.longitude
@@ -53,7 +53,7 @@ export class MapsComponent implements OnInit {
               title: 'your mum',
               animation: 0.0
             })
-          }else {
+          } else {
             this.currentUserMarker.setPosition(point);
           }
           this.socketService.updateUserLocation(loc);
@@ -72,7 +72,10 @@ export class MapsComponent implements OnInit {
         }
       })
     this.initMap();
+  }
 
+  ngOnInit(): void {
+    this.locationService.runLocationChecker();
   }
 
   initMap() {
@@ -96,6 +99,14 @@ export class MapsComponent implements OnInit {
           styles: MapStyles.retro
         }
       )
+    })
+  }
+
+  getFriendsLocations() {
+    this.locationService.fetchFriendsLocation().subscribe({
+      next: value => {
+        console.log('value', value)
+      }
     })
   }
 }

@@ -30,10 +30,20 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
     if (this.message) {
       this.chatService.sendChatMessage(this.message)
     }
+    this.message = ""
   }
 
   ngAfterContentInit(): void {
     this.currentUser = this.userService.getCurrentUserInfo();
+    this.chatService.chatSelectedObs.subscribe({
+      next: value => {
+        this.clearChatBox();
+        this.prepareChatBox();
+      }
+    })
+  }
+
+  prepareChatBox() {
     this.subscribeOnChatEvents();
     this.fetchChatMessages(() => {
       this.chatService.getSocketService().incomingChatMessagesObs.subscribe({
@@ -62,7 +72,7 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
       next: value => {
         if (value) {
           for (let message of value) {
-              this.chatMessages.unshift(this.mapToSimplifiedMessage(message));
+            this.chatMessages.unshift(this.mapToSimplifiedMessage(message));
           }
         }
       }, complete: () => {
@@ -88,7 +98,17 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
   }
 
   scrollChatHolderToBottom() {
-    console.log('ASKDNKSNDSAkSJD')
-    this.chatHolder.nativeElement.scrollTop = this.chatHolder.nativeElement.scrollHeight;
+    setTimeout(() => {
+      this.chatHolder.nativeElement.scrollTop = this.chatHolder.nativeElement.scrollHeight;
+    }, 100)
+  }
+
+  clearChatBox() {
+    this.chatMessages = []
+    this.message = ""
+    this.page = 0;
+    if (this.chatSubscription$) {
+      this.chatSubscription$.unsubscribe();
+    }
   }
 }

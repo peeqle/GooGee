@@ -1,8 +1,10 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from "rxjs";
-import {Location} from "../models/Location";
+import {Observable, Subject} from "rxjs";
 import {SnackService} from "../snack.service";
 import {SettingsService} from "../system/settings.service";
+import {HttpClient} from "@angular/common/http";
+import {ServerService} from "../system/server.service";
+import {ServerLinks} from "../resource/ServerLinks.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,10 @@ export class LocationService {
 
   private checkLoc: boolean = true;
 
-  constructor(private snackService: SnackService, private settingsService: SettingsService) {
+  constructor(private snackService: SnackService,
+              private settingsService: SettingsService,
+              private server: ServerService,
+              private http: HttpClient) {
   }
 
   runLocationChecker() {
@@ -30,6 +35,12 @@ export class LocationService {
       }, (err) => {
       })
     }
+  }
+
+  fetchFriendsLocation() {
+    return this.http.get(this.server.prepareServerLink(ServerLinks.FRIENDS_LOCATION_FETCH), {
+      headers: this.server.generateRequiredHeaders()
+    })
   }
 
   setUserLocation(position: GeolocationPosition) {

@@ -74,9 +74,13 @@ export class SocketService {
 
   public subscribeOnChatMessages(chat_id: string) {
     return this.stomp.subscribe(`/topic/chat.${chat_id}.events`, (message: any) => {
-      console.log('message', message)
       this.incomingMessage.next(message);
     });
+  }
+
+  public unsubscribeFromChat() {
+    if(!this.stomp) {return;}
+    return this.stomp.unsubscribe();
   }
 
   public sendSubscribeNotificationRequest() {

@@ -1,4 +1,5 @@
 import {AfterContentInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChatService} from "../../../../../service/user/chat.service";
 
 @Component({
   selector: 'app-chat-element',
@@ -16,6 +17,9 @@ export class ChatElementComponent implements OnInit, AfterContentInit {
   @Output("selectChat")
   chatEmitter: EventEmitter<any> = new EventEmitter<any>();
 
+  constructor(private chatService: ChatService) {
+  }
+
   ngOnInit(): void {
   }
 
@@ -27,6 +31,6 @@ export class ChatElementComponent implements OnInit, AfterContentInit {
   }
 
   emitChat() {
-    this.chatEmitter.emit(this.chat);
+    this.chatService.changeSelectedChat(this.chat)
   }
 }
