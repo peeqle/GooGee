@@ -40,6 +40,6 @@ public class GeolocationController {
 			.timestamp(Instant.now().toEpochMilli())
 			.build();
 
-		geolocationService.updateLocationDataForUser(geolocation, username);
+		geolocationService.updateLocationDataForUser(geolocation);
 	}
 }

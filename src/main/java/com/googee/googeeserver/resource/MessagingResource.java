@@ -6,9 +6,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
-import org.elasticsearch.common.Numbers;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -20,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.time.Instant;
 
 @Log4j2
@@ -43,7 +41,7 @@ public class MessagingResource {
 								   @Header("from") String senderId,
 								   @Header("target") String targetId,
 								   @Header("message") String messageContent) {
-		if (!Numbers.isPositiveNumeric(senderId) || !Numbers.isPositiveNumeric(targetId)) {
+		if (!isDigits(senderId) || !isDigits(targetId)) {
 			return;
 		}
 		ChatMessage chatMessage = new ChatMessage();
@@ -67,6 +65,15 @@ public class MessagingResource {
 		@RabbitListener
 		private void listenToMessage() {
 
+		}
+	}
+
+	private static boolean isDigits(String val) {
+		try {
+			Integer.parseInt(val);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
 		}
 	}
 }
