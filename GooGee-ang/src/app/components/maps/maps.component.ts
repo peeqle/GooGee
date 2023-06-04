@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {Loader} from "@googlemaps/js-api-loader";
 import MapStyles from "./styles/mapsStyles.json";
 import {LocationService} from "../../service/user/location.service";
@@ -11,7 +11,16 @@ import {SocketService} from "../../service/user/socket.service";
   templateUrl: './maps.component.html',
   styleUrls: ['./maps.component.css']
 })
-export class MapsComponent implements OnInit {
+export class MapsComponent implements OnInit, AfterContentInit {
+
+  @Input("templateMode")
+  templateMode: boolean = false
+
+  @Input("from")
+  from: string = "";
+
+  @Input("title")
+  title: string = "title"
 
   defaultLat = 52;
   defaultLng = 22;
@@ -31,48 +40,62 @@ export class MapsComponent implements OnInit {
   constructor(private locationService: LocationService, private socketService: SocketService) {
   }
 
-  ngOnInit(): void {
+  ngAfterContentInit(): void {
     var $this = this;
-    this.locationService.runLocationChecker();
-
-    this.locationService.getUserLocationSub().subscribe((loc: GeolocationPosition) => {
-        if (loc) {
-          const point = {
-            lat: loc.coords.latitude,
-            lng: loc.coords.longitude
-          } as google.maps.MapOptions;
-
-          if(this.currentUserMarker === undefined) {
-            this.map?.setCenter({
-              lat: loc.coords.latitude,
-              lng: loc.coords.longitude
-            })
-            this.currentUserMarker = new google.maps.Marker({// @ts-ignore
-              position: point,
-              map: this.map,
-              title: 'your mum',
-              animation: 0.0
-            })
-          }else {
-            this.currentUserMarker.setPosition(point);
-          }
-          this.socketService.updateUserLocation(loc);
-        }
-      }, () => {
-      },
-      () => {
-        if (!this.mapCenteredOnUser) {
-          this.map?.setCenter({
-            lat: this.currentGeoPosition?.coords.latitude,
-            lng: this.currentGeoPosition?.coords.longitude
-          })
-          this.map?.setZoom(14)
-
-          $this.mapCenteredOnUser = true;
-        }
-      })
     this.initMap();
+    if (!this.templateMode) {
+      this.getFriendsLocations();
+      this.locationService.getUserLocationSub().subscribe((loc: GeolocationPosition) => {
+          if (loc) {
+            this.updateLocation(loc);
+            this.socketService.updateUserLocation(loc);
+          }
+        }, () => {
+        },
+        () => {
+          if (!this.mapCenteredOnUser) {
+            this.map?.setCenter({
+              lat: this.currentGeoPosition?.coords.latitude,
+              lng: this.currentGeoPosition?.coords.longitude
+            })
+            $this.mapCenteredOnUser = true;
+          }
+        })
+    }
 
+    this.map?.setZoom(4)
+    this.updateLocation({
+      coords: {
+        latitude: this.defaultLat,
+        longitude: this.defaultLng
+      }
+    })
+  }
+
+  private updateLocation(loc: any) {
+    const point = {
+      lat: loc.coords.latitude,
+      lng: loc.coords.longitude
+    } as google.maps.MapOptions;
+
+    if (this.currentUserMarker === undefined) {
+      this.map?.setCenter({
+        lat: loc.coords.latitude,
+        lng: loc.coords.longitude
+      })
+      this.currentUserMarker = new google.maps.Marker({// @ts-ignore
+        position: point,
+        map: this.map,
+        title: this.title,
+        animation: 0.0
+      })
+    } else {
+      this.currentUserMarker.setPosition(point);
+    }
+  }
+
+  ngOnInit(): void {
+    this.locationService.runLocationChecker();
   }
 
   initMap() {
@@ -84,18 +107,50 @@ export class MapsComponent implements OnInit {
     })
     loader.load().then(() => {
       const point = {
-        lat: 0,
-        lng: 0
+        lat: this.defaultLat,
+        lng: this.defaultLng
       } as google.maps.MapOptions;
 
       $this.map = new google.maps.Map(
-        document.getElementById("map") as HTMLElement,
+        document.getElementById(`map-${this.from}`) as HTMLElement,
         {
           zoom: 14,// @ts-ignore
           center: point,
           styles: MapStyles.retro
         }
       )
+      if ($this.templateMode) {
+        $this.map.addListener("click", (mapsMouseEvent) => {
+          console.log('maps mouse event', mapsMouseEvent)
+          $this.setLocationMarker(mapsMouseEvent)
+        });
+      }
+    })
+  }
+
+  setLocationMarker(location) {
+    console.log('location va', location.Va.x)
+    const point = {
+      lat: location.Va.x,
+      lng: location.Va.y
+    } as google.maps.MapOptions;
+
+    console.log('point set', point)
+
+    console.log('this ,maps', this.map)
+    new google.maps.Marker({
+      // @ts-ignore
+      position: point,
+      map: this.map,
+      title: this.title,
+      animation: 0.0
+    })
+  }
+
+  getFriendsLocations() {
+    this.locationService.fetchFriendsLocation().subscribe({
+      next: value => {
+      }
     })
   }
 }

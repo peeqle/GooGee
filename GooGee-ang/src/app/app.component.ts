@@ -59,7 +59,6 @@ export class AppComponent implements AfterViewInit, OnInit {
         }),
         error: ((err) => {
           if (err.status === 404) {
-            console.log('Previous session info is not valid.')
           }
         }),
         complete: () => {

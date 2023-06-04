@@ -52,21 +52,25 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
         }
       }
     })
+
+    this.connectChatPicker();
   }
 
   createChat(user) {
     this.chatService.createNewChat(user).subscribe({
       next: value => {
         this.chats.push(value)
-
         this.currentSelectedChat = value
       }
     })
   }
 
-  setEmittedChat(chat: any) {
-    this.currentSelectedChat = chat;
-    this.chatService.changeSelectedChat(chat)
+  connectChatPicker() {
+    this.chatService.chatSelectedObs.subscribe({
+      next: chat => {
+        this.currentSelectedChat = chat;
+      }
+    })
   }
 
   checkUsername(user: any) {
@@ -77,6 +81,10 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
       }
     }
     return false;
+  }
+
+  getCurrentUser() {
+    return this.userService.getCurrentUserInfo();
   }
 
   ngOnInit(): void {

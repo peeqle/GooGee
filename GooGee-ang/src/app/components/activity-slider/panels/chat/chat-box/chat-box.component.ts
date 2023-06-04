@@ -1,4 +1,12 @@
-import {AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewChecked,
+  AfterViewInit,
+  Component,
+  HostListener,
+  OnDestroy,
+  ViewChild
+} from '@angular/core';
 import {ChatService} from "../../../../../service/user/chat.service";
 import {UserService} from "../../../../../service/user/user.service";
 
@@ -16,8 +24,15 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
 
   chatSubscription$: any;
 
+  messagesSubscription$: any;
+
   @ViewChild("chatHolder")
   chatHolder: any;
+
+  @HostListener("window:keydown.enter", ['$event'])
+  enterClick = () => {
+    this.sendMessage();
+  }
 
   page: number = 0;
   limit: number = 30;
@@ -30,13 +45,29 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
     if (this.message) {
       this.chatService.sendChatMessage(this.message)
     }
+    this.message = ""
   }
 
   ngAfterContentInit(): void {
     this.currentUser = this.userService.getCurrentUserInfo();
+    this.chatService.chatSelectedObs.subscribe({
+      next: value => {
+        this.clearChatBox();
+        if(this.messagesSubscription$) {
+          this.messagesSubscription$.unsubscribe();
+        }
+        if(this.chatSubscription$) {
+          this.chatSubscription$.unsubscribe();
+        }
+        this.prepareChatBox();
+      }
+    })
+  }
+
+  prepareChatBox() {
     this.subscribeOnChatEvents();
     this.fetchChatMessages(() => {
-      this.chatService.getSocketService().incomingChatMessagesObs.subscribe({
+      this.messagesSubscription$ = this.chatService.getSocketService().incomingChatMessagesObs.subscribe({
         next: message => {
           if (message.body) {
             this.chatMessages.push(this.mapToSimplifiedMessage(JSON.parse(message.body)));
@@ -62,7 +93,7 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
       next: value => {
         if (value) {
           for (let message of value) {
-              this.chatMessages.unshift(this.mapToSimplifiedMessage(message));
+            this.chatMessages.unshift(this.mapToSimplifiedMessage(message));
           }
         }
       }, complete: () => {
@@ -88,7 +119,14 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
   }
 
   scrollChatHolderToBottom() {
-    console.log('ASKDNKSNDSAkSJD')
-    this.chatHolder.nativeElement.scrollTop = this.chatHolder.nativeElement.scrollHeight;
+    setTimeout(() => {
+      this.chatHolder.nativeElement.scrollTop = this.chatHolder.nativeElement.scrollHeight;
+    }, 100)
+  }
+
+  clearChatBox() {
+    this.chatMessages = []
+    this.message = ""
+    this.page = 0;
   }
 }

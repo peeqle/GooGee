@@ -37,33 +37,40 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.router.events.subscribe({
       next: (value: any) => {
-        let route = value.routerEvent.urlAfterRedirects;
-        const urlDelimitators = new RegExp(/[?//]/);
-        let delimiterSet = route.split(urlDelimitators);
-        if (delimiterSet.indexOf('github') != -1) {
-          this.checkGitTokens();
-        } else if (delimiterSet.indexOf('google') != -1) {
-          this.checkGoogleTokens();
+        if (value.routerEvent) {
+          let route = value.routerEvent.urlAfterRedirects;
+          const urlDelimiters = new RegExp(/[?//]/);
+          let delimiterSet = route.split(urlDelimiters);
+          if (delimiterSet.indexOf('github') != -1) {
+            this.checkGitTokens();
+          } else if (delimiterSet.indexOf('google') != -1) {
+            this.checkGoogleTokens();
+          }
         }
       }
     })
   }
 
   checkGitTokens() {
-    console.log('this.active toir', this.activatedRoute.snapshot)
     let routeSnap: any = this.activatedRoute.snapshot;
     let code = routeSnap.queryParams.code;
     if (code) {
       this.authService.exchangeCode(code).subscribe({
         next: value => {
-          console.log('VALUEEEEE', value)
         }
       })
     }
   }
 
   checkGoogleTokens() {
-
+    let routeSnap: any = this.activatedRoute.snapshot;
+    let code = routeSnap.queryParams.code;
+    if (code) {
+      this.authService.exchangeCode(code).subscribe({
+        next: value => {
+        }
+      })
+    }
   }
 
   login() {

@@ -68,6 +68,6 @@ export class ChatService {
   }
 
   unsubscribeFromChat() {
-
+    return this.socketService.unsubscribeFromChat();
   }
 }

@@ -13,6 +13,5 @@ export class ChatMessageComponent implements OnInit{
   isUser: boolean;
 
   ngOnInit() {
-    console.log('this message', this.message)
   }
 }
