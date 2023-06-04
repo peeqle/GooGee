@@ -55,7 +55,6 @@ export class ChatService {
   }
 
   changeSelectedChat(chat: any) {
-    this.unsubscribeFromChat();
     this.chatSelected.next(chat);
     return chat;
   }

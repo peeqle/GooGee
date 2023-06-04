@@ -74,6 +74,7 @@ export class SocketService {
 
   public subscribeOnChatMessages(chat_id: string) {
     return this.stomp.subscribe(`/topic/chat.${chat_id}.events`, (message: any) => {
+      console.log('message', message)
       this.incomingMessage.next(message);
     });
   }
@@ -85,11 +86,11 @@ export class SocketService {
 
   public sendSubscribeNotificationRequest() {
     this.stomp.send(`/topic/notifications.global.subscribe.${this.frame.headers.session}`, (message: any) => {
-      console.log('message', message)
+
     });
 
     this.stomp.subscribe(`/topic/notifications.global`, (message: any) => {
-      console.log('message', message)
+
     });
   }
 
@@ -108,7 +109,6 @@ export class SocketService {
         'username': currentUserInfo.username
       },
       (message: any) => {
-        console.log('message', message)
       });
   }
 
@@ -133,7 +133,6 @@ export class SocketService {
           'chatId': chat.chatId
         },
         (message: any) => {
-          console.log('message', message)
         })
     } else {
       // this.stomp.send(`/topic/chat.${chat.chatId}.spread.message`, {
@@ -146,8 +145,12 @@ export class SocketService {
     }
   }
 
-  get incomingChatMessagesObs() {
+  get incomingChatMessagesObs(): Observable<any> {
     return this.incomingMessage.asObservable();
+  }
+
+  unsubIncomingMessages() {
+    this.incomingMessage.unsubscribe();
   }
 
   clearIncomingMessages() {

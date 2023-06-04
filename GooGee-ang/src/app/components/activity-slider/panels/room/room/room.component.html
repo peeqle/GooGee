@@ -9,10 +9,20 @@
       </button>
     </div>
   </div>
-  <div *ngFor="let creatorRoom of asyncCreatorRooms; index as i">
-    <p>{{creatorRoom.roomName}}</p>
-  </div>
-  <div *ngFor="let memberRoom of asyncMemberRooms; index as i">
-    <p>{{memberRoom.roomName}}</p>
+  <div class="container mt-2">
+    <div *ngFor="let creatorRoom of asyncCreatorRooms; index as i">
+      <div class="row">
+        <div class="col">
+          <p>{{creatorRoom.roomName}}</p>
+        </div>
+        <div class="col">
+          <button class="btn" (click)="openEditRoomDialog(creatorRoom)">Edit</button>
+          <button class="btn">Activate</button>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let memberRoom of asyncMemberRooms; index as i">
+      <p>{{memberRoom.roomName}}</p>
+    </div>
   </div>
 </div>

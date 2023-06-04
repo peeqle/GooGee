@@ -19,6 +19,8 @@ export class SettingsComponent extends CommonActivity{
   logout() {
     this.authService.logout();
     this.localService.removeTokens();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
   }
 }

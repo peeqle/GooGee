@@ -2,10 +2,10 @@
   <div class="container p-2">
     <div class="row">
       <div class="col-2 text-center chat-images-column">
-        <img [src]="getChatAvatar()" class="rounded-circle chat-image">
+        <img [src]="chatImage" class="rounded-circle chat-image">
       </div>
       <div class="col-8">
-        <h3>{{chat.chatName}}</h3>
+        <h3>{{getChatName()}}</h3>
       </div>
     </div>
   </div>
@@ -13,6 +13,6 @@
 
 <ng-template #shredChats>
   <div class="container chat-pointer p-2" (click)="emitChat()">
-    <img [src]="getChatAvatar()" class="rounded-circle chat-image">
+    <img [src]="chatImage" class="rounded-circle chat-image">
   </div>
 </ng-template>

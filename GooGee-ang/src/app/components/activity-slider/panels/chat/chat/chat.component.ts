@@ -60,7 +60,6 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
     this.chatService.createNewChat(user).subscribe({
       next: value => {
         this.chats.push(value)
-        console.log('value', value)
         this.currentSelectedChat = value
       }
     })
@@ -69,7 +68,6 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
   connectChatPicker() {
     this.chatService.chatSelectedObs.subscribe({
       next: chat => {
-        console.log('chat', chat)
         this.currentSelectedChat = chat;
       }
     })
@@ -83,6 +81,10 @@ export class ChatComponent extends CommonActivity implements OnInit, AfterConten
       }
     }
     return false;
+  }
+
+  getCurrentUser() {
+    return this.userService.getCurrentUserInfo();
   }
 
   ngOnInit(): void {

@@ -7,7 +7,8 @@ import {Observable} from "rxjs";
 import {UserService} from "../../../../../service/user/user.service";
 
 export interface RoomData {
-
+  edit: boolean,
+  room: any
 }
 
 @Component({
@@ -73,9 +74,28 @@ export class RoomCreateComponent implements AfterContentInit {
                 return {id: user.id, name: user.username}
               })
             }
+          },
+          complete: () => {
+            if (this.data.edit) {
+              this.mapToEdit(this.data.room)
+            }
           }
         })
       }
     })
+  }
+
+  mapToEdit(templateRoom) {
+    this.room = {
+      uuid: templateRoom.uuid,
+      roomName: templateRoom.roomName,
+      roomDescription: templateRoom.roomDescription,
+      maxMembers: templateRoom.maxMembers,
+      roomOptions: templateRoom.roomOptions,
+      isEvent: templateRoom.isEvent,
+      closingAt: templateRoom.closingAt,
+      members: templateRoom.members,
+      creators: templateRoom.creators
+    }
   }
 }

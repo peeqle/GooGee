@@ -5,8 +5,6 @@ import {RoomCreateComponent} from "../room-create/room-create.component";
 import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {HttpClient} from "@angular/common/http";
 import {RoomService} from "../../../../../service/user/room.service";
-import {FriendsModalComponent} from "../../profile/profile/friends-modal/friends-modal.component";
-import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-room',
@@ -57,13 +55,26 @@ export class RoomComponent extends CommonActivity implements OnInit {
 
   openCreateRoomDialog(): void {
     this.roomCreateRef = this.roomCreateDialog.open(RoomCreateComponent, {
-      data: {},
+      data: {
+        edit: false
+      },
       hasBackdrop: true,
       backdropClass: 'backdropBackground'
     });
 
     this.roomCreateRef.afterClosed().subscribe(result => {
 
+    });
+  }
+
+  openEditRoomDialog(room): void {
+    this.roomCreateRef = this.roomCreateDialog.open(RoomCreateComponent, {
+      data: {
+        edit: true,
+        room: room
+      },
+      hasBackdrop: true,
+      backdropClass: 'backdropBackground'
     });
   }
 }
