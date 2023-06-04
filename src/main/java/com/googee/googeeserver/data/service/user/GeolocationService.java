@@ -42,8 +42,9 @@ public class GeolocationService {
 				.set("coords", geolocation.getCoords())
 				.set("timestamp", geolocation.getTimestamp());
 			mongoTemplate.updateFirst(query, update, Geolocation.class);
+		}else {
+			userLocationRepository.save(geolocation);
 		}
-		userLocationRepository.save(geolocation);
 	}
 
 	public boolean existsByUsername(String username) {
