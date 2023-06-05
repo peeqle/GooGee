@@ -27,7 +27,11 @@ export class RoomCreateComponent implements AfterContentInit {
     isEvent: false,
     closingAt: 0,
     members: [],
-    creators: []
+    creators: [],
+    location: {
+      latitude: 0,
+      longitude: 0
+    }
   };
 
   possibleMembers: any[] = [];
@@ -95,7 +99,15 @@ export class RoomCreateComponent implements AfterContentInit {
       isEvent: templateRoom.isEvent,
       closingAt: templateRoom.closingAt,
       members: templateRoom.members,
-      creators: templateRoom.creators
+      creators: templateRoom.creators,
+      location: {
+        latitude: templateRoom.location.latitude,
+        longitude: templateRoom.location.longitude,
+      }
     }
+  }
+
+  deleteRoom() {
+
   }
 }

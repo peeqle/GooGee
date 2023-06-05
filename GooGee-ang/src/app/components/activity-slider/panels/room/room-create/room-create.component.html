@@ -1,6 +1,6 @@
 <div class="container sys-modal-container mb-2">
   <div class="mt-3">
-    <h4>Create room</h4>
+    <h4>{{data.edit ? "Edit room" : "Create room"}}</h4>
     <div>
       <input type="text" placeholder="Room name" class="form-control" [(ngModel)]="room.roomName">
     </div>
@@ -28,11 +28,18 @@
       </ng-select>
     </div>
     <div class="mt-2 w-100" style="height: 200px;">
-      Location:
-      <app-maps [templateMode]="true" [title]="room.roomName" from="room-create"></app-maps>
+      Location(lat, lng): {{room.location.latitude}}, {{room.location.longitude}}
+      <app-maps [templateMode]="true" [title]="room.roomName"
+                (selectedPoint)="room.location = { latitude: $event.lat, longitude: $event.lng }"
+                from="room-create"></app-maps>
     </div>
   </div>
-  <div class="mt-2 w-100 mb-2">
-    <button class="btn float-end ellipsis" (click)="createRoom()">Create room</button>
+  <div class="row mt-4 w-100 mb-2">
+    <div class="col" *ngIf="data.edit">
+      <button class="btn btn-danger ellipsis" (click)="deleteRoom()">Delete</button>
+    </div>
+    <div class="col">
+      <button class="btn float-end ellipsis" (click)="createRoom()">Save</button>
+    </div>
   </div>
 </div>

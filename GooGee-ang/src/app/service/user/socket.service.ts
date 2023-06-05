@@ -80,7 +80,9 @@ export class SocketService {
   }
 
   public unsubscribeFromChat() {
-    if(!this.stomp) {return;}
+    if (!this.stomp) {
+      return;
+    }
     return this.stomp.unsubscribe();
   }
 
@@ -130,18 +132,20 @@ export class SocketService {
           'message': message,
           'from': currentUser.id,
           'target': targetUser.id,
-          'chatId': chat.chatId
+          'chatId': chat.chatId,
+          'senderUsername': currentUser.username
         },
         (message: any) => {
         })
     } else {
-      // this.stomp.send(`/topic/chat.${chat.chatId}.spread.message`, {
-      //     'message': message,
-      //     'from': currentUser.id
-      //   },
-      //   (message: any) => {
-      //     console.log('message', message)
-      //   })
+      this.stomp.send(`/topic/chat.message`, {
+          'message': message,
+          'from': currentUser.id,
+          'chatId': chat.chatId,
+          'senderUsername': currentUser.username
+        },
+        (message: any) => {
+        })
     }
   }
 

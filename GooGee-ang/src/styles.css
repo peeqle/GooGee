@@ -41,7 +41,13 @@ body {
 
 .sys-modal-container {
   min-height: auto;
-  max-height: 600px;
+  max-height: 700px;
+  min-width: 25vw;
+  overflow-x: hidden;
+}
+.sys-modal-container-huge {
+  min-height: auto;
+  max-height: 700px;
   min-width: 25vw;
   overflow-x: hidden;
 }

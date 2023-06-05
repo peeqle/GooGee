@@ -4,7 +4,7 @@
 </ul>
 <div class="container h-100 p-3">
   <app-chat [hidden]="currentSelectedTab !== ActivityTab.CHAT"></app-chat>
-  <app-room [hidden]="currentSelectedTab !== ActivityTab.ROOMS"></app-room>
+  <app-room-view [hidden]="currentSelectedTab !== ActivityTab.ROOMS"></app-room-view>
   <app-profile [hidden]="currentSelectedTab !== ActivityTab.PROFILE"></app-profile>
   <app-search [hidden]="currentSelectedTab !== ActivityTab.SEARCH"></app-search>
   <app-settings [hidden]="currentSelectedTab !== ActivityTab.SETTINGS"></app-settings>

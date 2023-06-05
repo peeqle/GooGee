@@ -1,4 +1,13 @@
-import {AfterContentInit, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {
+  AfterContentInit,
+  AfterViewInit,
+  Component, EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges
+} from '@angular/core';
 import {Loader} from "@googlemaps/js-api-loader";
 import MapStyles from "./styles/mapsStyles.json";
 import {LocationService} from "../../service/user/location.service";
@@ -21,6 +30,9 @@ export class MapsComponent implements OnInit, AfterContentInit {
 
   @Input("title")
   title: string = "title"
+
+  @Output("selectedPoint")
+  selectedPoint: EventEmitter<any> = new EventEmitter<any>();
 
   defaultLat = 52;
   defaultLng = 22;
@@ -129,22 +141,13 @@ export class MapsComponent implements OnInit, AfterContentInit {
   }
 
   setLocationMarker(location) {
-    console.log('location va', location.Va.x)
+    console.log('lcoation', location)
     const point = {
-      lat: location.Va.x,
-      lng: location.Va.y
+      lat: location.latLng.lat(),
+      lng: location.latLng.lng()
     } as google.maps.MapOptions;
 
-    console.log('point set', point)
-
-    console.log('this ,maps', this.map)
-    new google.maps.Marker({
-      // @ts-ignore
-      position: point,
-      map: this.map,
-      title: this.title,
-      animation: 0.0
-    })
+    this.selectedPoint.emit(point);
   }
 
   getFriendsLocations() {

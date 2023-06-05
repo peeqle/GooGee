@@ -12,7 +12,7 @@ import {MainFrameComponent} from './components/main-frame/main-frame.component';
 import {MapsComponent} from './components/maps/maps.component';
 import {ActivitySliderComponent} from './components/activity-slider/activity-slider.component';
 import {ActivityTabComponent} from './components/activity-slider/activity-tab/activity-tab.component';
-import {RoomComponent} from './components/activity-slider/panels/room/room/room.component';
+import {RoomViewComponent} from './components/activity-slider/panels/room/room-view/room-view.component';
 import {ProfileComponent} from './components/activity-slider/panels/profile/profile/profile.component';
 import {SettingsComponent} from './components/activity-slider/panels/settings/settings/settings.component';
 import {ChatComponent} from "./components/activity-slider/panels/chat/chat/chat.component";
@@ -31,6 +31,7 @@ import { ChatElementComponent } from './components/activity-slider/panels/chat/c
 import { ChatBoxComponent } from './components/activity-slider/panels/chat/chat-box/chat-box.component';
 import { ChatMessageComponent } from './components/activity-slider/panels/chat/chat-message/chat-message.component';
 import { ProfileEditComponent } from './components/activity-slider/panels/profile/profile-edit/profile-edit.component';
+import { RoomComponent } from './components/activity-slider/panels/room/room/room.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,7 @@ import { ProfileEditComponent } from './components/activity-slider/panels/profil
     ChatComponent,
     ActivitySliderComponent,
     ActivityTabComponent,
-    RoomComponent,
+    RoomViewComponent,
     ProfileComponent,
     SettingsComponent,
     SearchComponent,
@@ -54,7 +55,8 @@ import { ProfileEditComponent } from './components/activity-slider/panels/profil
     ChatElementComponent,
     ChatBoxComponent,
     ChatMessageComponent,
-    ProfileEditComponent
+    ProfileEditComponent,
+    RoomComponent
   ],
   imports: [
     NgbModule,
