@@ -29,8 +29,6 @@ public class Chat implements Serializable {
 
 	private Long createdAt = Instant.now().toEpochMilli();
 
-	private Long lastMessage;
-
 	private boolean privateRoom = true;
 
 	@Cascade(CascadeType.MERGE)

@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.googee.googeeserver.models.DTO.room.RoomDTO;
 import com.googee.googeeserver.models.DTO.user.AppUserDTO;
 import com.googee.googeeserver.models.user.AppUser;
+import com.googee.googeeserver.models.user.geo.Geolocation;
+import com.googee.googeeserver.models.user.geo.GeolocationCoordinates;
 import jakarta.persistence.*;
 import lombok.*;
+import org.aspectj.lang.annotation.DeclareAnnotation;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -49,7 +52,16 @@ public class Room {
 
 	private long closingAt;
 
+	private GeolocationCoordinates geolocationCoordinates = new GeolocationCoordinates();
+
 	public void addCreator(AppUser appUser) {
 		this.creators.add(appUser);
+	}
+
+	@Data
+	@RequiredArgsConstructor
+	private static class Location implements Serializable {
+		private double longitude = 0;
+		private double latitude = 0;
 	}
 }

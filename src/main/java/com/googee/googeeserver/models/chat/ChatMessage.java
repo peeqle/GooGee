@@ -35,7 +35,10 @@ public class ChatMessage implements Serializable {
 	@Data
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class Message implements Serializable{
+	public static class Message implements Serializable {
+
+		private String senderUsername;
+
 		private String userId;
 
 		private String receiverId;
