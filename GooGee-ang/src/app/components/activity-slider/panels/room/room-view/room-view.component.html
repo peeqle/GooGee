@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-10">
+      <input type="text" class="form-control w-100">
+    </div>
+    <div class="col">
+      <button type="button" class="btn btn-light" (click)="openCreateRoomDialog()" data-toggle="modal"
+              data-target="#exampleModal">Create room
+      </button>
+    </div>
+  </div>
+  <div class="mt-2">
+    <div *ngFor="let creatorRoom of asyncCreatorRooms; index as i" class="card p-2 mb-2">
+      <div class="row">
+        <div class="col-10" (click)="openRoomScreen(creatorRoom, true)">
+          <p>{{creatorRoom.roomName}}</p>
+        </div>
+        <div class="col-2">
+          <button class="btn float-end" (click)="openEditRoomDialog(creatorRoom)">Edit</button>
+        </div>
+      </div>
+    </div>
+    <div *ngFor="let memberRoom of asyncMemberRooms; index as i" class="card p-2 mb-2" (click)="openRoomScreen(memberRoom, false)">
+      <p>{{memberRoom.roomName}}</p>
+    </div>
+  </div>
+</div>

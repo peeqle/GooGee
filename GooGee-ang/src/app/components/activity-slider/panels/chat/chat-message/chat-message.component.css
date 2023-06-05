@@ -57,6 +57,7 @@
   font-weight: 300;
   bottom: 5px;
   left: 5px;
+  margin-left: 5px;
 }
 
 .message-blue:after {

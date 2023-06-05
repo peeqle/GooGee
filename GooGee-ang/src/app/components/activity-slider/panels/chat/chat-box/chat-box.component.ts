@@ -110,6 +110,7 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
       sendAt: message.sendAt,
       isRead: message.isRead,
       content: atob(message.message.content),
+      senderUsername: message.message.senderUsername,
       sender: message.message.userId
     }
   }

@@ -16,4 +16,6 @@ export interface RoomDTO {
   creators: number[];
 
   members: number[];
+
+  location: { latitude: number, longitude: number };
 }
