@@ -3,6 +3,8 @@ package com.googee.googeeserver.resource;
 import com.googee.googeeserver.config.security.service.SecurityContextService;
 import com.googee.googeeserver.data.service.chat.ChatService;
 import com.googee.googeeserver.data.service.room.RoomService;
+import com.googee.googeeserver.data.service.search.SearchElementType;
+import com.googee.googeeserver.data.service.search.SearchService;
 import com.googee.googeeserver.models.DTO.room.RoomDTO;
 import com.googee.googeeserver.models.chat.Chat;
 import com.googee.googeeserver.models.room.Room;
@@ -31,6 +33,8 @@ public class RoomResource {
 
 	private final ChatService chatService;
 
+	private final SearchService searchService;
+
 	private final Gson gson = new GsonBuilder().create();
 
 	private final SecurityContextService securityContextService;
@@ -45,6 +49,7 @@ public class RoomResource {
 			room.addCreator(appUser);
 
 			Room savedRoom = roomService.saveRoom(room);
+			searchService.saveSearchElement(room.getRoomName(), room.getUuid().toString(), SearchElementType.ROOM);
 			if (savedRoom.getRoomOptions().isCreateChatRoomCreate()) {
 				Chat chat = new Chat();
 				chat.setChatName(savedRoom.getRoomName());
