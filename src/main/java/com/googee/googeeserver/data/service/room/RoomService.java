@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class RoomService {
@@ -21,6 +23,14 @@ public class RoomService {
 
 	public Room saveRoom(Room room) {
 		return roomRepository.save(room);
+	}
+
+	public void deleteRoomById(UUID roomId) {
+		roomRepository.deleteById(roomId);
+	}
+
+	public Room fetchRoomById(UUID roomId) {
+		return roomRepository.findById(roomId).orElseThrow();
 	}
 
 	public Page<Room> fetchUserCreatorRoom(Pageable pageable) {

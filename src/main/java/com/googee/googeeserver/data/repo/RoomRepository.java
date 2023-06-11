@@ -18,4 +18,6 @@ public interface RoomRepository extends JpaRepository<Room, UUID> {
 	Page<Room> findAllByCreatorsContaining(AppUser appUser, Pageable page);
 
 	Page<Room> findAllByMembersContaining(AppUser appUser, Pageable page);
+
+//	void updateRoomByUuid(Room room, UUID uuid);
 }
