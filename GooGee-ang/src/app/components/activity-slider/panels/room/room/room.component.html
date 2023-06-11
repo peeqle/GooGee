@@ -1,3 +1,46 @@
-<div class="container sys-modal-container mb-2">
+<div class="container sys-modal-container mb-2 p-2">
+  <div class="row">
+    <div class="col">
+      <img [src]="roomImage" class="rounded-circle room-image"/>
+    </div>
+    <div class="col">
+      <h3>
+        {{data.room.roomName}}
+      </h3>
+      <p>{{data.room.roomDescription}}</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <h3 [title]="'Max: ' + data.room.maxMembers">
+        Members: {{data.room.members.length + data.room.creators.length}}</h3>
+    </div>
+  </div>
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+      <h2 class="" id="headingOne" style="height: 50px;">
+        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+          Map
+        </button>
+      </h2>
+      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+           data-bs-parent="#accordionExample">
+        <div class="accordion-body d-block">
+          <div class="w-100" style="height: 200px;">
+            <app-maps [templateMode]="true" [title]="data.room.roomName"
+                      (selectedPoint)="data.room.location = { latitude: $event.lat, longitude: $event.lng }"
+                      from="room-"></app-maps>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-2">
+    <editor [init]="getEditorConfig()"></editor>
+  </div>
+  <hr>
+  <div class="mt-2">
 
+  </div>
 </div>

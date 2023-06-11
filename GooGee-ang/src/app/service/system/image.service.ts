@@ -29,6 +29,9 @@ export class ImageService {
 
   fetchUserImage() {
     let currentUser = this.localStorage.fetch("user");
+    if (!currentUser.imageKey) {
+      return;
+    }
     this.fetchImage(currentUser.imageKey).subscribe({
       next: value => {
         let objectURL = URL.createObjectURL(value);

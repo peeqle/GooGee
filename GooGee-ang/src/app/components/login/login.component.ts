@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2} from '@angular/core';
+import {Component, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validator, Validators} from "@angular/forms";
 import {AuthService} from "../../service/system/auth.service";
 import {HttpParams} from "@angular/common/http";
@@ -10,7 +10,7 @@ import {Octokit} from "octokit";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm = new UntypedFormGroup(
     {
@@ -28,23 +28,31 @@ export class LoginComponent implements OnInit {
   )
   registerSelected: boolean = false;
 
+  registerSub$: any;
+
   constructor(private renderer: Renderer2,
               private authService: AuthService,
               private router: Router,
               private activatedRoute: ActivatedRoute) {
   }
 
+  ngOnDestroy(): void {
+    this.registerSub$.unsubscribe()
+  }
+
   ngOnInit(): void {
-    this.router.events.subscribe({
+    this.registerSub$ = this.router.events.subscribe({
       next: (value: any) => {
         if (value.routerEvent) {
           let route = value.routerEvent.urlAfterRedirects;
-          const urlDelimiters = new RegExp(/[?//]/);
-          let delimiterSet = route.split(urlDelimiters);
-          if (delimiterSet.indexOf('github') != -1) {
-            this.checkGitTokens();
-          } else if (delimiterSet.indexOf('google') != -1) {
-            this.checkGoogleTokens();
+          if (route.includes("code")) {
+            const urlDelimiters = new RegExp(/[?//]/);
+            let delimiterSet = route.split(urlDelimiters);
+            if (delimiterSet.indexOf('github') != -1) {
+              this.checkGitTokens();
+            } else if (delimiterSet.indexOf('google') != -1) {
+              this.checkGoogleTokens();
+            }
           }
         }
       }

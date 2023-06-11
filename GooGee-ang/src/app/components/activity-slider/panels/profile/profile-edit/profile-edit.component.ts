@@ -6,6 +6,7 @@ import {HolderService} from "../../../service/holder.service";
 import {ChatService} from "../../../../../service/user/chat.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ImageService} from "../../../../../service/system/image.service";
+import {ImageSnippet} from "../../../../../service/models/imageSnippet";
 
 @Component({
   selector: 'app-profile-edit',
@@ -85,10 +86,5 @@ export class ProfileEditComponent implements OnInit, AfterContentInit {
         }
       }
     });
-  }
-}
-
-class ImageSnippet {
-  constructor(public src: string, public file: File) {
   }
 }

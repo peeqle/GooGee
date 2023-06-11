@@ -42,7 +42,7 @@ body {
 .sys-modal-container {
   min-height: auto;
   max-height: 700px;
-  min-width: 25vw;
+  min-width: 32vw;
   overflow-x: hidden;
 }
 .sys-modal-container-huge {

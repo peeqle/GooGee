@@ -5,6 +5,11 @@ import {RoomDTO} from "../../../../../service/models/DTO/RoomDTO";
 import {RoomService} from "../../../../../service/user/room.service";
 import {Observable} from "rxjs";
 import {UserService} from "../../../../../service/user/user.service";
+import {ImageSnippet} from "../../../../../service/models/imageSnippet";
+import {ImageService} from "../../../../../service/system/image.service";
+import {bottom} from "@popperjs/core";
+import {readBooleanType} from "@angular/compiler-cli/src/ngtsc/metadata/src/util";
+import {SnackService} from "../../../../../service/snack.service";
 
 export interface RoomData {
   edit: boolean,
@@ -23,7 +28,9 @@ export class RoomCreateComponent implements AfterContentInit {
     roomName: "",
     roomDescription: "",
     maxMembers: 1,
-    roomOptions: {},
+    roomOptions: {
+      createChatRoomCreate: true
+    },
     isEvent: false,
     closingAt: 0,
     members: [],
@@ -34,6 +41,8 @@ export class RoomCreateComponent implements AfterContentInit {
     }
   };
 
+  roomImageSnippet: any;
+
   possibleMembers: any[] = [];
 
   currentUser: any;
@@ -41,6 +50,8 @@ export class RoomCreateComponent implements AfterContentInit {
   constructor(private socketService: SocketService,
               private roomService: RoomService,
               private userService: UserService,
+              private imageService: ImageService,
+              private snackService: SnackService,
               public dialogRef: MatDialogRef<RoomCreateComponent>,
               @Inject(MAT_DIALOG_DATA) public data: RoomData) {
   }
@@ -52,10 +63,26 @@ export class RoomCreateComponent implements AfterContentInit {
     return `${value}`;
   }
 
-  createRoom() {
-    this.roomService.saveRoom(this.room).subscribe({
+  saveRoom() {
+    if (this.roomImageSnippet && this.roomImageSnippet.file) {
+      this.imageService.uploadImage(this.roomImageSnippet.file).subscribe({
+        next: value => {
+          if (value) {
+            this.room.roomOptions['roomImageKey'] = value.hash;
+          }
+        }, complete: () => {
+          this.saveRoomData()
+        }
+      })
+    } else {
+      this.saveRoomData()
+    }
+  }
+
+  saveRoomData() {
+    this.roomService.saveRoom(this.room, this.data.edit).subscribe({
       next: (json) => {
-        this.roomService.appendRoom(json, "CREATOR");
+        this.roomService.appendRoom(json, "CREATOR", this.data.edit);
       }, error: (err) => {
 
       }, complete: () => {
@@ -89,6 +116,15 @@ export class RoomCreateComponent implements AfterContentInit {
     })
   }
 
+  processFile(imageInput: any) {
+    const file: File = imageInput[0];
+    const reader = new FileReader();
+    reader.addEventListener('load', (event: any) => {
+      this.roomImageSnippet = new ImageSnippet(event.target.result, file);
+    })
+    reader.readAsDataURL(file);
+  }
+
   mapToEdit(templateRoom) {
     this.room = {
       uuid: templateRoom.uuid,
@@ -108,6 +144,15 @@ export class RoomCreateComponent implements AfterContentInit {
   }
 
   deleteRoom() {
-
+    this.roomService.deleteRoomById(this.room.uuid).subscribe({
+      next: (value: any) => {
+      }, error: () => {
+        this.snackService.roomDeleteError()
+      }, complete: () => {
+        this.snackService.roomDeleted();
+        this.roomService.removeRoom(this.room.uuid)
+      }
+    })
+    this.dialogRef.close();
   }
 }
