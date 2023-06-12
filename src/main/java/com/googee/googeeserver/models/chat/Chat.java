@@ -29,11 +29,9 @@ public class Chat implements Serializable {
 
 	private Long createdAt = Instant.now().toEpochMilli();
 
-	private Long lastMessage;
-
 	private boolean privateRoom = true;
 
-	@Cascade(CascadeType.MERGE)
+	@Cascade(CascadeType.ALL)
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "chat_members", joinColumns = @JoinColumn(name = "id"))
 	private List<AppUser> members = new ArrayList<>();

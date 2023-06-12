@@ -3,6 +3,7 @@ package com.googee.googeeserver.models.DTO.room;
 import com.googee.googeeserver.models.request.Response;
 import com.googee.googeeserver.models.room.RoomOptions;
 import com.googee.googeeserver.models.user.AppUser;
+import com.googee.googeeserver.models.user.geo.GeolocationCoordinates;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -32,6 +33,8 @@ public class RoomDTO extends Response implements Serializable {
 	private boolean isEvent = false;
 
 	private long closingAt;
+
+	private GeolocationCoordinates location;
 
 	private List<Long> creators = new ArrayList<>();
 

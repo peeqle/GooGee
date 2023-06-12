@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
-@EnableMongoRepositories(basePackageClasses = ChatMessagesRepository.class)
+@EnableMongoRepositories
 public class GooGeeServerApplication {
 
     public static void main(String[] args) {

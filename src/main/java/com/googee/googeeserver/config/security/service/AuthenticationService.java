@@ -1,5 +1,7 @@
 package com.googee.googeeserver.config.security.service;
 
+import com.googee.googeeserver.data.service.search.SearchElementType;
+import com.googee.googeeserver.data.service.search.SearchService;
 import com.googee.googeeserver.models.request.AuthenticationRequest;
 import com.googee.googeeserver.models.request.AuthenticationResponse;
 import com.googee.googeeserver.models.request.RegisterRequest;
@@ -42,6 +44,8 @@ public class AuthenticationService {
 
 	private final PasswordEncoder passwordEncoder;
 
+	private final SearchService searchService;
+
 	private final CustomAuthProvider customAuthProvider;
 
 	private final DaoAuthenticationProvider daoAuthenticationProvider;
@@ -54,6 +58,8 @@ public class AuthenticationService {
 		appUser.setEmail(request.getEmail());
 
 		var savedUser = appUserService.save(appUser);
+
+		searchService.saveSearchElement(appUser.getUsername(), appUser.getId().toString(), SearchElementType.USER);
 		var jwtAccessToken = jwtService.generateAccessToken(appUser);
 		var jwtRefreshToken = jwtService.generateRefreshToken(appUser);
 

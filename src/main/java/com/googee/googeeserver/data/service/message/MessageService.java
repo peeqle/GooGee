@@ -27,7 +27,6 @@ public class MessageService {
 		chatMessagesRepository.save(message);
 	}
 
-	//todo add filters
 	public List<ChatMessage> fetchChatMessages(String chatId, int page, int limit) {
 		Pageable pageable = PageRequest.of(page, limit);
 		Query query = new Query();
