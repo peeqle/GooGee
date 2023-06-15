@@ -1,6 +1,7 @@
 package com.googee.googeeserver.data.service.user;
 
 import com.googee.googeeserver.data.repo.mongo.location.AppUserLocationRepository;
+import com.googee.googeeserver.models.room.Room;
 import com.googee.googeeserver.models.user.AppUser;
 import com.googee.googeeserver.models.user.geo.Geolocation;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class GeolocationService {
 				.set("coords", geolocation.getCoords())
 				.set("timestamp", geolocation.getTimestamp());
 			mongoTemplate.updateFirst(query, update, Geolocation.class);
-		}else {
+		} else {
 			userLocationRepository.save(geolocation);
 		}
 	}
@@ -55,5 +56,9 @@ public class GeolocationService {
 	public List<Geolocation> fetchUsersLocation(Collection<AppUser> users) {
 		List<String> usernames = users.stream().map(AppUser::getUsername).toList();
 		return userLocationRepository.findByUsernameIn(usernames);
+	}
+
+	public Geolocation fetchUserLocation(String username) {
+		return userLocationRepository.findByUsername(username);
 	}
 }

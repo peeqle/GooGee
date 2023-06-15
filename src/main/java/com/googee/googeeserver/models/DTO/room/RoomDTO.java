@@ -1,6 +1,7 @@
 package com.googee.googeeserver.models.DTO.room;
 
 import com.googee.googeeserver.models.request.Response;
+import com.googee.googeeserver.models.room.RoomGeolocation;
 import com.googee.googeeserver.models.room.RoomOptions;
 import com.googee.googeeserver.models.user.AppUser;
 import com.googee.googeeserver.models.user.geo.GeolocationCoordinates;
@@ -34,7 +35,7 @@ public class RoomDTO extends Response implements Serializable {
 
 	private long closingAt;
 
-	private GeolocationCoordinates location;
+	private RoomGeolocation location;
 
 	private List<Long> creators = new ArrayList<>();
 

@@ -2,6 +2,7 @@ package com.googee.googeeserver.models.DTO.user;
 
 import com.googee.googeeserver.models.request.Response;
 import com.googee.googeeserver.models.user.AppUser;
+import com.googee.googeeserver.models.user.AppUserAdditionalInfo;
 import com.googee.googeeserver.models.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,8 +33,10 @@ public class AppUserDTO extends Response implements Serializable {
 
 	private int eventsVisited;
 
+	private AppUserAdditionalInfo appUserAdditionalInfo;
+
 	@Builder
-	public AppUserDTO(Long id, boolean success, long transactionTime, String imageKey, String username, String email, String status, Long lastActive, List<Role> roles, int friendsCount, int eventsVisited) {
+	public AppUserDTO(Long id, boolean success, long transactionTime, String imageKey, String username, String email, String status, Long lastActive, List<Role> roles, int friendsCount, int eventsVisited, AppUserAdditionalInfo appUserAdditionalInfo) {
 		super(success, transactionTime);
 		this.id = id;
 		this.imageKey = imageKey;
@@ -44,5 +47,6 @@ public class AppUserDTO extends Response implements Serializable {
 		this.roles = roles;
 		this.friendsCount = friendsCount;
 		this.eventsVisited = eventsVisited;
+		this.appUserAdditionalInfo = appUserAdditionalInfo;
 	}
 }

@@ -57,8 +57,6 @@ public class Room {
 
 	private long closingAt;
 
-	private GeolocationCoordinates geolocationCoordinates = new GeolocationCoordinates();
-
 	public void addCreator(AppUser appUser) {
 		this.creators.add(appUser);
 	}

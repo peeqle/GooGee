@@ -4,6 +4,7 @@ import com.googee.googeeserver.config.security.service.SecurityContextService;
 import com.googee.googeeserver.data.service.user.AppUserServiceImpl;
 import com.googee.googeeserver.models.DTO.user.AppUserDTO;
 import com.googee.googeeserver.models.user.AppUser;
+import com.googee.googeeserver.models.user.AppUserAdditionalInfo;
 import com.googee.googeeserver.utils.log.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,18 +33,7 @@ public class UserResource {
 			AppUser appUser = appUserService.loadUserByUsername(username);
 			if (appUser != null) {
 				return ResponseEntity.ok(
-					AppUserDTO.builder()
-						.id(appUser.getId())
-						.roles(appUser.getRoles().stream().toList())
-						.lastActive(appUser.getLastActive())
-						.username(username)
-						.email(appUser.getEmail())
-						.imageKey(appUser.getImageKey())
-						.status(appUser.getStatus())
-						.friendsCount(appUser.getFriendlyUsers().size())
-						.eventsVisited(appUser.getAppUserAdditionalInfo().getEventsVisited())
-						.success(true)
-						.build()
+					mapUser(appUser)
 				);
 			}
 		} catch (UsernameNotFoundException e) {
@@ -51,6 +41,22 @@ public class UserResource {
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+
+	private AppUserDTO mapUser(AppUser appUser) {
+		return AppUserDTO.builder()
+			.id(appUser.getId())
+			.roles(appUser.getRoles().stream().toList())
+			.lastActive(appUser.getLastActive())
+			.username(appUser.getUsername())
+			.email(appUser.getEmail())
+			.imageKey(appUser.getImageKey())
+			.status(appUser.getStatus())
+			.friendsCount(appUser.getFriendlyUsers().size())
+			.eventsVisited(appUser.getAppUserAdditionalInfo().getEventsVisited())
+			.appUserAdditionalInfo(appUser.getAppUserAdditionalInfo())
+			.success(true)
+			.build();
 	}
 
 	@GetMapping("/fetch")
@@ -94,15 +100,25 @@ public class UserResource {
 	}
 
 	@PutMapping("/current/update")
-	public ResponseEntity updateCurrentUser(@RequestBody AppUserDTO user) {
+	public ResponseEntity<AppUserDTO> updateCurrentUser(@RequestBody AppUserDTO user) {
 		AppUser currentUser = securityContextService.fetchCurrentUser();
 
 		currentUser.setStatus(user.getStatus());
 		currentUser.setEmail(user.getEmail());
 		currentUser.setImageKey(user.getImageKey());
 
-		this.appUserService.save(currentUser);
-		return ResponseEntity.ok().build();
+		var userd = this.appUserService.save(currentUser);
+		return ResponseEntity.ok(mapUser(userd));
+	}
+
+	@PutMapping("/current/update/additional")
+	public ResponseEntity<AppUserDTO> updateCurrentUser(@RequestBody AppUserAdditionalInfo appUserAdditionalInfo) {
+		AppUser currentUser = securityContextService.fetchCurrentUser();
+
+		currentUser.setAppUserAdditionalInfo(appUserAdditionalInfo);
+
+		var user = this.appUserService.save(currentUser);
+		return ResponseEntity.ok(mapUser(user));
 	}
 
 	//todo make page
@@ -118,17 +134,5 @@ public class UserResource {
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
-
-	public AppUserDTO mapUser(AppUser appUser) {
-		return AppUserDTO.builder()
-			.id(appUser.getId())
-			.username(appUser.getUsername())
-			.status(appUser.getStatus())
-			.imageKey(appUser.getImageKey())
-			.lastActive(appUser.getLastActive())
-			.roles(appUser.getRoles().stream().toList())
-			.friendsCount(appUser.getFriendlyUsers().size())
-			.eventsVisited(appUser.getAppUserAdditionalInfo().getEventsVisited()).build();
 	}
 }

@@ -13,4 +13,6 @@ public interface AppUserLocationRepository extends MongoRepository<Geolocation, 
 	Geolocation findFirstByUsername(String username);
 
 	List<Geolocation> findByUsernameIn(Collection<String> usernames);
+
+	Geolocation findByUsername(String username);
 }

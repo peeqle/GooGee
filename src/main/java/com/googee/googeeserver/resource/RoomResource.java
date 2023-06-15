@@ -5,11 +5,14 @@ import com.googee.googeeserver.data.service.chat.ChatService;
 import com.googee.googeeserver.data.service.room.RoomService;
 import com.googee.googeeserver.data.service.search.SearchElementType;
 import com.googee.googeeserver.data.service.search.SearchService;
+import com.googee.googeeserver.data.service.user.GeolocationService;
 import com.googee.googeeserver.models.DTO.room.RoomDTO;
 import com.googee.googeeserver.models.chat.Chat;
 import com.googee.googeeserver.models.room.Room;
+import com.googee.googeeserver.models.room.RoomGeolocation;
 import com.googee.googeeserver.models.user.AppUser;
 import com.googee.googeeserver.models.user.geo.GeolocationCoordinates;
+import com.googee.googeeserver.utils.helpers.RoomHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,8 @@ import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.googee.googeeserver.utils.helpers.RoomHelper.mapDTO;
+import static com.googee.googeeserver.utils.helpers.RoomHelper.mapRoom;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @RestController
@@ -34,6 +39,8 @@ public class RoomResource {
 	private final ChatService chatService;
 
 	private final SearchService searchService;
+
+	private final GeolocationService geolocationService;
 
 	private final Gson gson = new GsonBuilder().create();
 
@@ -54,13 +61,14 @@ public class RoomResource {
 			members.addAll(roomDTO.getMembers().stream().map(AppUser::new).collect(Collectors.toSet()));
 			room.setMembers(members);
 			if (!editMode) {
-				Room savedRoom = roomService.saveRoom(room);
+				RoomDTO savedRoom = roomService.saveRoom(room, roomDTO.getLocation().getCoords());
 				searchService.saveSearchElement(room.getRoomName(), room.getUuid().toString(), SearchElementType.ROOM);
 				if (savedRoom.getRoomOptions().isCreateChatRoomCreate()) {
 					Chat chat = new Chat();
 					chat.setChatName(savedRoom.getRoomName());
 					chat.setCreatedAt(Instant.now().toEpochMilli());
 					chat.setPrivateRoom(false);
+					chat.setImageKey(room.getRoomOptions().getRoomImageKey());
 
 					List<AppUser> chatMembers = new ArrayList<>();
 					chatMembers.addAll(room.getMembers());
@@ -69,8 +77,7 @@ public class RoomResource {
 
 					chatService.save(chat);
 				}
-				RoomDTO resultDto = mapRoom(savedRoom);
-				return ResponseEntity.ok(resultDto);
+				return ResponseEntity.ok(savedRoom);
 			}
 
 			Room fetchedRoom = roomService.fetchRoomById(roomDTO.getUuid());
@@ -94,8 +101,8 @@ public class RoomResource {
 
 		Map<String, Object> result = new HashMap<>();
 
-		result.put("createdRooms", creatorRooms.stream().map(this::mapRoom).toList());
-		result.put("memberRooms", memberRooms.stream().map(this::mapRoom).toList());
+		result.put("createdRooms", creatorRooms.stream().map(RoomHelper::mapRoom).toList());
+		result.put("memberRooms", memberRooms.stream().map(RoomHelper::mapRoom).toList());
 
 		return ResponseEntity.ok(result);
 	}
@@ -118,32 +125,14 @@ public class RoomResource {
 		return ResponseEntity.status(NOT_FOUND).build();
 	}
 
-	private RoomDTO mapRoom(Room room) {
-		return RoomDTO.builder()
-			.creators(room.getCreators().stream().map(AppUser::getId).toList())
-			.members(room.getMembers().stream().map(AppUser::getId).toList())
-			.roomOptions(room.getRoomOptions())
-			.roomName(room.getRoomName())
-			.roomDescription(room.getRoomDescription())
-			.isEvent(room.isEvent())
-			.closingAt(room.getClosingAt())
-			.location(room.getGeolocationCoordinates() == null ? new GeolocationCoordinates() : room.getGeolocationCoordinates())
-			.maxMembers(room.getMaxMembers())
-			.uuid(room.getUuid())
-			.build();
-	}
+	@GetMapping("/near")
+	public ResponseEntity<List<RoomDTO>> fetchNearUserLocation() {
+		AppUser appUser = securityContextService.fetchCurrentUser();
+		var lastLocation = geolocationService.fetchUserLocation(appUser.getUsername());
 
-	private static Room mapDTO(RoomDTO roomDTO) {
-		return Room.builder()
-			.roomName(roomDTO.getRoomName())
-			.roomDescription(roomDTO.getRoomDescription())
-			.maxMembers(roomDTO.getMaxMembers())
-			.roomOptions(roomDTO.getRoomOptions())
-			.geolocationCoordinates(roomDTO.getLocation())
-			.isEvent(roomDTO.isEvent())
-			.members(new HashSet<>())
-			.creators(new HashSet<>())
-			.closingAt(roomDTO.getClosingAt())
-			.build();
+		if (lastLocation == null) {
+			return ResponseEntity.status(NOT_FOUND).build();
+		}
+		return ResponseEntity.ok(roomService.fetchRoomsNearUserLocation(lastLocation.getCoords(), appUser));
 	}
 }

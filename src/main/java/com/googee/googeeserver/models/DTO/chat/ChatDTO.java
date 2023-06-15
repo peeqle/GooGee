@@ -31,4 +31,6 @@ public class ChatDTO extends Response {
 	private Long createdAt;
 
 	private boolean privateRoom = false;
+
+	private String imageKey;
 }
