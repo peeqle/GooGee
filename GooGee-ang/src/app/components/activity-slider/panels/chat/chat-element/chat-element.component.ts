@@ -47,7 +47,17 @@ export class ChatElementComponent implements OnInit, AfterContentInit {
         }
       })
     }else {
-      this.chatImage = this.chat.avatar ? this.chat.avatar : "./assets/images/empty_avatar.jpg"
+      let imageKey = this.chat.imageKey;
+      if(imageKey) {
+        this.imageService.fetchImage(imageKey).subscribe({
+          next: value => {
+            let objectURL = URL.createObjectURL(value);
+            this.chatImage = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          }
+        })
+      } else {
+        this.chatImage = "./assets/images/empty_avatar.jpg"
+      }
     }
   }
 

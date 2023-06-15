@@ -15,7 +15,7 @@ import {RoomComponent} from "../room/room.component";
 export class RoomViewComponent extends CommonActivity implements OnInit {
 
   @HostListener('window:keyup.esc') onKeyUp() {
-    this.roomCreateRef.close();
+    this.roomScreenRef.close();
   }
 
   asyncCreatorRooms: any;

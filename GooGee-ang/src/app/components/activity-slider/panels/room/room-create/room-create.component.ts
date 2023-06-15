@@ -36,8 +36,10 @@ export class RoomCreateComponent implements AfterContentInit {
     members: [],
     creators: [],
     location: {
-      latitude: 0,
-      longitude: 0
+      coords: {
+        latitude: 0,
+        longitude: 0
+      }
     }
   };
 
@@ -137,8 +139,10 @@ export class RoomCreateComponent implements AfterContentInit {
       members: templateRoom.members,
       creators: templateRoom.creators,
       location: {
-        latitude: templateRoom.location.latitude,
-        longitude: templateRoom.location.longitude,
+        coords: {
+          latitude: templateRoom.location.latitude,
+          longitude: templateRoom.location.longitude,
+        }
       }
     }
   }

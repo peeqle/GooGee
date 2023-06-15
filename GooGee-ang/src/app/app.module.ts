@@ -32,6 +32,7 @@ import { ChatBoxComponent } from './components/activity-slider/panels/chat/chat-
 import { ChatMessageComponent } from './components/activity-slider/panels/chat/chat-message/chat-message.component';
 import { ProfileEditComponent } from './components/activity-slider/panels/profile/profile-edit/profile-edit.component';
 import { RoomComponent } from './components/activity-slider/panels/room/room/room.component';
+import {GoogleMapsModule} from "@angular/google-maps";
 
 @NgModule({
   declarations: [
@@ -56,12 +57,13 @@ import { RoomComponent } from './components/activity-slider/panels/room/room/roo
     ChatBoxComponent,
     ChatMessageComponent,
     ProfileEditComponent,
-    RoomComponent
+    RoomComponent,
   ],
   imports: [
     NgbModule,
     SharedModule,
     MaterialModule,
+    GoogleMapsModule
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
