@@ -16,6 +16,22 @@ export class SnackService {
     })
   }
 
+  roomDeleted() {
+    this.matSnack.open("Room successfully deleted!", 'Ok', {
+      duration: 2500,
+      horizontalPosition: "start",
+      verticalPosition: "bottom"
+    })
+  }
+
+  roomDeleteError() {
+    this.matSnack.open("Error while deleting room", 'Ok', {
+      duration: 2500,
+      horizontalPosition: "start",
+      verticalPosition: "bottom"
+    })
+  }
+
   registerRequestError() {
     this.matSnack.open("Error occurred while registering! Try again.", ':(', {
       duration: 5000,

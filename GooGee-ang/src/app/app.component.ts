@@ -68,6 +68,10 @@ export class AppComponent implements AfterViewInit, OnInit {
     }
   }
 
+  public static getEditorKey() {
+    return environment.editorKey;
+  }
+
   private connectSockets() {
     this.socketService.connect();
     this.navigator.navigate(['/']).then(() => {

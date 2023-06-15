@@ -1,0 +1,11 @@
+.room-image {
+  width: 100px;
+  height: 100px;
+}
+
+.sys-modal-container {
+  min-height: auto;
+  max-height: 700px;
+  width: 32vw;
+  overflow-x: hidden;
+}

@@ -9,7 +9,6 @@ import {BehaviorSubject} from "rxjs";
   providedIn: 'root'
 })
 export class RoomService {
-
   creatorRooms: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   memberRooms: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
@@ -18,8 +17,12 @@ export class RoomService {
               private server: ServerService) {
   }
 
-  saveRoom(roomDTO: RoomDTO) {
-    return this.http.post(this.server.prepareServerLink(ServerLinks.ROOM_CREATE_REQUEST), roomDTO, {headers: this.server.generateRequiredHeaders()})
+  saveRoom(roomDTO: RoomDTO, editMode: boolean = false) {
+    console.log('this.room', roomDTO)
+    return this.http.post(this.server.prepareServerLink(ServerLinks.ROOM_CREATE_REQUEST), roomDTO, {
+      headers: this.server.generateRequiredHeaders(),
+      params: new HttpParams().set("editMode", editMode)
+    })
   }
 
   fetchRooms(page: number, limit: number) {
@@ -31,6 +34,14 @@ export class RoomService {
     })
   }
 
+  deleteRoomById(uuid: any) {
+    return this.http.delete(this.server.prepareServerLink(ServerLinks.ROOMS_DELETE_REQUEST), {
+      headers: this.server.generateRequiredHeaders(),
+      params: new HttpParams()
+        .set("roomId", uuid)
+    })
+  }
+
   getCreatorRooms() {
     return this.creatorRooms.asObservable();
   }
@@ -39,26 +50,41 @@ export class RoomService {
     return this.memberRooms.asObservable();
   }
 
-  appendRoom(room: any, target: string) {
-    if(target === "CREATOR") {
-      const currentValue = this.creatorRooms.value;
-      const updatedValue = [...currentValue, room];
+  appendRoom(room: any, target: string, edit: boolean) {
+    if (target === "CREATOR") {
+      let currentValue = this.creatorRooms.value;
+      let updatedValue = [];
+      if (edit) {
+        let roomIndex = currentValue.findIndex(el => el.uuid === room.uuid);
+        currentValue[roomIndex] = room;
+        updatedValue = currentValue;
+      } else {
+        updatedValue = [...currentValue, room];
+      }
+      console.log('UDPATED VALUE', updatedValue)
       this.creatorRooms.next(updatedValue);
-    }else {
+    } else {
       const currentValue = this.memberRooms.value;
       const updatedValue = [...currentValue, room];
       this.memberRooms.next(updatedValue);
     }
   }
 
+  removeRoom(roomId: any) {
+    let currentValue = this.creatorRooms.value;
+    let roomIndex = currentValue.findIndex(room => room.uuid === roomId);
+    currentValue.splice(roomIndex, 1);
+    this.creatorRooms.next(currentValue);
+  }
+
   appendRooms(rooms: any = [], target: string) {
-    if(target === "CREATOR") {
+    if (target === "CREATOR") {
       let currentValue = this.creatorRooms.value;
       rooms.forEach(item => {
         currentValue.push(item)
       })
       this.creatorRooms.next(currentValue);
-    }else {
+    } else {
       let currentValue = this.memberRooms.value;
       rooms.forEach(item => {
         currentValue.push(item)

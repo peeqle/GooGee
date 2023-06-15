@@ -7,7 +7,9 @@ export interface RoomDTO {
 
   maxMembers: any;
 
-  roomOptions: {};
+  roomOptions: {
+    createChatRoomCreate: boolean
+  };
 
   isEvent: boolean;
 

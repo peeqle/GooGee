@@ -25,7 +25,7 @@ export class ProfileComponent extends CommonActivity implements AfterContentInit
 
   content: any;
 
-  profileImage: any;
+  profileImage: any = "";
 
   constructor(private userService: UserService,
               private activityTabService: ActivityService,

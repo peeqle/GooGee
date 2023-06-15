@@ -93,7 +93,7 @@ export class RoomViewComponent extends CommonActivity implements OnInit {
       backdropClass: 'backdropBackground'
     });
 
-    this.roomCreateRef.afterClosed().subscribe(result => {
+    this.roomScreenRef.afterClosed().subscribe(result => {
 
     });
   }
