@@ -29,6 +29,8 @@ public class Chat implements Serializable {
 
 	private Long createdAt = Instant.now().toEpochMilli();
 
+	private String imageKey;
+
 	private boolean privateRoom = true;
 
 	@Cascade(CascadeType.ALL)

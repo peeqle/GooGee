@@ -118,6 +118,7 @@ public class ChatResource {
 						.success(true).build())
 				.toList())
 			.memberUsernames(chat.getMembers().stream().map(AppUser::getUsername).toList())
+			.imageKey(chat.getImageKey())
 			.build();
 	}
 }

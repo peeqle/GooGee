@@ -8,8 +8,11 @@ import java.io.Serializable;
 @Data
 @RequiredArgsConstructor
 public class GeolocationCoordinates implements Serializable {
-	private double accuracy = 0.0;
-	private double latitude = 0.0;
-	private double longitude = 0.0;
-	private double speed = 0.0;
+	private Double accuracy = 0.0;
+
+	private Double latitude = 0.0;
+
+	private Double longitude = 0.0;
+
+	private Double speed = 0.0;
 }
