@@ -16,10 +16,7 @@ import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.NearQuery;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -75,7 +72,7 @@ public class RoomService {
 	}
 
 	public Room fetchRoomById(UUID roomId) {
-		return roomRepository.findById(roomId).orElseThrow();
+		return roomRepository.findById(roomId).orElse(null);
 	}
 
 	public Page<Room> fetchUserCreatorRoom(Pageable pageable) {
@@ -91,25 +88,32 @@ public class RoomService {
 	}
 
 	public List<RoomDTO> fetchRoomsNearUserLocation(GeolocationCoordinates geolocationCoordinates, AppUser appUser) {
+		if(geolocationCoordinates.getLocation() == null) {
+			return new ArrayList<>();
+		}
 		Point point = new Point(geolocationCoordinates.getLocation().getX(), geolocationCoordinates.getLocation().getY());
 		var collection = mongoTemplate.getCollection("roomGeolocation");
+		NearQuery nearQuery = NearQuery.near(point)
+			.minDistance(100)
+			.maxDistance(10000);
 
-		NearQuery query = NearQuery.near(point)
-			.maxDistance(appUser.getAppUserAdditionalInfo().getMaxEventDistance() / 1000.0)
-			.in(Metrics.KILOMETERS)
-			.query(new Query(Criteria.where("coords")));
+// Create a CriteriaDefinition for the "coords.location" field
+		CriteriaDefinition locationCriteria = Criteria.where("coords.location").nearSphere(point).minDistance(100).maxDistance(10000);
 
-		GeoResults<RoomGeolocation> roomGeolocations = mongoTemplate.geoNear(query, RoomGeolocation.class);
+// Create a Query with the location criteria
+		Query query = Query.query(locationCriteria);
+
+		List<RoomGeolocation> roomGeolocations = mongoTemplate.find(query, RoomGeolocation.class);
 		List<RoomDTO> roomDTOList = new ArrayList<>();
 
-//		for (RoomGeolocation roomGeolocation : roomGeolocations) {
-//			Room room = fetchRoomById(UUID.fromString(roomGeolocation.getRoomUUID()));
-//			if (room != null) {
-//				RoomDTO roomDTO = RoomHelper.mapRoom(room);
-//				roomDTO.setLocation(roomGeolocation);
-//				roomDTOList.add(roomDTO);
-//			}
-//		}
+		for (RoomGeolocation roomGeolocation : roomGeolocations) {
+			Room room = fetchRoomById(UUID.fromString(roomGeolocation.getRoomUUID()));
+			if (room != null) {
+				RoomDTO roomDTO = RoomHelper.mapRoom(room);
+				roomDTO.setGeolocation(roomGeolocation);
+				roomDTOList.add(roomDTO);
+			}
+		}
 
 		return roomDTOList;
 	}

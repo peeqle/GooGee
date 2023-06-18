@@ -51,6 +51,9 @@ public class AuthenticationService {
 	private final DaoAuthenticationProvider daoAuthenticationProvider;
 
 	public AuthenticationResponse register(RegisterRequest request) {
+		if(appUserService.usernameExists(request.getUsername()) || appUserService.emailExists(request.getEmail())) {
+			return null;
+		}
 		AppUser appUser = new AppUser();
 
 		appUser.setUsername(request.getUsername());

@@ -75,9 +75,10 @@ public class RoomResource {
 					chatMembers.addAll(room.getCreators());
 					chat.setMembers(chatMembers);
 
-					chatService.save(chat);
+					room.setRoomChat(chatService.save(chat));
 				}
-				return ResponseEntity.ok(savedRoom);
+				room = roomService.saveRoom(room);
+				return ResponseEntity.ok(mapRoom(room));
 			}
 
 			Room fetchedRoom = roomService.fetchRoomById(roomDTO.getUuid());
@@ -100,9 +101,17 @@ public class RoomResource {
 		List<Room> memberRooms = roomService.fetchUserMemberRoom(PageRequest.of(page, limit)).getContent();
 
 		Map<String, Object> result = new HashMap<>();
+		var creatorRoomList = creatorRooms.stream().map(RoomHelper::mapRoom).toList();
+		var memberRoomList = memberRooms.stream().map(RoomHelper::mapRoom).toList();
+		for (RoomDTO creatorRoom : creatorRoomList) {
+			creatorRoom.setGeolocation(geolocationService.fetchRoomLocation(String.valueOf(creatorRoom.getUuid())));
+		}
 
-		result.put("createdRooms", creatorRooms.stream().map(RoomHelper::mapRoom).toList());
-		result.put("memberRooms", memberRooms.stream().map(RoomHelper::mapRoom).toList());
+		for (RoomDTO memberRoom : memberRoomList) {
+			memberRoom.setGeolocation(geolocationService.fetchRoomLocation(String.valueOf(memberRoom.getUuid())));
+		}
+		result.put("memberRooms", memberRoomList);
+		result.put("createdRooms", creatorRoomList);
 
 		return ResponseEntity.ok(result);
 	}
