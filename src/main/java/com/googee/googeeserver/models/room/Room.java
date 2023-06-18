@@ -61,6 +61,10 @@ public class Room {
 		this.creators.add(appUser);
 	}
 
+	public void addMember(AppUser appUser) {
+		this.members.add(appUser);
+	}
+
 	@Data
 	@RequiredArgsConstructor
 	private static class Location implements Serializable {

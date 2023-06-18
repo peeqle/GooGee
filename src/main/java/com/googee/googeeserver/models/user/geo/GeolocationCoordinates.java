@@ -2,6 +2,8 @@ package com.googee.googeeserver.models.user.geo;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.data.geo.Point;
 
 import java.io.Serializable;
 
@@ -10,9 +12,7 @@ import java.io.Serializable;
 public class GeolocationCoordinates implements Serializable {
 	private Double accuracy = 0.0;
 
-	private Double latitude = 0.0;
-
-	private Double longitude = 0.0;
+	Point location;
 
 	private Double speed = 0.0;
 }

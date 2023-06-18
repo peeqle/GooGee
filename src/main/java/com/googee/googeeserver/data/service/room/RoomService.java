@@ -7,20 +7,15 @@ import com.googee.googeeserver.models.DTO.room.RoomDTO;
 import com.googee.googeeserver.models.room.Room;
 import com.googee.googeeserver.models.room.RoomGeolocation;
 import com.googee.googeeserver.models.user.AppUser;
-import com.googee.googeeserver.models.user.geo.Geolocation;
 import com.googee.googeeserver.models.user.geo.GeolocationCoordinates;
 import com.googee.googeeserver.utils.helpers.RoomHelper;
-import com.mongodb.client.model.IndexOptions;
 import lombok.RequiredArgsConstructor;
-import org.bson.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.NearQuery;
 import org.springframework.data.mongodb.core.query.Query;
@@ -58,11 +53,11 @@ public class RoomService {
 				.set("coords", geolocationCoordinates)
 				.set("timestamp", epochMilli);
 			mongoTemplate.updateFirst(query, update, RoomGeolocation.class);
-			roomDto.setLocation(RoomGeolocation.builder().roomUUID(saved.getUuid().toString())
+			roomDto.setGeolocation(RoomGeolocation.builder().roomUUID(saved.getUuid().toString())
 				.coords(geolocationCoordinates)
 				.timestamp(epochMilli).build());
 		} else {
-			roomDto.setLocation(mongoTemplate.save(RoomGeolocation.builder()
+			roomDto.setGeolocation(mongoTemplate.save(RoomGeolocation.builder()
 				.roomUUID(saved.getUuid().toString())
 				.coords(geolocationCoordinates)
 				.timestamp(epochMilli).build()));
@@ -96,7 +91,7 @@ public class RoomService {
 	}
 
 	public List<RoomDTO> fetchRoomsNearUserLocation(GeolocationCoordinates geolocationCoordinates, AppUser appUser) {
-		Point point = new Point(geolocationCoordinates.getLongitude(), geolocationCoordinates.getLatitude());
+		Point point = new Point(geolocationCoordinates.getLocation().getX(), geolocationCoordinates.getLocation().getY());
 		var collection = mongoTemplate.getCollection("roomGeolocation");
 
 		NearQuery query = NearQuery.near(point)
@@ -117,5 +112,15 @@ public class RoomService {
 //		}
 
 		return roomDTOList;
+	}
+
+	public boolean addMember(UUID roomId, AppUser currentUser) {
+		Room room = fetchRoomById(roomId);
+		if(room != null) {
+			room.addMember(currentUser);
+			room.getRoomChat().addMember(currentUser);
+			return saveRoom(room) != null;
+		}
+		return false;
 	}
 }

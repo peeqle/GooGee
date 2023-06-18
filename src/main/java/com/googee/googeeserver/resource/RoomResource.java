@@ -61,7 +61,7 @@ public class RoomResource {
 			members.addAll(roomDTO.getMembers().stream().map(AppUser::new).collect(Collectors.toSet()));
 			room.setMembers(members);
 			if (!editMode) {
-				RoomDTO savedRoom = roomService.saveRoom(room, roomDTO.getLocation().getCoords());
+				RoomDTO savedRoom = roomService.saveRoom(room, roomDTO.getGeolocation().getCoords());
 				searchService.saveSearchElement(room.getRoomName(), room.getUuid().toString(), SearchElementType.ROOM);
 				if (savedRoom.getRoomOptions().isCreateChatRoomCreate()) {
 					Chat chat = new Chat();
@@ -105,6 +105,17 @@ public class RoomResource {
 		result.put("memberRooms", memberRooms.stream().map(RoomHelper::mapRoom).toList());
 
 		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/fetch/one")
+	public ResponseEntity<RoomDTO> fetchRoom(@RequestParam("roomId") String roomId) {
+		if (roomId != null) {
+			var roomEntity = roomService.fetchRoomById(UUID.fromString(roomId));
+			if (roomEntity != null) {
+				return ResponseEntity.ok(mapRoom(roomEntity));
+			}
+		}
+		return ResponseEntity.status(NOT_FOUND).build();
 	}
 
 	@DeleteMapping("/delete")

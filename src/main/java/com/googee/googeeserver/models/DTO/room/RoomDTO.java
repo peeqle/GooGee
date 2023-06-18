@@ -35,7 +35,7 @@ public class RoomDTO extends Response implements Serializable {
 
 	private long closingAt;
 
-	private RoomGeolocation location;
+	private RoomGeolocation geolocation;
 
 	private List<Long> creators = new ArrayList<>();
 
