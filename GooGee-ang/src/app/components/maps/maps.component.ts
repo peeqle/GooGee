@@ -53,34 +53,6 @@ export class MapsComponent implements OnInit, AfterContentInit {
   ngAfterContentInit(): void {
     var $this = this;
     this.initMap();
-    if (!this.templateMode) {
-      this.getFriendsLocations();
-      this.locationService.getUserLocationSub().subscribe((loc: GeolocationPosition) => {
-          if (loc) {
-            this.lastCoords = loc.coords;
-            $this.updateLocation(loc);
-            $this.socketService.updateUserLocation(loc);
-          }
-        }, () => {
-        },
-        () => {
-          if (!$this.mapCenteredOnUser) {
-            $this.map.setCenter({
-              lat: $this.currentGeoPosition.coords.latitude,
-              lng: $this.currentGeoPosition.coords.longitude
-            })
-            $this.mapCenteredOnUser = true;
-          }
-        })
-    }
-
-    this.map.setZoom(4)
-    this.updateLocation({
-      coords: {
-        latitude: this.defaultLat,
-        longitude: this.defaultLng
-      }
-    })
   }
 
   private updateLocation(loc: any) {
@@ -138,6 +110,35 @@ export class MapsComponent implements OnInit, AfterContentInit {
       if(!this.templateMode) {
         this.getRoomsNearLocation();
       }
+
+      if (!this.templateMode) {
+        this.getFriendsLocations();
+        this.locationService.getUserLocationSub().subscribe((loc: GeolocationPosition) => {
+            if (loc) {
+              this.lastCoords = loc.coords;
+              $this.updateLocation(loc);
+              $this.socketService.updateUserLocation(loc);
+            }
+          }, () => {
+          },
+          () => {
+            if (!$this.mapCenteredOnUser) {
+              $this.map.setCenter({
+                lat: $this.currentGeoPosition.coords.latitude,
+                lng: $this.currentGeoPosition.coords.longitude
+              })
+              $this.mapCenteredOnUser = true;
+            }
+          })
+      }
+
+      this.map.setZoom(14)
+      this.updateLocation({
+        coords: {
+          latitude: this.defaultLat,
+          longitude: this.defaultLng
+        }
+      })
     })
   }
 
@@ -162,14 +163,12 @@ export class MapsComponent implements OnInit, AfterContentInit {
   getRoomsNearLocation() {
     this.locationService.fetchRoomsLocation().subscribe({
       next: (rooms: any) => {
-        console.log('vale', rooms)
-
+        console.log('ROOMS', rooms)
         for (let room of rooms) {
-          console.log('room name', room)
-          let roomLocation = room.location.coords
+          let roomLocation = room.geolocation.coords.location
 
           let icon = {
-            url: "https://www.simplilearn.com/ice9/free_resources_article_thumb/what_is_image_Processing.jpg",
+            url: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(0, 0),
             scaledSize: new google.maps.Size(50, 50)
@@ -197,7 +196,7 @@ export class MapsComponent implements OnInit, AfterContentInit {
               icon: icon,
               shape: shape,
               optimized: false,
-              position: new google.maps.LatLng(roomLocation.latitude, roomLocation.longitude),
+              position: new google.maps.LatLng(roomLocation.x, roomLocation.y),
               title: room.roomDescription,
               visible: true
             }

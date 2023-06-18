@@ -5,7 +5,6 @@ import {Observable, Observer, Subject} from "rxjs";
 import {LocalStorageService} from "../system/local-storage.service";
 import {UserService} from "./user.service";
 import {Router} from "@angular/router";
-import {AuthService} from "../system/auth.service";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +21,6 @@ export class SocketService {
 
   constructor(private storageService: LocalStorageService,
               private userService: UserService,
-              private authService: AuthService,
               private router: Router) {
   }
 
@@ -98,8 +96,10 @@ export class SocketService {
 
   public updateUserLocation(geoData: any) {
     let geoObj = {
-      latitude: geoData.coords.latitude,
-      longitude: geoData.coords.longitude,
+      location: {
+        x: geoData.coords.latitude,
+        y: geoData.coords.longitude
+      },
       accuracy: geoData.coords.accuracy,
       speed: geoData.coords.speed
     }
@@ -118,7 +118,6 @@ export class SocketService {
     let currentUser = this.userService.getCurrentUserInfo();
 
     if (!currentUser) {
-      this.authService.logout();
       this.storageService.removeTokens();
       this.router.navigate(['/login']);
     }

@@ -13,6 +13,8 @@ import {UserService} from "../../../../../service/user/user.service";
 export class RoomComponent implements OnInit, AfterContentInit {
   roomImage: any = "";
 
+  canJoin: boolean = false;
+
   constructor(public dialogRef: MatDialogRef<RoomComponent>,
               private imageService: ImageService,
               private userService: UserService,
@@ -21,11 +23,11 @@ export class RoomComponent implements OnInit, AfterContentInit {
   }
 
   ngOnInit(): void {
-    console.log('ASdasdasd', this.data)
   }
 
   ngAfterContentInit(): void {
     this.getRoomImage();
+    console.log('THIS SD S DSD', this.data)
   }
 
   getRoomImage() {

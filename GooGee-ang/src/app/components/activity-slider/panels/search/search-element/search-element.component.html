@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col row">
+    <div class="col-4">
+      <img [src]="searchImageSrc" class="rounded-circle image" *ngIf="searchImageSrc"/>
+    </div>
+    <div class="col">
+      <p>{{searchElement.elementQuery}}</p>
+    </div>
+  </div>
+  <div class="col w-100 d-flex justify-content-end">
+    <button class="btn float-end align-middle float-end" *ngIf="canAdd" (click)="addElement()" #joinButton>Join</button>
+  </div>
+</div>
+

@@ -55,15 +55,13 @@ export class AppComponent implements AfterViewInit, OnInit {
                 this.localStorageService.save("user", value)
               }
             })
+            this.connectSockets();
           }
         }),
         error: ((err) => {
           if (err.status === 404) {
           }
-        }),
-        complete: () => {
-          this.connectSockets();
-        }
+        })
       })
     }
   }

@@ -10,6 +10,7 @@ export enum ServerLinks {
   CHAT_FETCH_REQUEST = "chat/fetch",
   ROOMS_REQUEST = "room",
   ROOMS_USER_FETCH_REQUEST = "room/fetch",
+  ROOM_FETCH_REQUEST = "room/fetch/one",
   ROOMS_DELETE_REQUEST = "room/delete",
   SEARCH_REQUEST = "search",
   USER_REQUEST = "user",
@@ -23,6 +24,7 @@ export enum ServerLinks {
   FRIENDS_LOCATION_FETCH = "location/friends",
   ROOMS_NEAR_LOCATION = "room/near",
   SEARCH_FOR_QUERY = "search",
+  SEARCH_ADD_ELEMENT = "search/add",
   MEDIA_SAVE = "images/save",
   MEDIA_FETCH = "images/fetch",
   APPLICATION_AUTH_PREFIX = "auth"

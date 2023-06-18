@@ -33,6 +33,7 @@ import { ChatMessageComponent } from './components/activity-slider/panels/chat/c
 import { ProfileEditComponent } from './components/activity-slider/panels/profile/profile-edit/profile-edit.component';
 import { RoomComponent } from './components/activity-slider/panels/room/room/room.component';
 import {GoogleMapsModule} from "@angular/google-maps";
+import { SearchElementComponent } from './components/activity-slider/panels/search/search-element/search-element.component';
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import {GoogleMapsModule} from "@angular/google-maps";
     ChatMessageComponent,
     ProfileEditComponent,
     RoomComponent,
+    SearchElementComponent,
   ],
   imports: [
     NgbModule,

@@ -26,7 +26,7 @@ export class UserService {
   }
 
   fetchUserInfo(userId: any) {
-    return this.http.get<AppUserDTO>(this.server.prepareServerLink(ServerLinks.USER_CURRENT_REQUEST), {
+    return this.http.get<AppUserDTO>(this.server.prepareServerLink(ServerLinks.USER_FETCH_REQUEST), {
       headers: this.server.generateRequiredHeaders(),
       params: new HttpParams()
         .set("userId", userId)

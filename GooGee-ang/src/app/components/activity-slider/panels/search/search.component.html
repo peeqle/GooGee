@@ -8,10 +8,6 @@
      [fromRoot]="true"
      class="mt-3">
   <div *ngFor="let searchElement of searchElements" class="card p-2 mb-2">
-    <div class="row">
-      <div class="col-10">
-        <p>{{searchElement.elementQuery}}</p>
-      </div>
-    </div>
+    <app-search-element [searchElement]="searchElement" (addElement)="addElement($event)"></app-search-element>
   </div>
 </div>

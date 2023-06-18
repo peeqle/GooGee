@@ -1,9 +1,10 @@
-import {AfterContentInit, Component, OnChanges, SimpleChanges} from '@angular/core';
+import {AfterContentInit, ApplicationRef, Component, ComponentRef, OnChanges, SimpleChanges} from '@angular/core';
 import {CommonActivity} from "../../CommonActivity";
 import {AuthService} from "../../../../../service/system/auth.service";
 import {LocalStorageService} from "../../../../../service/system/local-storage.service";
 import {Router} from "@angular/router";
 import {UserService} from "../../../../../service/user/user.service";
+import {AppComponent} from "../../../../../app.component";
 
 @Component({
   selector: 'app-settings',
@@ -19,7 +20,8 @@ export class SettingsComponent extends CommonActivity implements AfterContentIni
   constructor(private authService: AuthService,
               private localService: LocalStorageService,
               private userService: UserService,
-              private router: Router) {
+              private router: Router,
+              private appRef: ApplicationRef) {
     super();
   }
 
@@ -32,6 +34,11 @@ export class SettingsComponent extends CommonActivity implements AfterContentIni
     this.localService.removeTokens();
     this.router.navigate(['/login']).then(() => {
       window.location.reload();
+      const rootComponents = this.appRef.components;
+      const rootComponentRef: ComponentRef<any> = rootComponents[0];
+      this.appRef.detachView(rootComponentRef.hostView);
+      rootComponentRef.destroy();
+      this.appRef.bootstrap(AppComponent);
     });
   }
 
