@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable, Subject} from "rxjs";
 import {SnackService} from "../snack.service";
 import {SettingsService} from "../system/settings.service";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpParams} from "@angular/common/http";
 import {ServerService} from "../system/server.service";
 import {ServerLinks} from "../resource/ServerLinks.enum";
 
@@ -39,6 +39,12 @@ export class LocationService {
 
   fetchFriendsLocation() {
     return this.http.get(this.server.prepareServerLink(ServerLinks.FRIENDS_LOCATION_FETCH), {
+      headers: this.server.generateRequiredHeaders()
+    })
+  }
+
+  fetchRoomsLocation() {
+    return this.http.get(this.server.prepareServerLink(ServerLinks.ROOMS_NEAR_LOCATION), {
       headers: this.server.generateRequiredHeaders()
     })
   }

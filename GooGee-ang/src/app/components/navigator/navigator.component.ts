@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+  import {Component, OnInit} from '@angular/core';
 import {SnackService} from "../../service/snack.service";
 import {LocationService} from "../../service/user/location.service";
 

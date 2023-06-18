@@ -8,7 +8,8 @@ export interface RoomDTO {
   maxMembers: any;
 
   roomOptions: {
-    createChatRoomCreate: boolean
+    createChatRoomCreate: boolean,
+    roomImageKey: string
   };
 
   isEvent: boolean;
@@ -19,5 +20,9 @@ export interface RoomDTO {
 
   members: number[];
 
-  location: { latitude: number, longitude: number };
+  geolocation: {
+    coords: {
+      location: any
+    }
+  }
 }

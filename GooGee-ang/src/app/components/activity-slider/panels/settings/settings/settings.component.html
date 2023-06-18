@@ -1,5 +1,11 @@
+<div class="mb-2 w-50">
+  <label for="max-distance" class="form-label">Max distance</label>
+  <input id="max-distance"class="form-control" [(ngModel)]="currentUserAdditionalInfo.maxEventDistance" type="number" [min]="300" [max]="40000">
+</div>
 <div class="row">
-  <div class="col"></div>
+  <div class="col">
+    <button class="btn btn-success" (click)="updateInfo()">Save</button>
+  </div>
   <div class="col">
     <button class="btn btn-danger float-end w-50 shadow-sm bald-link" (click)="logout()">Logout</button>
   </div>

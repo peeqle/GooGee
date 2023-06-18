@@ -4,6 +4,7 @@ import {AuthService} from "../../service/system/auth.service";
 import {HttpParams} from "@angular/common/http";
 import {ActivatedRoute, Router} from "@angular/router";
 import {Octokit} from "octokit";
+import {SocketService} from "../../service/user/socket.service";
 
 @Component({
   selector: 'app-login',
@@ -33,6 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(private renderer: Renderer2,
               private authService: AuthService,
               private router: Router,
+              private socketService: SocketService,
               private activatedRoute: ActivatedRoute) {
   }
 

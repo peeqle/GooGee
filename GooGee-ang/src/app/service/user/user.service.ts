@@ -26,7 +26,7 @@ export class UserService {
   }
 
   fetchUserInfo(userId: any) {
-    return this.http.get<AppUserDTO>(this.server.prepareServerLink(ServerLinks.USER_CURRENT_REQUEST), {
+    return this.http.get<AppUserDTO>(this.server.prepareServerLink(ServerLinks.USER_FETCH_REQUEST), {
       headers: this.server.generateRequiredHeaders(),
       params: new HttpParams()
         .set("userId", userId)
@@ -35,6 +35,12 @@ export class UserService {
 
   updateUserInfo(userInfo: any) {
     return this.http.put(this.server.prepareServerLink(ServerLinks.USER_CURRENT_UPDATE), userInfo, {
+      headers: this.server.generateRequiredHeaders()
+    })
+  }
+
+  updateUserAdditionalInfo(addInfo: any) {
+    return this.http.put(this.server.prepareServerLink(ServerLinks.USER_CURRENT_UPDATE_ADDITIONAL), addInfo, {
       headers: this.server.generateRequiredHeaders()
     })
   }

@@ -29,15 +29,20 @@ export class RoomCreateComponent implements AfterContentInit {
     roomDescription: "",
     maxMembers: 1,
     roomOptions: {
-      createChatRoomCreate: true
+      createChatRoomCreate: true,
+      roomImageKey: ""
     },
     isEvent: false,
     closingAt: 0,
     members: [],
     creators: [],
-    location: {
-      latitude: 0,
-      longitude: 0
+    geolocation: {
+      coords: {
+        location: {
+          x: 0.0,
+          y: 0.0
+        }
+      }
     }
   };
 
@@ -126,6 +131,7 @@ export class RoomCreateComponent implements AfterContentInit {
   }
 
   mapToEdit(templateRoom) {
+    console.log(';tetetetetr', templateRoom)
     this.room = {
       uuid: templateRoom.uuid,
       roomName: templateRoom.roomName,
@@ -136,9 +142,13 @@ export class RoomCreateComponent implements AfterContentInit {
       closingAt: templateRoom.closingAt,
       members: templateRoom.members,
       creators: templateRoom.creators,
-      location: {
-        latitude: templateRoom.location.latitude,
-        longitude: templateRoom.location.longitude,
+      geolocation: {
+        coords: {
+          location: {
+            x: templateRoom.geolocation.coords.location.x,
+            y: templateRoom.geolocation.coords.location.y
+          }
+        }
       }
     }
   }

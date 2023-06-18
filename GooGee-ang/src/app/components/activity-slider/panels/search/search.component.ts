@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild, ViewRef} from '@angular/core';
 import {CommonActivity} from "../CommonActivity";
 import {SearchService} from "../../../../service/user/search.service";
 
@@ -8,8 +8,6 @@ import {SearchService} from "../../../../service/user/search.service";
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent extends CommonActivity {
-
-
   searchBarValue: any;
 
   searchElements: any[] = [];
@@ -45,5 +43,15 @@ export class SearchComponent extends CommonActivity {
   onScroll() {
     this.page++;
     this.currentValueSearch();
+  }
+
+  addElement(element: any) {
+    if (element) {
+      this.searchService.addElement(element).subscribe({
+        next: value => {
+
+        }
+      })
+    }
   }
 }

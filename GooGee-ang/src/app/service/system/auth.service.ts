@@ -8,6 +8,7 @@ import {ServerLinks} from "../resource/ServerLinks.enum";
 import {UserService} from "../user/user.service";
 import {SnackService} from "../snack.service";
 import {AuthenticationRequest} from "../models/AuthorizationRequest";
+import {SocketService} from "../user/socket.service";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class AuthService {
               private localStorageService: LocalStorageService,
               private server: ServerService,
               private userService: UserService,
+              private socketService: SocketService,
               private snack: SnackService) {
   }
 
@@ -49,7 +51,9 @@ export class AuthService {
           })
           // хз оставлять ли сохранение в локале профиля, в любом случае TODO
           // this.userService.generateAndSaveFromRegisterRequest(registerRequest);
-          this$.router.navigate(['/']).then()
+          this$.router.navigate(['/']).then(() => {
+            this.socketService.connect();
+          })
         }
       },
       error: (err) => {

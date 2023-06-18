@@ -34,6 +34,14 @@ export class RoomService {
     })
   }
 
+  fetchRoomById(roomId: number) {
+    return this.http.get(this.server.prepareServerLink(ServerLinks.ROOM_FETCH_REQUEST), {
+      headers: this.server.generateRequiredHeaders(),
+      params: new HttpParams()
+        .set("roomId", roomId)
+    })
+  }
+
   deleteRoomById(uuid: any) {
     return this.http.delete(this.server.prepareServerLink(ServerLinks.ROOMS_DELETE_REQUEST), {
       headers: this.server.generateRequiredHeaders(),
@@ -61,7 +69,6 @@ export class RoomService {
       } else {
         updatedValue = [...currentValue, room];
       }
-      console.log('UDPATED VALUE', updatedValue)
       this.creatorRooms.next(updatedValue);
     } else {
       const currentValue = this.memberRooms.value;
@@ -91,5 +98,10 @@ export class RoomService {
       })
       this.memberRooms.next(currentValue);
     }
+  }
+
+  clearRooms() {
+    this.creatorRooms.next([])
+    this.memberRooms.next([])
   }
 }

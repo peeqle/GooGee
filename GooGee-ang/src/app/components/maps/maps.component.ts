@@ -1,19 +1,10 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component, EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges
-} from '@angular/core';
+import {AfterContentInit, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Loader} from "@googlemaps/js-api-loader";
 import MapStyles from "./styles/mapsStyles.json";
 import {LocationService} from "../../service/user/location.service";
-import {Observable} from "rxjs";
-import {HttpClient} from "@angular/common/http";
 import {SocketService} from "../../service/user/socket.service";
+import {ImageService} from "../../service/system/image.service";
+import {DomSanitizer} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-maps',
@@ -49,39 +40,19 @@ export class MapsComponent implements OnInit, AfterContentInit {
 
   private mapCenteredOnUser: boolean = false;
 
-  constructor(private locationService: LocationService, private socketService: SocketService) {
+  private roomsFetched: boolean = false;
+
+  private lastCoords = {};
+
+  constructor(private locationService: LocationService,
+              private socketService: SocketService,
+              private imageService: ImageService,
+              private sanitizer: DomSanitizer) {
   }
 
   ngAfterContentInit(): void {
     var $this = this;
     this.initMap();
-    if (!this.templateMode) {
-      this.getFriendsLocations();
-      this.locationService.getUserLocationSub().subscribe((loc: GeolocationPosition) => {
-          if (loc) {
-            this.updateLocation(loc);
-            this.socketService.updateUserLocation(loc);
-          }
-        }, () => {
-        },
-        () => {
-          if (!this.mapCenteredOnUser) {
-            this.map?.setCenter({
-              lat: this.currentGeoPosition?.coords.latitude,
-              lng: this.currentGeoPosition?.coords.longitude
-            })
-            $this.mapCenteredOnUser = true;
-          }
-        })
-    }
-
-    this.map?.setZoom(4)
-    this.updateLocation({
-      coords: {
-        latitude: this.defaultLat,
-        longitude: this.defaultLng
-      }
-    })
   }
 
   private updateLocation(loc: any) {
@@ -91,7 +62,7 @@ export class MapsComponent implements OnInit, AfterContentInit {
     } as google.maps.MapOptions;
 
     if (this.currentUserMarker === undefined) {
-      this.map?.setCenter({
+      this.map.setCenter({
         lat: loc.coords.latitude,
         lng: loc.coords.longitude
       })
@@ -133,10 +104,41 @@ export class MapsComponent implements OnInit, AfterContentInit {
       )
       if ($this.templateMode) {
         $this.map.addListener("click", (mapsMouseEvent) => {
-          console.log('maps mouse event', mapsMouseEvent)
           $this.setLocationMarker(mapsMouseEvent)
         });
       }
+      if(!this.templateMode) {
+        this.getRoomsNearLocation();
+      }
+
+      if (!this.templateMode) {
+        this.getFriendsLocations();
+        this.locationService.getUserLocationSub().subscribe((loc: GeolocationPosition) => {
+            if (loc) {
+              this.lastCoords = loc.coords;
+              $this.updateLocation(loc);
+              $this.socketService.updateUserLocation(loc);
+            }
+          }, () => {
+          },
+          () => {
+            if (!$this.mapCenteredOnUser) {
+              $this.map.setCenter({
+                lat: $this.currentGeoPosition.coords.latitude,
+                lng: $this.currentGeoPosition.coords.longitude
+              })
+              $this.mapCenteredOnUser = true;
+            }
+          })
+      }
+
+      this.map.setZoom(14)
+      this.updateLocation({
+        coords: {
+          latitude: this.defaultLat,
+          longitude: this.defaultLng
+        }
+      })
     })
   }
 
@@ -153,6 +155,53 @@ export class MapsComponent implements OnInit, AfterContentInit {
   getFriendsLocations() {
     this.locationService.fetchFriendsLocation().subscribe({
       next: value => {
+        console.log('vale', value)
+      }
+    })
+  }
+
+  getRoomsNearLocation() {
+    this.locationService.fetchRoomsLocation().subscribe({
+      next: (rooms: any) => {
+        console.log('ROOMS', rooms)
+        for (let room of rooms) {
+          let roomLocation = room.geolocation.coords.location
+
+          let icon = {
+            url: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(0, 0),
+            scaledSize: new google.maps.Size(50, 50)
+          };
+          this.imageService.fetchImage(room.roomOptions.roomImageKey).subscribe({
+            next: value => {
+              let objectURL = URL.createObjectURL(value);
+              icon.url = this.sanitizer.bypassSecurityTrustUrl(objectURL).toString();
+            },complete: () => {
+
+            }
+          })
+          var shape = {
+            coords: [60,0, 90,15, 120,60, 90,120, 60, 180, 30,120, 0,60, 30,15, 60,0],
+            type: 'poly'
+          };
+          let marker = new google.maps.Marker(
+            {
+              animation: 0,
+              clickable: true,
+              collisionBehavior: null,
+              draggable: false,
+              label: room.roomName,
+              map: this.map,
+              icon: icon,
+              shape: shape,
+              optimized: false,
+              position: new google.maps.LatLng(roomLocation.x, roomLocation.y),
+              title: room.roomDescription,
+              visible: true
+            }
+          )
+        }
       }
     })
   }
