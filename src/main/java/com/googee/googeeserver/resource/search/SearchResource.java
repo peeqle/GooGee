@@ -8,7 +8,6 @@ import com.googee.googeeserver.data.service.user.AppUserServiceImpl;
 import com.googee.googeeserver.models.search.SearchElement;
 import com.googee.googeeserver.models.user.AppUser;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +39,14 @@ public class SearchResource {
 			return ResponseEntity.status(NOT_FOUND).build();
 		}
 		return ResponseEntity.ok(searchService.findByParameters(query, limit, offset, username));
+	}
+
+	@GetMapping("/users")
+	public ResponseEntity<List<SearchElement>> findByParameters(@RequestParam(value = "limit", defaultValue = "30") int limit,
+																@RequestParam(value = "offset", defaultValue = "0") int offset) {
+		AppUser user = securityContextService.fetchCurrentUser();
+
+		return ResponseEntity.ok(searchService.findNearestUsers(limit, offset, user));
 	}
 
 	@PostMapping("/add")
