@@ -1,6 +1,6 @@
 # GooGee
 
-Fully functional, geo-based social media
+Geo-based social media
 
 Technologies: 
   Spring Boot,
