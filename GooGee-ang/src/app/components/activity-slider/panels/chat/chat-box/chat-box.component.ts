@@ -29,6 +29,9 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
   @ViewChild("chatHolder")
   chatHolder: any;
 
+
+  chatName: string = "";
+
   @HostListener("window:keydown.enter", ['$event'])
   enterClick = () => {
     this.sendMessage();
@@ -52,11 +55,13 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
     this.currentUser = this.userService.getCurrentUserInfo();
     this.chatService.chatSelectedObs.subscribe({
       next: value => {
+        console.log('Vadasdas', value)
+        this.chatName = value.chatName
         this.clearChatBox();
-        if(this.messagesSubscription$) {
+        if (this.messagesSubscription$) {
           this.messagesSubscription$.unsubscribe();
         }
-        if(this.chatSubscription$) {
+        if (this.chatSubscription$) {
           this.chatSubscription$.unsubscribe();
         }
         this.prepareChatBox();
@@ -105,11 +110,17 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
   }
 
   private mapToSimplifiedMessage(message) {
+    const decoder = new TextDecoder("utf-8")
+    let content = atob(message.message.content);
+    let byteArray = new Uint8Array(content.length);
+    for (let i = 0; i < content.length; i++) {
+      byteArray[i] = content.charCodeAt(i);
+    }
     return {
       id: message.id,
       sendAt: message.sendAt,
       isRead: message.isRead,
-      content: atob(message.message.content),
+      content: decoder.decode(byteArray),
       senderUsername: message.message.senderUsername,
       sender: message.message.userId
     }
