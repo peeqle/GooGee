@@ -26,7 +26,6 @@ export class SettingsComponent extends CommonActivity implements AfterContentIni
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('changes', changes)
   }
 
   logout() {
@@ -47,7 +46,6 @@ export class SettingsComponent extends CommonActivity implements AfterContentIni
     if (appUserInfo) {
       this.currentUserAdditionalInfo = appUserInfo.appUserAdditionalInfo;
     }
-    console.log('cjusdusususu', this.currentUserAdditionalInfo)
   }
 
   updateInfo() {

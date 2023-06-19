@@ -86,7 +86,6 @@ export class MapsComponent implements OnInit, AfterContentInit {
       this.currentUserMarker.setPosition(point);
     }
     let userInfo = this.userService.getCurrentUserInfo();
-    console.log('userinfo', userInfo)
     if (userInfo) {
       let maxDistance = userInfo.appUserAdditionalInfo.maxEventDistance;
 
@@ -178,7 +177,6 @@ export class MapsComponent implements OnInit, AfterContentInit {
   getFriendsLocations() {
     this.locationService.fetchFriendsLocation().subscribe({
       next: value => {
-        console.log('vale', value)
       }
     })
   }
@@ -187,7 +185,6 @@ export class MapsComponent implements OnInit, AfterContentInit {
     var $this = this;
     this.locationService.fetchRoomsLocation().subscribe({
       next: (rooms: any) => {
-        console.log('ROOMS', rooms)
         for (let room of rooms) {
           let roomLocation = room.geolocation.coords.location
 
@@ -231,7 +228,6 @@ export class MapsComponent implements OnInit, AfterContentInit {
 
   addListener(marker) {
     google.maps.event.addListener(marker, 'click', function (e) {
-      console.log('test', e);
     });
   }
 }

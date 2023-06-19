@@ -50,7 +50,6 @@ export class SearchElementComponent implements AfterContentInit {
         case "USER":
           this.userService.fetchUserInfo(this.searchElement.refId).subscribe({
             next: value => {
-              console.log('USER VALUE', value)
               this.entity.id = value.id;
               this.getImageSrc(value.imageKey)
               this.canAdd = true;
@@ -60,7 +59,6 @@ export class SearchElementComponent implements AfterContentInit {
         case "ROOM":
           this.roomService.fetchRoomById(this.searchElement.refId).subscribe({
             next: (value: RoomDTO) => {
-              console.log("ROOM VALUE", value)
               this.entity.id = value.uuid
               this.getImageSrc(value.roomOptions.roomImageKey)
               if (!value.creators.includes(userId) && !value.members.includes(userId)) {

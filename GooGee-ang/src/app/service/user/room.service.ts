@@ -18,7 +18,6 @@ export class RoomService {
   }
 
   saveRoom(roomDTO: RoomDTO, editMode: boolean = false) {
-    console.log('this.room', roomDTO)
     return this.http.post(this.server.prepareServerLink(ServerLinks.ROOM_CREATE_REQUEST), roomDTO, {
       headers: this.server.generateRequiredHeaders(),
       params: new HttpParams().set("editMode", editMode)

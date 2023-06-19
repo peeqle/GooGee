@@ -55,7 +55,6 @@ export class ChatBoxComponent implements AfterContentInit, OnDestroy {
     this.currentUser = this.userService.getCurrentUserInfo();
     this.chatService.chatSelectedObs.subscribe({
       next: value => {
-        console.log('Vadasdas', value)
         this.chatName = value.chatName
         this.clearChatBox();
         if (this.messagesSubscription$) {
