@@ -66,25 +66,36 @@ export class ProfileEditComponent implements OnInit, AfterContentInit {
   }
 
   save() {
-    this.imageService.uploadImage(this.selectedFile.file).subscribe({
-      next: (value: any) => {
-        if (value) {
-          this.userData.imageKey = value.hash;
-          if (!this.userData.email) {
-            this.userData.email = this.currentUser.email;
-          }
-
-
-          this.userService.updateUserInfo(this.userData).subscribe({
-            next: value1 => {
-            },
-            complete: () => {
-              this.dialogRef.close();
-              this.imageService.fetchUserImage();
+    if (this.selectedFile) {
+      this.imageService.uploadImage(this.selectedFile.file).subscribe({
+        next: (value: any) => {
+          if (value) {
+            this.userData.imageKey = value.hash;
+            if (!this.userData.email) {
+              this.userData.email = this.currentUser.email;
             }
-          })
+
+
+            this.userService.updateUserInfo(this.userData).subscribe({
+              next: value1 => {
+              },
+              complete: () => {
+                this.dialogRef.close();
+                this.imageService.fetchUserImage();
+              }
+            })
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.userService.updateUserInfo(this.userData).subscribe({
+        next: value1 => {
+        },
+        complete: () => {
+          this.dialogRef.close();
+          this.imageService.fetchUserImage();
+        }
+      })
+    }
   }
 }

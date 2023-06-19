@@ -25,6 +25,15 @@ export class SearchService {
     })
   }
 
+  findNearestUsers(limit: any, page: any) {
+    return this.http.get(this.server.prepareServerLink(ServerLinks.SEARCH_FOR_NEAREST_USERS),  {
+      params: new HttpParams()
+        .set("offset", page)
+        .set("limit", limit),
+      headers: this.server.generateRequiredHeaders()
+    })
+  }
+
   addElement(element: any) {
     return this.http.post(this.server.prepareServerLink(ServerLinks.SEARCH_ADD_ELEMENT), {}, {
       params: new HttpParams()

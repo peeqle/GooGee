@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, Subject} from "rxjs";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
 import {SnackService} from "../snack.service";
 import {SettingsService} from "../system/settings.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
@@ -24,17 +24,20 @@ export class LocationService {
   runLocationChecker() {
     const intervalCheckLocation = setInterval(() => {
       this.checkLocation()
-    }, 5000);
+    }, 15000);
   }
 
-  checkLocation() {
-    const $this = this;
+  checkLocation(callback = () =>  {}) {
+    let location = {};
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((sol) => {
         this.setUserLocation(sol);
+        location = sol;
+        callback()
       }, (err) => {
       })
     }
+    return location;
   }
 
   fetchFriendsLocation() {

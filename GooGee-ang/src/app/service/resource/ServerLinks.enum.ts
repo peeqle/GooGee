@@ -24,6 +24,7 @@ export enum ServerLinks {
   FRIENDS_LOCATION_FETCH = "location/friends",
   ROOMS_NEAR_LOCATION = "room/near",
   SEARCH_FOR_QUERY = "search",
+  SEARCH_FOR_NEAREST_USERS = "search/users",
   SEARCH_ADD_ELEMENT = "search/add",
   MEDIA_SAVE = "images/save",
   MEDIA_FETCH = "images/fetch",

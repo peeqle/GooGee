@@ -1,4 +1,4 @@
-import {Component, ViewChild, ViewRef} from '@angular/core';
+import {AfterContentInit, Component, ViewChild, ViewRef} from '@angular/core';
 import {CommonActivity} from "../CommonActivity";
 import {SearchService} from "../../../../service/user/search.service";
 
@@ -7,7 +7,7 @@ import {SearchService} from "../../../../service/user/search.service";
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css']
 })
-export class SearchComponent extends CommonActivity {
+export class SearchComponent extends CommonActivity implements AfterContentInit {
   searchBarValue: any;
 
   searchElements: any[] = [];
@@ -17,6 +17,18 @@ export class SearchComponent extends CommonActivity {
 
   constructor(private searchService: SearchService) {
     super();
+  }
+
+  ngAfterContentInit(): void {
+    this.searchService.findNearestUsers(this.limit, this.page).subscribe({
+      next: (value: any[]) => {
+        value.forEach((el: any) => {
+          if(el != null) {
+           this.searchElements.push(el);
+          }
+        });
+      }
+    })
   }
 
   searchForValue(event: any) {

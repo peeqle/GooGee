@@ -29,6 +29,7 @@
         <div class="accordion-body d-block">
           <div class="w-100" style="height: 200px;">
             <app-maps [templateMode]="true" [title]="data.room.roomName"
+                      [location]="data.room.geolocation.coords"
                       (selectedPoint)="data.room.location = { latitude: $event.lat, longitude: $event.lng }"
                       from="room-"></app-maps>
           </div>

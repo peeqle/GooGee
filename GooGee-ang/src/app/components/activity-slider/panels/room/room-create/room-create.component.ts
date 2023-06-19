@@ -131,7 +131,6 @@ export class RoomCreateComponent implements AfterContentInit {
   }
 
   mapToEdit(templateRoom) {
-    console.log(';tetetetetr', templateRoom)
     this.room = {
       uuid: templateRoom.uuid,
       roomName: templateRoom.roomName,
