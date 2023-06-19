@@ -37,4 +37,9 @@ public class Chat implements Serializable {
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "chat_members", joinColumns = @JoinColumn(name = "id"))
 	private List<AppUser> members = new ArrayList<>();
+
+	public List<AppUser> addMember(AppUser appUser) {
+		this.members.add(appUser);
+		return this.members;
+	}
 }

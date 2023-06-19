@@ -8,16 +8,13 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
-import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static org.hibernate.annotations.CacheConcurrencyStrategy.READ_WRITE;
@@ -85,14 +82,13 @@ public class AppUserServiceImpl implements UserDetailsManager {
 		return userRepository.findAppUserById(userId).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 	}
 
-	// todo stupidest method in history, asap addition
-	public void addToFriends(AppUser appUser, Long userId) {
+	public boolean addToFriends(AppUser appUser, Long userId) {
 		AppUser targetUser = tryGetAppUserById(userId);
 		Set<AppUser> friendlyUsers = appUser.getFriendlyUsers();
 		friendlyUsers.add(targetUser);
 
 		appUser.setFriendlyUsers(friendlyUsers);
-		userRepository.saveAndFlush(appUser);
+		return userRepository.saveAndFlush(appUser) != null;
 	}
 
 	public boolean usernameExists(String username) {

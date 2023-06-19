@@ -1,7 +1,7 @@
 package com.googee.googeeserver.data.service.user;
 
 import com.googee.googeeserver.data.repo.mongo.location.AppUserLocationRepository;
-import com.googee.googeeserver.models.room.Room;
+import com.googee.googeeserver.models.room.RoomGeolocation;
 import com.googee.googeeserver.models.user.AppUser;
 import com.googee.googeeserver.models.user.geo.Geolocation;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -60,5 +61,15 @@ public class GeolocationService {
 
 	public Geolocation fetchUserLocation(String username) {
 		return userLocationRepository.findByUsername(username);
+	}
+
+	public RoomGeolocation fetchRoomLocation(String roomId) {
+		Query query = new Query(Criteria.where("roomUUID").is(roomId))
+			.limit(1);
+		var roomGeoList = mongoTemplate.find(query, RoomGeolocation.class);
+		if(roomGeoList.isEmpty()) {
+			return null;
+		}
+		return roomGeoList.get(0);
 	}
 }

@@ -19,8 +19,13 @@ public class SearchService {
 
 	private final MongoTemplate mongoTemplate;
 
-	public List<SearchElement> findByParameters(String query, int limit, int offset) {
-		Query executive = Query.query(Criteria.where("elementQuery").regex("(?i)^.*" + query + ".*$"));
+	public List<SearchElement> findByParameters(String query, int limit, int offset, String username) {
+		Query executive = Query.query(
+			new Criteria().andOperator(
+				Criteria.where("elementQuery").ne(username),
+				Criteria.where("elementQuery").regex("(?i)^.*" + query + ".*$")
+			)
+		);
 		Pageable pageable = PageRequest.of(offset, limit);
 		executive.with(pageable);
 

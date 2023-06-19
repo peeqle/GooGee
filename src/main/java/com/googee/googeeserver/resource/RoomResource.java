@@ -61,7 +61,7 @@ public class RoomResource {
 			members.addAll(roomDTO.getMembers().stream().map(AppUser::new).collect(Collectors.toSet()));
 			room.setMembers(members);
 			if (!editMode) {
-				RoomDTO savedRoom = roomService.saveRoom(room, roomDTO.getLocation().getCoords());
+				RoomDTO savedRoom = roomService.saveRoom(room, roomDTO.getGeolocation().getCoords());
 				searchService.saveSearchElement(room.getRoomName(), room.getUuid().toString(), SearchElementType.ROOM);
 				if (savedRoom.getRoomOptions().isCreateChatRoomCreate()) {
 					Chat chat = new Chat();
@@ -75,9 +75,10 @@ public class RoomResource {
 					chatMembers.addAll(room.getCreators());
 					chat.setMembers(chatMembers);
 
-					chatService.save(chat);
+					room.setRoomChat(chatService.save(chat));
 				}
-				return ResponseEntity.ok(savedRoom);
+				room = roomService.saveRoom(room);
+				return ResponseEntity.ok(mapRoom(room));
 			}
 
 			Room fetchedRoom = roomService.fetchRoomById(roomDTO.getUuid());
@@ -100,11 +101,30 @@ public class RoomResource {
 		List<Room> memberRooms = roomService.fetchUserMemberRoom(PageRequest.of(page, limit)).getContent();
 
 		Map<String, Object> result = new HashMap<>();
+		var creatorRoomList = creatorRooms.stream().map(RoomHelper::mapRoom).toList();
+		var memberRoomList = memberRooms.stream().map(RoomHelper::mapRoom).toList();
+		for (RoomDTO creatorRoom : creatorRoomList) {
+			creatorRoom.setGeolocation(geolocationService.fetchRoomLocation(String.valueOf(creatorRoom.getUuid())));
+		}
 
-		result.put("createdRooms", creatorRooms.stream().map(RoomHelper::mapRoom).toList());
-		result.put("memberRooms", memberRooms.stream().map(RoomHelper::mapRoom).toList());
+		for (RoomDTO memberRoom : memberRoomList) {
+			memberRoom.setGeolocation(geolocationService.fetchRoomLocation(String.valueOf(memberRoom.getUuid())));
+		}
+		result.put("memberRooms", memberRoomList);
+		result.put("createdRooms", creatorRoomList);
 
 		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("/fetch/one")
+	public ResponseEntity<RoomDTO> fetchRoom(@RequestParam("roomId") String roomId) {
+		if (roomId != null) {
+			var roomEntity = roomService.fetchRoomById(UUID.fromString(roomId));
+			if (roomEntity != null) {
+				return ResponseEntity.ok(mapRoom(roomEntity));
+			}
+		}
+		return ResponseEntity.status(NOT_FOUND).build();
 	}
 
 	@DeleteMapping("/delete")

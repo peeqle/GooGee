@@ -7,24 +7,16 @@ import com.googee.googeeserver.models.DTO.room.RoomDTO;
 import com.googee.googeeserver.models.room.Room;
 import com.googee.googeeserver.models.room.RoomGeolocation;
 import com.googee.googeeserver.models.user.AppUser;
-import com.googee.googeeserver.models.user.geo.Geolocation;
 import com.googee.googeeserver.models.user.geo.GeolocationCoordinates;
 import com.googee.googeeserver.utils.helpers.RoomHelper;
-import com.mongodb.client.model.IndexOptions;
 import lombok.RequiredArgsConstructor;
-import org.bson.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.geo.GeoJsonPoint;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.NearQuery;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -58,11 +50,11 @@ public class RoomService {
 				.set("coords", geolocationCoordinates)
 				.set("timestamp", epochMilli);
 			mongoTemplate.updateFirst(query, update, RoomGeolocation.class);
-			roomDto.setLocation(RoomGeolocation.builder().roomUUID(saved.getUuid().toString())
+			roomDto.setGeolocation(RoomGeolocation.builder().roomUUID(saved.getUuid().toString())
 				.coords(geolocationCoordinates)
 				.timestamp(epochMilli).build());
 		} else {
-			roomDto.setLocation(mongoTemplate.save(RoomGeolocation.builder()
+			roomDto.setGeolocation(mongoTemplate.save(RoomGeolocation.builder()
 				.roomUUID(saved.getUuid().toString())
 				.coords(geolocationCoordinates)
 				.timestamp(epochMilli).build()));
@@ -80,7 +72,7 @@ public class RoomService {
 	}
 
 	public Room fetchRoomById(UUID roomId) {
-		return roomRepository.findById(roomId).orElseThrow();
+		return roomRepository.findById(roomId).orElse(null);
 	}
 
 	public Page<Room> fetchUserCreatorRoom(Pageable pageable) {
@@ -96,26 +88,43 @@ public class RoomService {
 	}
 
 	public List<RoomDTO> fetchRoomsNearUserLocation(GeolocationCoordinates geolocationCoordinates, AppUser appUser) {
-		Point point = new Point(geolocationCoordinates.getLongitude(), geolocationCoordinates.getLatitude());
+		if(geolocationCoordinates.getLocation() == null) {
+			return new ArrayList<>();
+		}
+		Point point = new Point(geolocationCoordinates.getLocation().getX(), geolocationCoordinates.getLocation().getY());
 		var collection = mongoTemplate.getCollection("roomGeolocation");
+		NearQuery nearQuery = NearQuery.near(point)
+			.minDistance(100)
+			.maxDistance(10000);
 
-		NearQuery query = NearQuery.near(point)
-			.maxDistance(appUser.getAppUserAdditionalInfo().getMaxEventDistance() / 1000.0)
-			.in(Metrics.KILOMETERS)
-			.query(new Query(Criteria.where("coords")));
+// Create a CriteriaDefinition for the "coords.location" field
+		CriteriaDefinition locationCriteria = Criteria.where("coords.location").nearSphere(point).minDistance(100).maxDistance(10000);
 
-		GeoResults<RoomGeolocation> roomGeolocations = mongoTemplate.geoNear(query, RoomGeolocation.class);
+// Create a Query with the location criteria
+		Query query = Query.query(locationCriteria);
+
+		List<RoomGeolocation> roomGeolocations = mongoTemplate.find(query, RoomGeolocation.class);
 		List<RoomDTO> roomDTOList = new ArrayList<>();
 
-//		for (RoomGeolocation roomGeolocation : roomGeolocations) {
-//			Room room = fetchRoomById(UUID.fromString(roomGeolocation.getRoomUUID()));
-//			if (room != null) {
-//				RoomDTO roomDTO = RoomHelper.mapRoom(room);
-//				roomDTO.setLocation(roomGeolocation);
-//				roomDTOList.add(roomDTO);
-//			}
-//		}
+		for (RoomGeolocation roomGeolocation : roomGeolocations) {
+			Room room = fetchRoomById(UUID.fromString(roomGeolocation.getRoomUUID()));
+			if (room != null) {
+				RoomDTO roomDTO = RoomHelper.mapRoom(room);
+				roomDTO.setGeolocation(roomGeolocation);
+				roomDTOList.add(roomDTO);
+			}
+		}
 
 		return roomDTOList;
+	}
+
+	public boolean addMember(UUID roomId, AppUser currentUser) {
+		Room room = fetchRoomById(roomId);
+		if(room != null) {
+			room.addMember(currentUser);
+			room.getRoomChat().addMember(currentUser);
+			return saveRoom(room) != null;
+		}
+		return false;
 	}
 }
