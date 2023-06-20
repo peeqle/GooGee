@@ -27,7 +27,6 @@ export class RoomComponent implements OnInit, AfterContentInit {
 
   ngAfterContentInit(): void {
     this.getRoomImage();
-    console.log('THIS SD S DSD', this.data)
   }
 
   getRoomImage() {

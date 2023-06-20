@@ -35,14 +35,12 @@ export class RoomViewComponent extends CommonActivity implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('ON INIT')
     this.tabService.currentActiveTabObs.subscribe({
       next: value => {
         if(value  == 2) {
           this.roomService.clearRooms();
           this.fetchUserRooms();
         }
-        console.log('Value', value)
       }
     })
     this.fetchUserRooms()
