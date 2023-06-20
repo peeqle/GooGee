@@ -112,7 +112,7 @@ export class MapsComponent implements OnInit, AfterContentInit {
   initMap() {
     var $this = this;
     let loader = new Loader({
-      apiKey: 'AIzaSyD2TltWC2XmblzIuBUydKxBRUob39cPKiw',
+      apiKey: '',
       region: 'pl',
       version: 'weekly'
     })
