@@ -6,12 +6,12 @@ import com.googee.googeeserver.data.service.room.RoomService;
 import com.googee.googeeserver.data.service.search.SearchElementType;
 import com.googee.googeeserver.data.service.search.SearchService;
 import com.googee.googeeserver.data.service.user.GeolocationService;
+import com.googee.googeeserver.data.service.user.post.PostService;
 import com.googee.googeeserver.models.DTO.room.RoomDTO;
 import com.googee.googeeserver.models.chat.Chat;
+import com.googee.googeeserver.models.post.RoomPost;
 import com.googee.googeeserver.models.room.Room;
-import com.googee.googeeserver.models.room.RoomGeolocation;
 import com.googee.googeeserver.models.user.AppUser;
-import com.googee.googeeserver.models.user.geo.GeolocationCoordinates;
 import com.googee.googeeserver.utils.helpers.RoomHelper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,6 +37,8 @@ public class RoomResource {
 	private final RoomService roomService;
 
 	private final ChatService chatService;
+
+	private final PostService postService;
 
 	private final SearchService searchService;
 
@@ -154,5 +156,34 @@ public class RoomResource {
 			return ResponseEntity.status(NOT_FOUND).build();
 		}
 		return ResponseEntity.ok(roomService.fetchRoomsNearUserLocation(lastLocation.getCoords(), appUser));
+	}
+
+	@PostMapping("/post/save")
+	public ResponseEntity<RoomPost> saveRoomPost(@RequestBody String postContent, @RequestParam("roomId") String roomId) {
+		UUID roomUid = UUID.fromString(roomId);
+
+		Room room = roomService.fetchRoomById(roomUid);
+		if (room != null) {
+			RoomPost post = RoomPost.builder()
+				.createdAt(Instant.now().toEpochMilli())
+				.byteContentHashes(new ArrayList<>())
+				.textContent(postContent)
+				.room(room)
+				.build();
+
+			return ResponseEntity.ok(postService.save(post));
+		}
+		return ResponseEntity.status(NOT_FOUND).build();
+	}
+
+	@GetMapping("/post/fetch")
+	public ResponseEntity<List<RoomPost>> fetchRoomPosts(@RequestParam("roomId") String roomId) {
+		UUID roomUid = UUID.fromString(roomId);
+
+		Room room = roomService.fetchRoomById(roomUid);
+		if (room != null) {
+			return ResponseEntity.ok(postService.fetch(room));
+		}
+		return ResponseEntity.status(NOT_FOUND).build();
 	}
 }

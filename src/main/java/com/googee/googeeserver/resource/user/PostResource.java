@@ -29,10 +29,16 @@ public class PostResource {
 	private final SecurityContextService securityContextService;
 
 	@GetMapping("/fetch")
-	public void fetch(@RequestParam(value = "userId") Long userId,
-					  @RequestParam("offset") int offset,
-					  @RequestParam("limit") int limit) {
+	public ResponseEntity<Object>fetch(@RequestParam(value = "userId") Long userId) {
+		if(userId == null ) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
 
+		AppUser appUser = appUserService.tryGetAppUserById(userId);
+		if(appUser == null) {
+			return  ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		return ResponseEntity.ok(postService.fetch(appUser));
 	}
 
 	@PostMapping("/save")
@@ -65,6 +71,6 @@ public class PostResource {
 		}
 		//send post info to subbed users channel
 
-		return ResponseEntity.ok().build();
+		return ResponseEntity.ok(postService.save(post));
 	}
 }

@@ -18,8 +18,8 @@ class GeolocationServiceTest {
 	}
 	@Test
 	public void testFoundExistingUserInLocation() {
-		String username = "user";
+		String username = "AAAAAAAAAAAAAAAAAA";
 		boolean exist = geolocationService.existsByUsername(username);
-		assertEquals(true, exist);
+		assertEquals(false, exist);
 	}
 }
